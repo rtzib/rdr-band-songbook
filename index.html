@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Rey de Reyes Songbook</title>
+<meta name="theme-color" content="#1d4ed8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Songbook">
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --soft:#eef2ff;
+  --accent:#1d4ed8; --accent-ink:#ffffff; --chord:#c2410c; --warn:#b45309; --warn-bg:#fef3c7; --bad:#b91c1c; --bad-bg:#fee2e2;
+  --k-intro:#64748b; --k-verse:#1d4ed8; --k-pre:#7c3aed; --k-chorus:#047857; --k-bridge:#be185d; --k-inst:#0e7490; --k-outro:#64748b;
+  --lyric:18px; --radius:14px;
+  --mono: ui-monospace, "Cascadia Mono", "Consolas", "Menlo", "Roboto Mono", monospace;
+}
+html.dark{
+  --bg:#0b1120; --card:#131c2e; --ink:#e5e7eb; --muted:#94a3b8; --line:#23304a; --soft:#1a2540;
+  --accent:#60a5fa; --accent-ink:#0b1120; --chord:#fb923c; --warn:#fbbf24; --warn-bg:#3a2a07; --bad:#f87171; --bad-bg:#3b1010;
+  --k-intro:#94a3b8; --k-verse:#60a5fa; --k-pre:#a78bfa; --k-chorus:#34d399; --k-bridge:#f472b6; --k-inst:#22d3ee; --k-outro:#94a3b8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+.wrap{max-width:860px;margin:0 auto;padding:0 14px}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:10px;height:56px}
+.brand{display:flex;flex-direction:column;line-height:1.1;min-width:0;flex:1}
+.brand b{font-size:17px}
+.brand span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{border:1px solid var(--line);background:var(--card);border-radius:10px;height:38px;min-width:38px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.ibtn svg{width:18px;height:18px}
+.ibtn.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+nav.tabs{display:flex;gap:4px}
+nav.tabs a{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px}
+nav.tabs a.on{background:var(--soft);color:var(--accent)}
+
+/* bottom bar on phones */
+nav.bottom{display:none}
+@media (max-width:640px){
+  header.top nav.tabs{display:none}
+  nav.bottom{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  nav.bottom a{flex:1;text-align:center;padding:9px 0 10px;text-decoration:none;color:var(--muted);font-size:12px;font-weight:600}
+  nav.bottom a svg{display:block;margin:0 auto 2px;width:22px;height:22px}
+  nav.bottom a.on{color:var(--accent)}
+  main{padding-bottom:80px}
+}
+
+main{padding:14px 0 40px}
+.banner{border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:14px}
+.banner.warn{background:var(--warn-bg);color:var(--warn)}
+.banner.bad{background:var(--bad-bg);color:var(--bad)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid var(--line)}
+.muted{color:var(--muted)}
+.empty{padding:30px 16px;text-align:center;color:var(--muted)}
+
+/* list */
+.search{position:relative;margin-bottom:10px}
+.search input{width:100%;height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 40px 0 40px;font-size:16px;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search svg{position:absolute;left:12px;top:13px;width:20px;height:20px;color:var(--muted)}
+.search .x{position:absolute;right:6px;top:6px;width:34px;height:34px;border:0;background:transparent;color:var(--bad);font-size:20px;display:none}
+.search.has .x{display:block}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters select,.chip{height:36px;border-radius:999px;border:1px solid var(--line);background:var(--card);padding:0 12px;font-size:14px;flex:0 0 auto}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip.clear{color:var(--bad)}
+.count{font-size:13px;color:var(--muted);margin:4px 2px 10px}
+.group-h{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:18px 4px 8px}
+.songs{display:grid;gap:8px}
+.song-row{display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit}
+.song-row:hover{border-color:var(--accent)}
+.key-badge{flex:0 0 46px;height:46px;border-radius:12px;background:var(--soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.key-badge.none{color:var(--muted);font-weight:600}
+.song-row .t{font-weight:650;font-size:16px}
+.song-row .s{font-size:13px;color:var(--muted);margin-top:2px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--soft);color:var(--accent);margin-left:6px;vertical-align:1px}
+.tag.w{background:var(--warn-bg);color:var(--warn)}
+.tag.c{background:rgba(194,65,12,.12);color:var(--chord)}
+
+/* song */
+.song-head{padding:16px}
+.backrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.song-head h1{font-size:26px;margin:0 0 8px;line-height:1.15}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.meta span{font-size:13px;background:var(--soft);border-radius:999px;padding:4px 10px}
+.meta span b{font-weight:700}
+.meta span span{background:none;padding:0;border-radius:0}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tool{display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:12px;padding:3px;background:var(--bg)}
+.tool .lbl{font-size:12px;color:var(--muted);padding:0 6px}
+.tool button{border:0;background:var(--card);border-radius:9px;height:34px;min-width:34px;padding:0 9px;font-weight:700}
+.tool button.on{background:var(--accent);color:var(--accent-ink)}
+.tool .val{min-width:38px;text-align:center;font-weight:800}
+.beat{width:12px;height:12px;border-radius:50%;background:var(--line);margin:0 6px}
+.beat.hit{background:var(--accent)}
+.beat.hit.one{background:var(--chord)}
+.struct{display:flex;gap:6px;overflow-x:auto;padding:12px 16px;border-top:1px solid var(--line);scrollbar-width:none}
+.struct::-webkit-scrollbar{display:none}
+.struct a{flex:0 0 auto;text-decoration:none;font-size:13px;font-weight:650;padding:5px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.struct a i{font-style:normal;opacity:.6;margin-right:4px}
+.sections{display:grid;gap:10px;margin-top:10px}
+.sec{padding:12px 16px 14px;scroll-margin-top:70px}
+.sec-h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.sec-h .bar{width:4px;height:18px;border-radius:4px;background:currentColor}
+.xb{display:inline-block;font-size:12px;font-weight:800;padding:1px 7px;border-radius:999px;background:var(--soft);color:var(--accent);margin-left:6px;vertical-align:2px;text-transform:none;letter-spacing:0}
+.k-intro{color:var(--k-intro)} .k-verse{color:var(--k-verse)} .k-pre{color:var(--k-pre)} .k-chorus{color:var(--k-chorus)}
+.k-bridge{color:var(--k-bridge)} .k-inst{color:var(--k-inst)} .k-outro{color:var(--k-outro)} .k-other{color:var(--muted)}
+.body{font-size:var(--lyric);line-height:1.45}
+.ln{white-space:pre-wrap;word-break:break-word}
+.gap{height:.7em}
+.mono{font-family:var(--mono);font-size:.86em;white-space:pre;overflow-x:auto}
+.pair{margin:.15em 0}
+.pair .ly{white-space:pre}
+.ch{color:var(--chord);font-weight:700}
+.ch-line{font-family:var(--mono);font-size:.86em;white-space:pre-wrap;color:var(--chord);font-weight:700}
+.note{font-style:italic;color:var(--muted)}
+.echo{color:var(--muted);font-style:italic}
+.rep{position:relative;border-left:3px solid var(--accent);padding:2px 0 2px 12px;margin:4px 0}
+.rep>.xb{position:absolute;right:0;top:0;margin:0}
+.rp{background:var(--soft);border-radius:6px;padding:0 4px}
+.rp sup{font-size:.62em;font-weight:800;color:var(--accent);margin-left:2px}
+.copied{opacity:.62}
+.copied-lbl{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:4px}
+.pending{font-size:14px;color:var(--warn);font-style:italic}
+.navrow{display:flex;gap:8px;margin-top:14px}
+.navrow a{flex:1;padding:12px 14px;text-decoration:none;color:inherit;font-size:14px;min-width:0}
+.navrow a small{display:block;color:var(--muted);font-size:12px}
+.navrow a b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.navrow a.next{text-align:right}
+.nolyrics{padding:22px 16px;text-align:center;color:var(--muted)}
+
+/* lists + help */
+.block{padding:14px 16px;margin-bottom:12px}
+.block h2{font-size:18px;margin:0 0 10px}
+.block h3{font-size:15px;margin:14px 0 6px}
+.tbl{width:100%;overflow-x:auto}
+.tbl table{border-collapse:collapse;min-width:100%;font-size:14px}
+.tbl td,.tbl th{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+.tbl tr:first-child td{font-weight:700;background:var(--soft)}
+.tbl td div{padding:1px 0}
+.block ul,.block ol{margin:4px 0 4px 20px;padding:0}
+.block li{margin:3px 0}
+.help p,.help li{font-size:15px;line-height:1.5}
+.help code,.help pre{font-family:var(--mono);background:var(--soft);border-radius:6px;padding:1px 5px;font-size:13px}
+.help pre{padding:10px 12px;white-space:pre;overflow-x:auto}
+.miss li{font-size:14px}
+.setup{padding:18px}
+.setup ol{line-height:1.6}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Songbook</b><span id="status">Rey de Reyes</span></div>
+    <nav class="tabs" id="tabsTop">
+      <a href="#/" data-v="list">Songs</a>
+      <a href="#/listas" data-v="lists">Set Lists</a>
+      <a href="#/ayuda" data-v="help">Help</a>
+    </nav>
+    <button class="ibtn" id="btnRefresh" title="Refresh from the song doc" aria-label="Refresh">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+    </button>
+    <button class="ibtn" id="btnTheme" title="Light / dark mode" aria-label="Light or dark mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main><div class="wrap" id="app"><div class="empty">Loading songs...</div></div></main>
+
+<nav class="bottom" id="tabsBottom">
+  <a href="#/" data-v="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</a>
+  <a href="#/listas" data-v="lists"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Set Lists</a>
+  <a href="#/ayuda" data-v="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</a>
+</nav>
+
+<script>
+/* ====================== SETTINGS ====================== */
+// Link of the Apps Script web app that reads the Google Doc (ends in /exec). See README.
+var SCRIPT_URL = "";
+// The band's song document (only used for the "Open the song doc" link on the Help page).
+var DOC_URL = "https://docs.google.com/document/d/1h71apax-e4iVCXoxrhq3wtUltAUcRPk51wqIVKMSCT0/edit";
+// Re-read the document when the app is opened again after this many minutes.
+var REFRESH_MINUTES = 5;
+</script>
+
+<script>
+/* ====================== CORE (no screen code; tested on its own) ====================== */
+/* CORE-START */
+var NOTES_S = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+var NOTES_F = ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
+var NOTE_IDX = {"C":0,"C#":1,"Db":1,"D":2,"D#":3,"Eb":3,"E":4,"Fb":4,"E#":5,"F":5,"F#":6,"Gb":6,"G":7,"G#":8,"Ab":8,"A":9,"A#":10,"Bb":10,"B":11,"Cb":11,"B#":0};
+var CHORD_BODY = "[A-G](?:#|b)?(?:maj|min|m|M|dim|aug|sus|add|º|°)?\\d*(?:(?:sus|add|maj|b|#)\\d+)*(?:\\/[A-G](?:#|b)?)?";
+var CHORD_RE = new RegExp("^" + CHORD_BODY + "$");
+var CHORD_G = new RegExp("(^|[^A-Za-z#])(" + CHORD_BODY + ")(?![A-Za-z#])", "g");
+
+function norm(s){ return String(s||"").replace(/&/g," y ").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[’'`´]/g,"").replace(/[^a-z0-9#]+/g," ").trim(); }
+function slug(s){ return norm(s).replace(/#/g,"").replace(/\s+/g,"-") || "cancion"; }
+function expandTabs(s){ return String(s).replace(/\t/g,"    "); }
+
+function isChordLine(line){
+  var s = expandTabs(line).trim(); if(!s) return false;
+  var toks = s.split(/[\s\-–—|,]+/), n = 0;
+  for (var i=0;i<toks.length;i++){
+    var c = toks[i].replace(/^[\[\(\/:]+|[\]\)\/:.]+$/g,"");
+    if(!c) continue;
+    if(/^x\d+$/i.test(c)) continue;
+    if(!CHORD_RE.test(c)) return false;
+    n++;
+  }
+  return n > 0;
+}
+
+function transposeChord(ch, n, flats){
+  var m = ch.match(/^([A-G][#b]?)(.*?)(?:\/([A-G][#b]?))?$/);
+  if(!m || NOTE_IDX[m[1]] === undefined) return ch;
+  var names = flats ? NOTES_F : NOTES_S;
+  var r = names[(NOTE_IDX[m[1]] + n + 1200) % 12];
+  var b = m[3] ? "/" + names[(NOTE_IDX[m[3]] + n + 1200) % 12] : "";
+  return r + m[2] + b;
+}
+// key text like "G / SOL mayor", "E Major", "Am" -> {root:"G", minor:false} or null
+function parseKey(k){
+  var m = String(k||"").trim().match(/^([A-G])\s*([#b♯♭])?\s*(m(?!aj|ayor)|min|minor|menor)?/i);
+  if(!m || !/[A-G]/.test(m[1])) return null;
+  var acc = m[2] ? (m[2]==="♯"?"#":m[2]==="♭"?"b":m[2]) : "";
+  var minor = !!m[3] || /\bmenor\b|\bminor\b/i.test(k);
+  return { root: m[1].toUpperCase() + acc, minor: minor };
+}
+function keyName(k, n){
+  if(!k) return "";
+  var flats = useFlats(k, n);
+  return transposeChord(k.root, n, flats) + (k.minor ? "m" : "");
+}
+function useFlats(k, n){
+  if(!k) return false;
+  var idx = (NOTE_IDX[k.root] + (n||0) + 1200) % 12;
+  // keys that are normally written with flats
+  var flatMajor = {5:1,10:1,3:1,8:1,1:1};        // F Bb Eb Ab Db
+  var flatMinor = {2:1,7:1,0:1,5:1,10:1,3:1};    // Dm Gm Cm Fm Bbm Ebm
+  return k.minor ? !!flatMinor[idx] : !!flatMajor[idx];
+}
+// transpose every chord in a chord line, keeping chords lined up over the words when possible
+function transposeLine(line, n, flats){
+  line = expandTabs(line);
+  if(!n) return line;
+  var out = "", carry = 0, last = 0, m;
+  CHORD_G.lastIndex = 0;
+  while((m = CHORD_G.exec(line))){
+    var start = m.index + m[1].length;
+    var gap = line.slice(last, start);
+    if(carry > 0 && /^ +$/.test(gap) && gap.length > 1){ var cut = Math.min(carry, gap.length-1); gap = gap.slice(cut); carry -= cut; }
+    else if(carry < 0 && /^ +$/.test(gap)){ gap += new Array(-carry+1).join(" "); carry = 0; }
+    var t = transposeChord(m[2], n, flats);
+    carry += t.length - m[2].length;
+    out += gap + t;
+    last = start + m[2].length;
+    CHORD_G.lastIndex = last;
+  }
+  return out + line.slice(last);
+}
+
+var SEC_RE = /^(intro(?:ducci[oó]n)?|pre[\s-]?coro|pre[\s-]?chorus|verso|verse|estrofa|coro|chorus|estribillo|puente|bridge|interludio|interlude|instrumental|drum solo|solo de bateria|outro|final|cierre|tag|vamp)(?![a-z])\s*((?:[IVX]+|\d+)(?![a-z]))?\s*(.*)$/i;
+function sectionKind(w){
+  w = norm(w);
+  if(/^intro/.test(w)) return "intro";
+  if(/^pre/.test(w)) return "pre";
+  if(/^(verso|verse|estrofa)/.test(w)) return "verse";
+  if(/^(coro|chorus|estribillo)/.test(w)) return "chorus";
+  if(/^(puente|bridge)/.test(w)) return "bridge";
+  if(/^(instrumental|interlud|drum|solo)/.test(w)) return "inst";
+  if(/^(outro|final|cierre|tag|vamp)/.test(w)) return "outro";
+  return "other";
+}
+function parseHeader(line){
+  var s = String(line||"").trim();
+  if(!s || s.length > 48) return null;
+  var m = s.match(SEC_RE);
+  if(!m) return null;
+  var rest = m[3] || "";
+  if(rest && !/^[\(\-–—:\[]/.test(rest)) return null;
+  var reps = 0, rm = rest.match(/\(\s*x\s*(\d+)\s*\)|\bx\s*(\d+)\b/i);
+  if(rm){ reps = parseInt(rm[1]||rm[2],10); rest = rest.replace(rm[0],"").trim(); }
+  rest = rest.replace(/^[\-–—:]\s*/,"").trim();
+  var kind = sectionKind(m[1]);
+  var num = m[2] ? m[2].toUpperCase() : "";
+  var arab = {"1":"I","2":"II","3":"III","4":"IV","5":"V"}; if(arab[num]) num = arab[num];
+  var label = (m[1] + (m[2] ? " " + m[2] : "")).replace(/\s+/g," ");
+  label = label.charAt(0).toUpperCase() + label.slice(1);
+  return { label: label, note: rest.replace(/^\((.*)\)$/,"$1"), reps: reps, kind: kind, key: kind + "|" + num };
+}
+
+var META_RE = { type:/^(type|tipo)/, artist:/^(artist|artista|autor|cover)/, key:/^(key|tono|tonalidad)/, tempo:/^(tempo|bpm|velocidad)/, genre:/^(genre|genero|ritmo|estilo)/, instruments:/^instrument/ };
+function metaLabel(s){ var n = norm(s); for(var k in META_RE) if(META_RE[k].test(n)) return k; return null; }
+function isMetaTable(b){
+  if(!b || b.t !== "table" || !b.rows || !b.rows.length) return false;
+  var hits = 0;
+  b.rows.forEach(function(r){ if(r && r.length && metaLabel(r[0])) hits++; });
+  return hits >= 2 || (hits >= 1 && b.rows.length === 1);
+}
+function parseMeta(rows){
+  var m = {};
+  rows.forEach(function(r){
+    for(var i=0;i<r.length;i+=2){
+      var k = metaLabel(r[i]); var v = (splitLines(r[i+1]).filter(function(x){ return x.trim() && !parseHeader(x); })[0] || "").replace(/\s+/g," ").trim();
+      if(k && v && !m[k]) m[k] = v;
+    }
+  });
+  var bpm = null, time = null;
+  if(m.tempo){
+    var b = m.tempo.match(/(\d+)\s*bpm/i) || m.tempo.match(/^(\d+)/);
+    if(b && parseInt(b[1],10) > 0) bpm = parseInt(b[1],10);
+    var t = m.tempo.match(/(\d+)\s*\/\s*(\d+)/); if(t) time = t[1] + "/" + t[2];
+  }
+  m.bpm = bpm; m.time = time;
+  return m;
+}
+function splitLines(text){ return String(text==null?"":text).replace(/\r\n?/g,"\n").replace(/\u000b/g,"\n").split("\n"); }
+function textOf(b){ return b.t === "table" ? b.rows.map(function(r){return r.join(" | ");}).join("\n") : String(b.text||""); }
+function isBlankP(b){ return (b.t === "p" || b.t === "li") && !String(b.text||"").trim(); }
+
+function looksLikeTitle(bl, i){
+  var b = bl[i];
+  if(!b || (b.t !== "p" && b.t !== "li")) return -1;
+  var t = String(b.text||"").trim();
+  if(!t || t.length > 80 || parseHeader(t) || metaLabel(t)) return -1;
+  for(var j=i+1;j<bl.length && j<=i+4;j++){
+    if(isBlankP(bl[j])) continue;
+    return isMetaTable(bl[j]) ? j : -1;
+  }
+  return -1;
+}
+
+function buildSections(lines){
+  var secs = [], cur = null;
+  function push(l){
+    if(!cur){ cur = { label:"", note:"", reps:0, kind:"other", key:"other|", lines:[] }; secs.push(cur); }
+    cur.lines.push(l);
+  }
+  lines.forEach(function(raw){
+    var l = String(raw).replace(/\s+$/,"");
+    var h = parseHeader(l);
+    if(h){ h.lines = []; cur = h; secs.push(h); return; }
+    push(l);
+  });
+  secs.forEach(function(s){
+    var out = [], prevBlank = true;
+    s.lines.forEach(function(l){ var b = !l.trim(); if(b && prevBlank) return; out.push(l); prevBlank = b; });
+    while(out.length && !out[out.length-1].trim()) out.pop();
+    s.lines = out;
+  });
+  secs = secs.filter(function(s){ return s.label || s.lines.length; });
+  // empty sections repeat an earlier one with the same name
+  var seen = {};
+  secs.forEach(function(s){
+    if(s.lines.length){ if(!seen[s.key]) seen[s.key] = s; }
+    else if(seen[s.key] && s.kind !== "inst" && s.kind !== "intro" && s.kind !== "outro"){ s.copyOf = seen[s.key]; }
+  });
+  return secs;
+}
+
+function parseDoc(data){
+  var songs = [], lists = [], groups = [], used = {};
+  (data.tabs || []).forEach(function(tab, ti){
+    var bl = tab.blocks || [], cur = null, tabSongs = [], extra = [], listMode = null, tabLists = [];
+    for(var i=0;i<bl.length;i++){
+      var b = bl[i];
+      var tj = looksLikeTitle(bl, i);
+      if(tj >= 0){
+        var title = String(b.text).replace(/\s+/g," ").trim();
+        var id = slug(title), k = 2; while(used[id]) id = slug(title) + "-" + (k++); used[id] = 1;
+        cur = { id:id, title:title, group:tab.title || ("Part " + (ti+1)), groupIdx:ti, order:songs.length, meta:parseMeta(bl[tj].rows), raw:[] };
+        tabSongs.push(cur); songs.push(cur); listMode = null;
+        i = tj; continue;
+      }
+      if(b.t === "hr" || b.t === "toc" || (b.t === "p" && /^\s*[_\-─—=]{8,}\s*$/.test(b.text||""))){ cur = null; continue; }
+      if(b.t === "p" && /^\s*(set ?lists?|listas?|playlists?|setlists?)\s*$/i.test(b.text||"")){ cur = null; listMode = { title: String(b.text).trim(), blocks: [] }; tabLists.push(listMode); continue; }
+      if(listMode){ listMode.blocks.push(b); continue; }
+      if(cur){ splitLines(textOf(b)).forEach(function(l){ cur.raw.push(l); }); }
+      else extra.push(b);
+    }
+    tabLists.forEach(function(l){ if(l.blocks.length) lists.push(l); });
+    if(tabSongs.length) groups.push(tabSongs[0].group);
+    else if(extra.some(function(b){ return b.t === "table" || (b.t !== "hr" && String(b.text||"").trim()); })) lists.push({ title: tab.title || ("Part " + (ti+1)), blocks: extra });
+  });
+  songs.forEach(function(s){
+    var m = s.meta;
+    s.key = parseKey(m.key);
+    s.keyText = m.key || "";
+    s.bpm = m.bpm; s.time = m.time;
+    s.genre = m.genre || "";
+    s.artist = m.artist || "";
+    var ours = /^(rey de reyes|rdr|rohi)\b/i.test(norm(s.artist));
+    s.type = /cover/i.test(m.type||"") ? "Cover" : /original/i.test(m.type||"") ? "Original" : (s.artist && !ours ? "Cover" : "Original");
+    s.ours = ours;
+    s.sections = buildSections(s.raw);
+    s.hasChords = s.raw.some(isChordLine);
+    s.hasLyrics = s.sections.some(function(x){
+      return x.kind !== "inst" && x.kind !== "intro" && x.lines.some(function(l){ return l.trim() && !isChordLine(l) && !/^\(.*\)$/.test(l.trim()); });
+    });
+    s.search = norm(s.title + " " + s.artist + " " + s.genre + " " + s.raw.join(" "));
+    s.titleN = norm(s.title);
+    delete s.raw;
+  });
+  return { songs: songs, lists: lists, groups: groups, name: data.name || "", updated: data.updated || "" };
+}
+
+// match a line from a set list ("2. Si supieras [D]") to a song
+function cleanListItem(s){
+  return String(s||"").replace(/^\s*(\d+[\.\)]|[\*\-•])\s*/,"").replace(/\s*[\[\(][^\]\)]*[\]\)]?\s*$/,"").trim();
+}
+function findSong(songs, text){
+  var n = norm(cleanListItem(text)); if(!n) return null;
+  for(var i=0;i<songs.length;i++) if(songs[i].titleN === n) return songs[i];
+  var best = null;
+  for(var j=0;j<songs.length;j++){
+    var t = songs[j].titleN;
+    if(t.length >= 6 && (n + " ").indexOf(t + " ") === 0 && (!best || t.length > best.titleN.length)) best = songs[j];
+  }
+  return best;
+}
+/* CORE-END */
+</script>
+
+<script>
+/* ====================== SCREEN ====================== */
+(function(){
+var LS = "cancionero.";
+function ls(k, v){ try{ if(v === undefined){ var x = localStorage.getItem(LS+k); return x == null ? null : JSON.parse(x); } localStorage.setItem(LS+k, JSON.stringify(v)); }catch(e){ return null; } }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+var $ = function(id){ return document.getElementById(id); };
+
+var state = {
+  db: null, source: "", loadedAt: 0, error: "", loading: false,
+  q: ls("q") || "", group: ls("group") || "", type: ls("type") || "", genre: ls("genre") || "", onlyLyrics: !!ls("onlyLyrics"),
+  chords: ls("chords") !== false, size: ls("size") || 18, trans: ls("trans") || {}, lastList: []
+};
+
+/* theme */
+function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#0b1120" : "#1d4ed8"; }
+setTheme(ls("theme") || "light");
+$("btnTheme").onclick = function(){ setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"); };
+document.documentElement.style.setProperty("--lyric", state.size + "px");
+
+/* ---------- data ---------- */
+function jsonp(url, ms){
+  return new Promise(function(res, rej){
+    var name = "cb_" + Date.now() + "_" + Math.floor(Math.random()*1e6);
+    var tag = document.createElement("script"), done = false;
+    var timer = setTimeout(function(){ finish(); rej(new Error("timeout")); }, ms || 25000);
+    function finish(){ done = true; clearTimeout(timer); try{ delete window[name]; }catch(e){ window[name] = undefined; } if(tag.parentNode) tag.parentNode.removeChild(tag); }
+    window[name] = function(d){ if(done) return; finish(); res(d); };
+    tag.onerror = function(){ if(done) return; finish(); rej(new Error("network")); };
+    tag.src = url + (url.indexOf("?") >= 0 ? "&" : "?") + "callback=" + name + "&_=" + Date.now();
+    document.head.appendChild(tag);
+  });
+}
+function useData(raw, source, when){
+  state.db = parseDoc(raw); state.source = source; state.loadedAt = when || Date.now();
+  route();
+}
+function load(force){
+  if(state.loading) return;
+  if(!SCRIPT_URL){
+    if(window.SNAPSHOT){ useData(window.SNAPSHOT, "snapshot"); }
+    else { state.error = "setup"; route(); }
+    return;
+  }
+  state.loading = true; $("btnRefresh").classList.add("spin"); status();
+  jsonp(SCRIPT_URL + (force ? "?fresh=1" : "")).then(function(d){
+    if(!d || !d.ok) throw new Error((d && d.error) || "bad");
+    state.error = "";
+    ls("cache", { at: Date.now(), data: d });
+    useData(d, "live");
+  }).catch(function(e){
+    state.error = String(e.message || e);
+    if(!state.db){
+      var c = ls("cache");
+      if(c && c.data) useData(c.data, "cache", c.at); else route();
+    } else route();
+  }).then(function(){ state.loading = false; $("btnRefresh").classList.remove("spin"); status(); });
+}
+function status(){
+  var s = "Rey de Reyes";
+  if(state.loading) s = "Refreshing...";
+  else if(state.db){
+    var d = new Date(state.loadedAt);
+    var hhmm = d.toLocaleTimeString("en-US", { hour:"numeric", minute:"2-digit" });
+    var day = d.toDateString() === new Date().toDateString() ? "" : d.toLocaleDateString("en-US", { day:"numeric", month:"short" }) + " ";
+    s = state.source === "snapshot" ? "Test copy" : (state.source === "cache" ? "Offline, copy from " + day + hhmm : "Updated " + day + hhmm);
+  }
+  $("status").textContent = s;
+}
+$("btnRefresh").onclick = function(){ load(true); };
+document.addEventListener("visibilitychange", function(){
+  if(document.visibilityState === "visible"){
+    if(SCRIPT_URL && Date.now() - state.loadedAt > REFRESH_MINUTES*60000) load(false);
+    if(wake.want) wake.on();
+  }
+});
+
+/* ---------- routing ---------- */
+function route(){
+  status();
+  var h = location.hash.replace(/^#\/?/,"");
+  var view = "list", arg = "";
+  if(/^c\//.test(h)){ view = "song"; arg = decodeURIComponent(h.slice(2)); }
+  else if(h === "listas") view = "lists";
+  else if(h === "ayuda") view = "help";
+  document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === (view === "song" ? "list" : view)); });
+  if(view !== "song"){ metro.stop(); }
+  var app = $("app");
+  if(!state.db){
+    if(state.error === "setup") app.innerHTML = setupHtml();
+    else if(state.error) app.innerHTML = '<div class="banner bad">Could not load the songbook (' + esc(state.error) + '). Check the internet and tap Refresh.</div>';
+    else app.innerHTML = '<div class="empty">Loading songs...</div>';
+    return;
+  }
+  var banner = "";
+  if(state.error && state.source === "cache") banner = '<div class="banner warn">No internet. You are seeing the last copy saved on this phone.</div>';
+  else if(state.error && state.source === "live") banner = '<div class="banner warn">Could not refresh. You are seeing the last version that loaded.</div>';
+  if(view === "song") renderSong(arg, banner);
+  else if(view === "lists"){ app.innerHTML = banner + listsHtml(); scrollTop(); }
+  else if(view === "help"){ app.innerHTML = banner + helpHtml(); scrollTop(); }
+  else renderList(banner);
+}
+function scrollTop(){ window.scrollTo(0,0); }
+window.addEventListener("hashchange", function(){ route(); if(!/^#\/?c\//.test(location.hash)) {} });
+
+/* ---------- song list ---------- */
+function filtered(){
+  var db = state.db, q = norm(state.q), words = q ? q.split(" ") : [];
+  return db.songs.filter(function(s){
+    if(state.group && s.group !== state.group) return false;
+    if(state.type && s.type !== state.type) return false;
+    if(state.genre && norm(s.genre) !== state.genre) return false;
+    if(state.onlyLyrics && !s.hasLyrics) return false;
+    for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false;
+    return true;
+  });
+}
+function byTitle(a,b){ return a.titleN < b.titleN ? -1 : a.titleN > b.titleN ? 1 : 0; }
+function songRow(s){
+  var bits = [];
+  if(s.bpm) bits.push(s.bpm + " BPM" + (s.time && s.time !== "4/4" ? " " + s.time : ""));
+  if(s.genre) bits.push(esc(s.genre));
+  if(s.artist && s.type === 'Cover') bits.push(esc(s.artist));
+  var tags = "";
+  if(!s.hasLyrics) tags += '<span class="tag w">No lyrics</span>';
+  if(s.hasChords) tags += '<span class="tag c">Chords</span>';
+  if(s.type === "Cover") tags += '<span class="tag">Cover</span>';
+  return '<a class="card song-row" href="#/c/' + encodeURIComponent(s.id) + '">' +
+    '<div class="key-badge' + (s.key ? '' : ' none') + '">' + (s.key ? esc(keyName(s.key, 0)) : '–') + '</div>' +
+    '<div style="min-width:0"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div></a>';
+}
+function renderList(banner){
+  var db = state.db, list = filtered();
+  var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
+  var gkeys = Object.keys(genres).sort();
+  var anyFilter = state.group || state.type || state.genre || state.onlyLyrics || state.q;
+  var nFilters = (state.group?1:0) + (state.type?1:0) + (state.genre?1:0) + (state.onlyLyrics?1:0) + (state.q?1:0);
+  var html = banner +
+    '<div class="search' + (state.q ? ' has' : '') + '" id="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+    '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button></div>' +
+    '<div class="filters">' +
+      (db.groups.length > 1 ? '<select id="fGroup"><option value="">All parts</option>' + db.groups.map(function(g){ return '<option' + (g === state.group ? ' selected' : '') + '>' + esc(g) + '</option>'; }).join("") + '</select>' : '') +
+      '<button class="chip' + (state.type === "Original" ? ' on' : '') + '" data-type="Original">Originals</button>' +
+      '<button class="chip' + (state.type === "Cover" ? ' on' : '') + '" data-type="Cover">Covers</button>' +
+      (gkeys.length ? '<select id="fGenre"><option value="">All rhythms</option>' + gkeys.map(function(k){ return '<option value="' + esc(k) + '"' + (k === state.genre ? ' selected' : '') + '>' + esc(genres[k]) + '</option>'; }).join("") + '</select>' : '') +
+      '<button class="chip' + (state.onlyLyrics ? ' on' : '') + '" id="fLyr">Has lyrics</button>' +
+      (anyFilter ? '<button class="chip clear" id="fClear">Clear filters (' + nFilters + ')</button>' : '') +
+    '</div>';
+  var withLyr = list.filter(function(s){ return s.hasLyrics; }).length;
+  html += '<div class="count">' + list.length + (list.length === 1 ? ' song' : ' songs') + ' · ' + withLyr + ' with lyrics</div>';
+  var order = [];
+  if(!list.length) html += '<div class="card empty">No songs match.</div>';
+  else if(state.q || state.group){
+    var l2 = list.slice().sort(byTitle); order = l2;
+    html += '<div class="songs">' + l2.map(songRow).join("") + '</div>';
+  } else {
+    db.groups.forEach(function(g){
+      var gs = list.filter(function(s){ return s.group === g; }).sort(byTitle);
+      if(!gs.length) return;
+      order = order.concat(gs);
+      if(db.groups.length > 1) html += '<div class="group-h">' + esc(g) + ' <span style="font-weight:600">(' + gs.length + ')</span></div>';
+      html += '<div class="songs">' + gs.map(songRow).join("") + '</div>';
+    });
+  }
+  state.lastList = order.map(function(s){ return s.id; });
+  $("app").innerHTML = html;
+
+  var q = $("q");
+  q.oninput = function(){
+    state.q = q.value; ls("q", state.q);
+    var pos = q.selectionStart; renderList(banner); var q2 = $("q"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){}
+  };
+  $("qx").onclick = function(){ state.q = ""; ls("q",""); renderList(banner); };
+  if($("fGroup")) $("fGroup").onchange = function(){ state.group = this.value; ls("group", state.group); renderList(banner); };
+  if($("fGenre")) $("fGenre").onchange = function(){ state.genre = this.value; ls("genre", state.genre); renderList(banner); };
+  document.querySelectorAll("[data-type]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-type"); state.type = state.type === t ? "" : t; ls("type", state.type); renderList(banner); }; });
+  $("fLyr").onclick = function(){ state.onlyLyrics = !state.onlyLyrics; ls("onlyLyrics", state.onlyLyrics); renderList(banner); };
+  if($("fClear")) $("fClear").onclick = function(){ state.q = state.group = state.type = state.genre = ""; state.onlyLyrics = false; ["q","group","type","genre"].forEach(function(k){ ls(k,""); }); ls("onlyLyrics", false); renderList(banner); };
+}
+
+/* ---------- one song ---------- */
+function chordHtml(line){ return esc(line).replace(CHORD_G, function(all, pre, ch){ return pre + '<span class="ch">' + ch + '</span>'; }); }
+function lyricHtml(text){
+  var h = esc(text);
+  h = h.replace(/(\/{2,4})([^\/]+?)\1/g, function(all, sl, inner){ return '<span class="rp">' + inner + '<sup>×' + sl.length + '</sup></span>'; });
+  h = h.replace(/\(\s*x\s*(\d+)\s*\)/gi, '<span class="xb">×$1</span>');
+  h = h.replace(/\(([^)]{1,60})\)/g, '<span class="echo">($1)</span>');
+  return h;
+}
+function sectionBody(sec, n, flats, showChords){
+  var lines = sec.lines, out = "", group = 0, paren = false;
+  var noteSec = sec.kind === "inst" || sec.kind === "intro" || sec.kind === "outro";
+  for(var i=0;i<lines.length;i++){
+    var l = lines[i];
+    if(!l.trim()){ if(!group) out += '<div class="gap"></div>'; continue; }
+    if(isChordLine(l)){
+      if(!showChords) continue;
+      var cl = transposeLine(l, n, flats);
+      var nx = lines[i+1];
+      if(nx && nx.trim() && !isChordLine(nx) && /\s{2,}/.test(cl.trim()) || (nx && nx.trim() && !isChordLine(nx) && /^\s+\S/.test(cl))){
+        // chords written above the words
+        var ly = nx.replace(/\s+$/,""), lead = ly.match(/^\s*(\/{2,4})/), trail = ly.match(/(\/{2,4})\s*$/);
+        var opened = false;
+        if(lead && !trail && !group){ group = lead[1].length; opened = true; ly = ly.replace(/^(\s*)\/{2,4}/,"$1"); var cut = lead[1].length; if(/^ +/.test(cl) && cl.match(/^ +/)[0].length >= cut) cl = cl.slice(cut); }
+        var closing = false;
+        if(trail && group){ ly = ly.replace(/\/{2,4}\s*$/,""); closing = true; }
+        if(opened) out += '<div class="rep"><span class="xb">×' + group + '</span>';
+        out += '<div class="pair mono"><div class="ch-line">' + chordHtml(cl) + '</div><div class="ly">' + lyricHtml(ly) + '</div></div>';
+        if(closing){ out += '</div>'; group = 0; }
+        i++; continue;
+      }
+      var ct = cl.trim(), cm = ct.match(/^(\/{2,4})(.*?)\1$/), crep = "";
+      if(cm){ ct = cm[2].trim(); crep = '<span class="xb">×' + cm[1].length + '</span>'; }
+      out += '<div class="ch-line">' + chordHtml(ct) + crep + '</div>';
+      continue;
+    }
+    var t = l.trim(), cls = "ln";
+    if(paren || /^\(/.test(t)){ cls += " note"; paren = !/\)\s*$/.test(t); }
+    else if(noteSec) cls += " note";
+    var lead2 = t.match(/^(\/{2,4})/), trail2 = t.match(/(\/{2,4})$/);
+    var whole = lead2 && trail2 && new RegExp("^(\\/{2,4})[^\\/]+?\\1$").test(t);
+    if(!whole && lead2 && !group){ group = lead2[1].length; t = t.slice(group); out += '<div class="rep"><span class="xb">×' + group + '</span>'; }
+    var close = false;
+    if(!whole && trail2 && group){ t = t.replace(/\/{2,4}$/,""); close = true; }
+    out += '<div class="' + cls + '">' + lyricHtml(t) + '</div>';
+    if(close){ out += '</div>'; group = 0; }
+  }
+  if(group) out += '</div>';
+  return out;
+}
+function renderSong(id, banner){
+  var db = state.db, s = null;
+  for(var i=0;i<db.songs.length;i++) if(db.songs[i].id === id) s = db.songs[i];
+  if(!s){ $("app").innerHTML = banner + '<div class="card empty">Could not find that song. Its name may have changed in the doc.<br><br><a href="#/">See all songs</a></div>'; return; }
+  var n = state.trans[s.id] || 0;
+  var flats = s.key ? useFlats(s.key, n) : false;
+  var showChords = state.chords && s.hasChords;
+  var meta = [];
+  if(s.key || s.keyText) meta.push('<span>Key <b>' + (s.key ? esc(keyName(s.key, n)) : esc(s.keyText)) + '</b>' + (n && s.key ? ' <span class="muted">(original ' + esc(keyName(s.key,0)) + ')</span>' : '') + '</span>');
+  if(s.bpm) meta.push('<span><b>' + s.bpm + '</b> BPM</span>');
+  if(s.time) meta.push('<span>Time <b>' + esc(s.time) + '</b></span>');
+  if(s.genre) meta.push('<span>' + esc(s.genre) + '</span>');
+  meta.push('<span>' + (s.type === 'Cover' && s.artist ? 'Cover of <b>' + esc(s.artist) + '</b>' : esc(s.type)) + '</span>');
+  if(s.meta.instruments) meta.push('<span>Instruments: ' + esc(s.meta.instruments) + '</span>');
+
+  var tools = "";
+  if(s.key || s.hasChords) tools += '<div class="tool"><span class="lbl">Key</span><button id="tDown" aria-label="Down a half step">−</button><span class="val">' + (n > 0 ? "+" + n : n) + '</span><button id="tUp" aria-label="Up a half step">+</button>' + (n ? '<button id="tReset">Reset</button>' : '') + '</div>';
+  if(s.hasChords) tools += '<div class="tool"><span class="lbl">Chords</span><button id="cOn" class="' + (state.chords ? 'on' : '') + '">On</button><button id="cOff" class="' + (state.chords ? '' : 'on') + '">Off</button></div>';
+  tools += '<div class="tool"><span class="lbl">Text</span><button id="zDown" aria-label="Smaller text">A−</button><button id="zUp" aria-label="Bigger text">A+</button></div>';
+  if(s.bpm) tools += '<div class="tool"><span class="lbl">Metronome</span><span class="beat" id="beat"></span><button id="mGo" class="' + (metro.on ? 'on' : '') + '">' + (metro.on ? 'Stop' : 'Play') + '</button></div>';
+  if("wakeLock" in navigator) tools += '<div class="tool"><span class="lbl">Screen</span><button id="wk" class="' + (wake.want ? 'on' : '') + '">' + (wake.want ? 'Stays on' : 'Normal') + '</button></div>';
+
+  var struct = s.sections.filter(function(x){ return x.label; }).map(function(x){
+    var i = s.sections.indexOf(x);
+    return '<a href="javascript:void 0" data-sec="' + i + '" class="k-' + x.kind + '">' + esc(x.label) + (x.reps ? ' ×' + x.reps : '') + '</a>';
+  });
+  var head = '<div class="card"><div class="song-head">' +
+    '<div class="backrow"><a class="ibtn" href="#/" style="text-decoration:none">‹ Songs</a>' + (s.group ? '<span class="muted" style="font-size:13px;text-align:right">' + esc(s.group) + '</span>' : '') + '</div>' +
+    '<h1>' + esc(s.title) + '</h1><div class="meta">' + meta.join("") + '</div><div class="tools">' + tools + '</div></div>' +
+    (struct.length > 1 ? '<div class="struct">' + struct.map(function(a, k){ return a.replace('">', '"><i>' + (k+1) + '</i>'); }).join("") + '</div>' : '') + '</div>';
+
+  var body = "";
+  if(!s.sections.length || (!s.hasLyrics && !s.hasChords)){
+    body += '<div class="card nolyrics">This song does not have lyrics in the doc yet.</div>';
+  }
+  if(s.sections.length){
+    body += '<div class="sections body">' + s.sections.map(function(x, i){
+      var src = x.lines.length ? x : (x.copyOf || null);
+      var inner = "";
+      if(src && src !== x) inner = '<div class="copied-lbl">Same as before</div><div class="copied">' + sectionBody(src, n, flats, showChords) + '</div>';
+      else if(src) inner = sectionBody(x, n, flats, showChords);
+      else if(x.kind !== "inst" && x.kind !== "intro" && x.kind !== "outro" && x.kind !== "other") inner = '<div class="pending">Lyrics missing</div>';
+      var h = x.label ? '<div class="sec-h k-' + x.kind + '"><span class="bar"></span>' + esc(x.label) + (x.reps ? '<span class="xb">×' + x.reps + '</span>' : '') + (x.note ? '<span class="muted" style="text-transform:none;letter-spacing:0;font-weight:600">' + esc(x.note) + '</span>' : '') + '</div>' : '';
+      if(!h && !inner) return "";
+      return '<div class="card sec" id="sec-' + i + '">' + h + inner + '</div>';
+    }).join("") + '</div>';
+  }
+  // previous / next in the list the person came from
+  var ids = state.lastList.length ? state.lastList : db.songs.slice().sort(byTitle).map(function(x){ return x.id; });
+  var at = ids.indexOf(s.id), prev = at > 0 ? find(ids[at-1]) : null, next = at >= 0 && at < ids.length-1 ? find(ids[at+1]) : null;
+  if(prev || next) body += '<div class="navrow">' + (prev ? '<a class="card" href="#/c/' + encodeURIComponent(prev.id) + '"><small>‹ Previous</small><b>' + esc(prev.title) + '</b></a>' : '<span style="flex:1"></span>') + (next ? '<a class="card next" href="#/c/' + encodeURIComponent(next.id) + '"><small>Next ›</small><b>' + esc(next.title) + '</b></a>' : '<span style="flex:1"></span>') + '</div>';
+
+  var sameSong = $("app").getAttribute("data-song") === s.id;
+  var y = window.scrollY;
+  $("app").innerHTML = banner + head + body;
+  $("app").setAttribute("data-song", s.id);
+  if(sameSong) window.scrollTo(0, y); else scrollTop();
+  if(!sameSong){ metro.stop(); }
+  metro.song = s;
+
+  function setT(v){ v = ((v % 12) + 12) % 12; if(v > 6) v -= 12; if(v) state.trans[s.id] = v; else delete state.trans[s.id]; ls("trans", state.trans); renderSong(s.id, banner); }
+  if($("tUp")) $("tUp").onclick = function(){ setT(n + 1); };
+  if($("tDown")) $("tDown").onclick = function(){ setT(n - 1); };
+  if($("tReset")) $("tReset").onclick = function(){ setT(0); };
+  if($("cOn")) $("cOn").onclick = function(){ state.chords = true; ls("chords", true); renderSong(s.id, banner); };
+  if($("cOff")) $("cOff").onclick = function(){ state.chords = false; ls("chords", false); renderSong(s.id, banner); };
+  $("zUp").onclick = function(){ setSize(state.size + 2); };
+  $("zDown").onclick = function(){ setSize(state.size - 2); };
+  if($("mGo")) $("mGo").onclick = function(){ metro.on ? metro.stop() : metro.start(s); renderSong(s.id, banner); };
+  if($("wk")) $("wk").onclick = function(){ wake.want ? wake.off() : wake.on(); renderSong(s.id, banner); };
+  document.querySelectorAll("[data-sec]").forEach(function(a){ a.onclick = function(){ var el = $("sec-" + a.getAttribute("data-sec")); if(el) el.scrollIntoView({ behavior:"smooth", block:"start" }); }; });
+}
+function find(id){ var l = state.db.songs; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
+function setSize(v){ state.size = Math.max(12, Math.min(34, v)); ls("size", state.size); document.documentElement.style.setProperty("--lyric", state.size + "px"); }
+
+/* metronome */
+var metro = { on:false, ctx:null, timer:null, next:0, beat:0, song:null,
+  start: function(s){
+    try{ this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)(); this.ctx.resume(); }catch(e){ return; }
+    var self = this; self.on = true; self.song = s; self.beat = 0; self.next = self.ctx.currentTime + 0.1;
+    var per = parseInt((s.time || "4/4").split("/")[0], 10) || 4;
+    var spb = 60 / s.bpm;
+    self.timer = setInterval(function(){
+      while(self.next < self.ctx.currentTime + 0.12){
+        var o = self.ctx.createOscillator(), g = self.ctx.createGain(), one = self.beat % per === 0;
+        o.frequency.value = one ? 1500 : 1000; g.gain.setValueAtTime(0.0001, self.next);
+        g.gain.exponentialRampToValueAtTime(one ? 0.6 : 0.35, self.next + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, self.next + 0.06);
+        o.connect(g); g.connect(self.ctx.destination); o.start(self.next); o.stop(self.next + 0.07);
+        (function(when, isOne){ setTimeout(function(){ var b = $("beat"); if(!b) return; b.className = "beat hit" + (isOne ? " one" : ""); setTimeout(function(){ if($("beat")) $("beat").className = "beat"; }, 90); }, Math.max(0, (when - self.ctx.currentTime) * 1000)); })(self.next, one);
+        self.next += spb; self.beat++;
+      }
+    }, 25);
+  },
+  stop: function(){ this.on = false; if(this.timer) clearInterval(this.timer); this.timer = null; }
+};
+/* keep the screen on */
+var wake = { want:false, lock:null,
+  on: function(){ var self = this; self.want = true; try{ navigator.wakeLock.request("screen").then(function(l){ self.lock = l; }).catch(function(){}); }catch(e){} },
+  off: function(){ this.want = false; try{ if(this.lock) this.lock.release(); }catch(e){} this.lock = null; }
+};
+
+/* ---------- set lists (other parts of the document) ---------- */
+function linkLine(text){
+  var s = findSong(state.db.songs, text);
+  return s ? '<a href="#/c/' + encodeURIComponent(s.id) + '">' + esc(text) + '</a>' : esc(text);
+}
+function listsHtml(){
+  var L = state.db.lists;
+  if(!L.length) return '<div class="card empty">No set lists yet. Any tab in the song doc that has song lists (by event or service) instead of songs shows up here.</div>';
+  return L.map(function(t){
+    var h = '<div class="card block"><h2>' + esc(t.title) + '</h2>', listOpen = false;
+    t.blocks.forEach(function(b){
+      if(b.t === "li"){ if(!listOpen){ h += '<ul>'; listOpen = true; } h += '<li>' + linkLine(b.text) + '</li>'; return; }
+      if(listOpen){ h += '</ul>'; listOpen = false; }
+      if(b.t === "table"){
+        h += '<div class="tbl"><table>' + b.rows.map(function(r){
+          return '<tr>' + r.map(function(c){ return '<td>' + splitLines(c).filter(function(x){ return x.trim(); }).map(function(x){ return '<div>' + linkLine(x.trim()) + '</div>'; }).join("") + '</td>'; }).join("") + '</tr>';
+        }).join("") + '</table></div>';
+      } else if(b.t === "p"){
+        var tx = String(b.text||"").trim(); if(!tx) return;
+        if(/HEADING|TITLE/i.test(b.h||"") && !/NORMAL/i.test(b.h||"")) h += '<h3>' + esc(tx) + '</h3>';
+        else h += splitLines(tx).map(function(x){ return x.trim() ? '<div>' + linkLine(x.trim()) + '</div>' : ''; }).join("");
+      }
+    });
+    if(listOpen) h += '</ul>';
+    return h + '</div>';
+  }).join("");
+}
+
+/* ---------- help ---------- */
+function helpHtml(){
+  var S = state.db.songs;
+  var noLyr = S.filter(function(s){ return !s.hasLyrics; }), noKey = S.filter(function(s){ return !s.key; }), noBpm = S.filter(function(s){ return !s.bpm; }), noGenre = S.filter(function(s){ return !s.genre; });
+  var noChords = S.filter(function(s){ return s.hasLyrics && !s.hasChords; });
+  function li(arr){ return arr.length ? '<ul>' + arr.slice().sort(byTitle).map(function(s){ return '<li><a href="#/c/' + encodeURIComponent(s.id) + '">' + esc(s.title) + '</a></li>'; }).join("") + '</ul>' : '<p class="muted">None.</p>'; }
+  return '<div class="card block help"><h2>How to use the songbook</h2>' +
+    '<ul><li>Search for a song by its title or by any line of the lyrics.</li>' +
+    '<li>Inside a song, the row of colored buttons at the top is the song order. Tap one to jump to that part.</li>' +
+    '<li><b>Key + / −</b> moves the chords up or down a half step. It\'s saved on your phone for that song and doesn\'t change the doc.</li>' +
+    '<li><b>//</b> in the lyrics means those lines are sung twice, <b>///</b> three times. The app shows it with a blue bar and ×2 or ×3.</li>' +
+    '<li><b>Metronome</b> plays the song\'s tempo. Beat 1 is louder.</li>' +
+    '<li><b>Screen: Stays on</b> keeps your phone from going dark while you play.</li>' +
+    '<li>Changes to the doc show up on their own when you open the app. If not, tap the refresh button at the top.</li>' +
+    '<li>To install it: on Android, open the Chrome menu and pick "Add to Home screen". On iPhone, in Safari tap Share, then "Add to Home Screen".</li></ul></div>' +
+    '<div class="card block help"><h2>How to write a song in the doc</h2>' +
+    '<p>The app reads the doc by itself, but every song has to follow the same layout:</p>' +
+    '<pre>Song title\n[table]  Type                 | Original  (or Cover)\n         Artist               | Rey de Reyes  (or the band we cover)\n         Key                  | G\n         Tempo/Time Signature | 120 BPM - 4/4\n         Genre                | Cumbia\n\nIntro\n||: [G] - [C] - [D] :||\n\nVerso I (x2)\nFirst line of the lyrics\n//These two lines\nare sung twice//\n\nCoro\n...\n\n────────────  (horizontal line or page break between songs)</pre>' +
+    '<ul><li>The title goes on its own line (Heading 2), with the table right under it: Type, Artist, Key, Tempo/Time Signature, Genre. Nothing else goes inside the table.</li>' +
+    '<li>Each part goes on its own line: Intro, Verso/Verse, Pre-Coro, Coro/Chorus, Puente/Bridge, Instrumental, Outro, Final. Numbers (Verso II) and repeats (Coro (x2)) are fine.</li>' +
+    '<li>If a part repeats exactly, just write its name again. The app shows the lyrics from the first time.</li>' +
+    '<li>Chords: on their own line, like <code>[D] - [Bm] - [G] - [A]</code>, or above the words.</li>' +
+    '<li>Notes like (Repeat everything) go in parentheses.</li>' +
+    '<li>Set lists (by event or service) go at the end of the doc under a heading called Set Lists. They show up under Set Lists here.</li></ul>' +
+    '<p><a href="' + esc(DOC_URL) + '" target="_blank" rel="noopener">Open the song doc</a></p></div>' +
+    '<div class="card block miss"><h2>What\'s missing in the doc</h2>' +
+    '<h3>No lyrics (' + noLyr.length + ')</h3>' + li(noLyr) +
+    '<h3>No key (' + noKey.length + ')</h3>' + li(noKey) +
+    '<h3>No tempo (' + noBpm.length + ')</h3>' + li(noBpm) +
+    '<h3>No rhythm / genre (' + noGenre.length + ')</h3>' + li(noGenre) +
+    '<h3>Lyrics but no chords (' + noChords.length + ')</h3>' + li(noChords) + '</div>';
+}
+function setupHtml(){
+  return '<div class="card setup"><h2 style="margin-top:0">The song doc isn\'t connected yet</h2><p>This app reads the songs from the band\'s Google Doc through a small Apps Script. Steps (one time):</p>' +
+    '<ol><li>Open script.google.com and make a new project.</li><li>Paste in <code>apps-script/Code.gs</code> from this repo and save.</li><li>Deploy &gt; New deployment &gt; Web app. Execute as: Me. Who has access: Anyone.</li><li>Copy the link that ends in <code>/exec</code> and put it in <code>SCRIPT_URL</code> at the top of <code>index.html</code>.</li></ol></div>';
+}
+
+/* ---------- start ---------- */
+var c = ls("cache");
+if(SCRIPT_URL && c && c.data){ try{ useData(c.data, "cache", c.at); state.source = "cache"; }catch(e){} }
+load(false);
+if(!state.db) route();
+if("serviceWorker" in navigator && location.protocol === "https:"){ navigator.serviceWorker.register("sw.js").catch(function(){}); }
+})();
+</script>
+</body>
+</html>
