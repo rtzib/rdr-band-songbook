@@ -3,7 +3,7 @@
 Phone-friendly songbook for the Rey de Reyes band. It reads the band's song Google Doc every time it's opened, so fixing a song in the doc fixes it for everyone.
 
 - **Song doc:** https://docs.google.com/document/d/1h71apax-e4iVCXoxrhq3wtUltAUcRPk51wqIVKMSCT0/edit
-- **Planned live page:** https://rtzib.github.io/rdr-cancionero/ (once GitHub Pages is on)
+- **Planned live page:** https://rtzib.github.io/rdr-band-songbook/ (once GitHub Pages is on)
 - No lyrics are stored in this repo. They're read live from the doc, and each phone keeps its last copy so it still works with bad internet.
 - `noindex` tag is set so Google doesn't list it. Anyone with the link can still open it.
 
