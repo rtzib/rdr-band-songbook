@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Rey de Reyes Songbook</title>
-<meta name="theme-color" content="#1d4ed8">
+<meta name="theme-color" content="#0b1120">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -159,17 +159,91 @@ main{padding:14px 0 40px}
 .miss li{font-size:14px}
 .setup{padding:18px}
 .setup ol{line-height:1.6}
+
+/* home + events */
+.pagehead{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 12px}
+.pagehead h2{margin:0;font-size:24px}
+.ibtn.primary,.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);border-radius:12px;height:42px;padding:0 16px;font-weight:700;text-decoration:none;color:var(--ink);font-size:15px}
+.btn.small{height:32px;padding:0 10px;font-size:13px;border-radius:9px}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.6}
+.hero{display:block;text-decoration:none;color:#fff;background:linear-gradient(135deg,#1d4ed8,#2563eb 60%,#3b82f6);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.hero-k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.85}
+.hero-t{font-size:24px;font-weight:800;margin:6px 0 4px;line-height:1.15}
+.hero-s{font-size:14px;opacity:.9}
+.hero-b{display:inline-block;margin-top:14px;background:#fff;color:#1d4ed8;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px;text-decoration:none}
+.week{padding:12px 14px;margin-bottom:12px}
+.week-h{font-weight:700;margin-bottom:8px}
+.week-row{display:grid;grid-template-columns:repeat(14,minmax(38px,1fr));gap:4px;overflow-x:auto;scrollbar-width:none}
+.week-row::-webkit-scrollbar{display:none}
+.day{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:10px;text-decoration:none;color:var(--ink)}
+.day span{font-size:11px;color:var(--muted)}
+.day b{font-size:16px}
+.day i{width:6px;height:6px;border-radius:50%;background:transparent}
+.day.has i{background:var(--accent)}
+.day.today{background:var(--soft)}
+.day:hover{background:var(--soft)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.stat{padding:14px 16px;text-decoration:none;color:inherit}
+.stat-k{font-weight:700;font-size:14px}
+.stat-v{font-size:30px;font-weight:800;margin:6px 0 2px}
+.heart-ic{color:#e11d48}
+.sec-title{font-size:15px;font-weight:800;margin:18px 2px 8px}
+.ev-row,.set-row{display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit}
+.ev-row:hover,.set-row:hover{border-color:var(--accent)}
+.ev-row .t,.set-row .t{font-weight:700;font-size:16px}
+.ev-row .s,.set-row .s{font-size:13px;color:var(--muted);margin-top:2px}
+.datebox{flex:0 0 48px;height:50px;border-radius:12px;background:var(--soft);color:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.datebox b{font-size:19px}.datebox span{font-size:11px;font-weight:700;text-transform:uppercase;margin-top:3px}
+.chev{color:var(--muted);font-size:20px}
+.et{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;margin-right:4px}
+.et0{background:#dbeafe;color:#1e40af}.et1{background:#e0e7ff;color:#4338ca}.et2{background:#fce7f3;color:#be185d}.et3{background:#dcfce7;color:#166534}
+.et4{background:#fef3c7;color:#92400e}.et5{background:#e5e7eb;color:#374151}.et6{background:#ffedd5;color:#9a3412}.et7{background:#f1f5f9;color:#475569}
+html.dark .et{filter:brightness(.85) saturate(1.2)}
+.ev-notes{margin-top:12px;font-size:15px;line-height:1.5;background:var(--bg);border-radius:10px;padding:10px 12px}
+.num{flex:0 0 30px;height:30px;border-radius:50%;background:var(--soft);color:var(--accent);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+.note-line{font-size:13px;color:var(--chord);margin-top:3px;font-weight:600}
+.pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:inline-block;font-size:12px;font-weight:700;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.evbar{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:10px;text-decoration:none;color:inherit;border-color:var(--accent)}
+.ev-note{padding:10px 14px;margin-bottom:10px;background:var(--warn-bg);color:var(--warn);border-color:transparent;font-size:15px}
+.song-row{padding:0;gap:0}
+.song-link{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:12px 6px 12px 14px;text-decoration:none;color:inherit}
+.heart{border:0;background:transparent;font-size:22px;width:44px;height:44px;color:var(--muted);flex:0 0 auto;line-height:1}
+.heart.on{color:#e11d48}
+.editor label,.song-head>label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-top:12px}
+.editor input,.editor select,.editor textarea,.song-head>label input{display:block;width:100%;margin-top:5px;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 12px;font-size:16px;color:var(--ink);font-weight:500}
+.editor textarea{height:84px;padding:10px 12px;resize:vertical;font-family:inherit}
+#selList+.card{margin-top:10px}
+.ibtn{font-size:14px;color:var(--ink)}
+#pickRes+*{margin-top:0}
+.card.song-head+.card.song-head{margin-top:10px}
+.row2{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px}
+@media (max-width:640px){ .row2{grid-template-columns:1fr 1fr} .row2 label:first-child{grid-column:1 / -1} }
+.sel-row{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.sel-row .t{font-weight:700}
+.note-in{width:100%;margin-top:6px;height:36px;border:1px solid var(--line);border-radius:9px;background:var(--bg);padding:0 10px;font-size:14px;color:var(--ink)}
+.sel-btns{display:flex;flex-direction:column;gap:4px}
+@media (min-width:641px){ .sel-btns{flex-direction:row} }
+.sel-btns button{width:34px;height:30px;border:1px solid var(--line);background:var(--card);border-radius:8px;font-weight:700}
+.sel-btns button:disabled{opacity:.35}
+.sel-btns .rm{color:var(--bad)}
+.pick-row{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line)}
+.pick-row:last-child{border-bottom:0}
+.pick-row .s{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="brand"><b>Songbook</b><span id="status">Rey de Reyes</span></div>
+    <div class="brand"><b>RDR Band</b><span id="status">Rey de Reyes</span></div>
     <nav class="tabs" id="tabsTop">
-      <a href="#/" data-v="list">Songs</a>
-      <a href="#/listas" data-v="lists">Set Lists</a>
-      <a href="#/ayuda" data-v="help">Help</a>
+      <a href="#/" data-v="home">Home</a>
+      <a href="#/songs" data-v="songs">Songs</a>
+      <a href="#/events" data-v="events">Events</a>
     </nav>
+    <a class="ibtn" href="#/help" title="Help" aria-label="Help" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></a>
     <button class="ibtn" id="btnRefresh" title="Refresh from the song doc" aria-label="Refresh">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
     </button>
@@ -182,9 +256,9 @@ main{padding:14px 0 40px}
 <main><div class="wrap" id="app"><div class="empty">Loading songs...</div></div></main>
 
 <nav class="bottom" id="tabsBottom">
-  <a href="#/" data-v="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</a>
-  <a href="#/listas" data-v="lists"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Set Lists</a>
-  <a href="#/ayuda" data-v="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>Help</a>
+  <a href="#/" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+  <a href="#/songs" data-v="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</a>
+  <a href="#/events" data-v="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 17h6"/></svg>Events</a>
 </nav>
 
 <script>
@@ -446,12 +520,14 @@ var $ = function(id){ return document.getElementById(id); };
 var state = {
   db: null, source: "", loadedAt: 0, error: "", loading: false,
   q: ls("q") || "", group: ls("group") || "", type: ls("type") || "", genre: ls("genre") || "", onlyLyrics: !!ls("onlyLyrics"),
-  chords: ls("chords") !== false, size: ls("size") || 18, trans: ls("trans") || {}, lastList: []
+  chords: ls("chords") !== false, size: ls("size") || 18, trans: ls("trans") || {}, lastList: [],
+  saved: ls("saved") || {}, onlySaved: false, pin: ls("pin") || "",
+  events: null, evAt: 0, evError: "", evLoading: false, evQ: "", evType: "", draft: null, draftKey: "", pick: ""
 };
 
 /* theme */
 function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#0b1120" : "#1d4ed8"; }
-setTheme(ls("theme") || "light");
+setTheme(ls("theme") || "dark");
 $("btnTheme").onclick = function(){ setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"); };
 document.documentElement.style.setProperty("--lyric", state.size + "px");
 
@@ -504,7 +580,7 @@ function status(){
   }
   $("status").textContent = s;
 }
-$("btnRefresh").onclick = function(){ load(true); };
+$("btnRefresh").onclick = function(){ load(true); loadEvents(true); };
 document.addEventListener("visibilitychange", function(){
   if(document.visibilityState === "visible"){
     if(SCRIPT_URL && Date.now() - state.loadedAt > REFRESH_MINUTES*60000) load(false);
@@ -515,13 +591,20 @@ document.addEventListener("visibilitychange", function(){
 /* ---------- routing ---------- */
 function route(){
   status();
-  var h = location.hash.replace(/^#\/?/,"");
-  var view = "list", arg = "";
+  var h = location.hash.replace(/^#\/?/,""), m;
+  var view = "home", arg = "", arg2 = "";
   if(/^c\//.test(h)){ view = "song"; arg = decodeURIComponent(h.slice(2)); }
-  else if(h === "listas") view = "lists";
-  else if(h === "ayuda") view = "help";
-  document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === (view === "song" ? "list" : view)); });
-  if(view !== "song"){ metro.stop(); }
+  else if(/^songs/.test(h)){ view = "songs"; if(/\?saved/.test(h)) state.onlySaved = true; }
+  else if(h === "events") view = "events";
+  else if((m = h.match(/^e\/([^\/]+)\/s\/(\d+)$/))){ view = "evsong"; arg = decodeURIComponent(m[1]); arg2 = +m[2]; }
+  else if((m = h.match(/^e\/([^\/]+)\/edit$/))){ view = "edit"; arg = decodeURIComponent(m[1]); }
+  else if((m = h.match(/^e\/([^\/]+)$/))){ view = "event"; arg = decodeURIComponent(m[1]); }
+  else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
+  else if(h === "help" || h === "ayuda" || h === "listas") view = "help";
+  var tab = { song:"songs", songs:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home" }[view] || "";
+  document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
+  if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
+  if(view !== "edit"){ state.draft = null; state.draftKey = ""; }
   var app = $("app");
   if(!state.db){
     if(state.error === "setup") app.innerHTML = setupHtml();
@@ -532,10 +615,24 @@ function route(){
   var banner = "";
   if(state.error && state.source === "cache") banner = '<div class="banner warn">No internet. You are seeing the last copy saved on this phone.</div>';
   else if(state.error && state.source === "live") banner = '<div class="banner warn">Could not refresh. You are seeing the last version that loaded.</div>';
+  if(view === "home" || view === "events" || view === "event" || view === "evsong") loadEvents(false);
   if(view === "song") renderSong(arg, banner);
-  else if(view === "lists"){ app.innerHTML = banner + listsHtml(); scrollTop(); }
+  else if(view === "songs") renderList(banner);
+  else if(view === "events"){ renderEvents(banner); }
+  else if(view === "event") renderEvent(arg, banner);
+  else if(view === "evsong"){
+    var ev = findEvent(arg);
+    if(!ev){ renderEvent(arg, banner); }
+    else {
+      var it = (ev.songs || [])[arg2];
+      if(!it){ location.hash = "#/e/" + encodeURIComponent(ev.id); return; }
+      var sg = songFor(it);
+      renderSong(sg ? sg.id : "", banner, { ev: ev, idx: arg2, item: it });
+    }
+  }
+  else if(view === "edit") renderEditor(arg, arg2, banner);
   else if(view === "help"){ app.innerHTML = banner + helpHtml(); scrollTop(); }
-  else renderList(banner);
+  else { renderHome(banner); scrollTop(); }
 }
 function scrollTop(){ window.scrollTo(0,0); }
 window.addEventListener("hashchange", function(){ route(); if(!/^#\/?c\//.test(location.hash)) {} });
@@ -548,6 +645,7 @@ function filtered(){
     if(state.type && s.type !== state.type) return false;
     if(state.genre && norm(s.genre) !== state.genre) return false;
     if(state.onlyLyrics && !s.hasLyrics) return false;
+    if(state.onlySaved && !state.saved[s.id]) return false;
     for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false;
     return true;
   });
@@ -555,24 +653,24 @@ function filtered(){
 function byTitle(a,b){ return a.titleN < b.titleN ? -1 : a.titleN > b.titleN ? 1 : 0; }
 function songRow(s){
   var bits = [];
-  if(s.bpm) bits.push(s.bpm + " BPM" + (s.time && s.time !== "4/4" ? " " + s.time : ""));
+  if(s.artist && s.type === "Cover") bits.push(esc(s.artist));
   if(s.genre) bits.push(esc(s.genre));
-  if(s.artist && s.type === 'Cover') bits.push(esc(s.artist));
   var tags = "";
   if(!s.hasLyrics) tags += '<span class="tag w">No lyrics</span>';
   if(s.hasChords) tags += '<span class="tag c">Chords</span>';
   if(s.type === "Cover") tags += '<span class="tag">Cover</span>';
-  return '<a class="card song-row" href="#/c/' + encodeURIComponent(s.id) + '">' +
-    '<div class="key-badge' + (s.key ? '' : ' none') + '">' + (s.key ? esc(keyName(s.key, 0)) : '–') + '</div>' +
-    '<div style="min-width:0"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div></a>';
+  var pills = (s.key ? '<span class="pill">' + esc(keyName(s.key, 0) + (s.key.minor ? " Minor" : " Major").replace(/m Minor$/, " Minor")) + '</span>' : '') + (s.bpm ? '<span class="pill">' + s.bpm + ' bpm</span>' : '');
+  return '<div class="card song-row"><a class="song-link" href="#/c/' + encodeURIComponent(s.id) + '">' +
+    '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div><div class="pills">' + pills + '</div></a>' +
+    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="' + (state.saved[s.id] ? 'Remove from saved' : 'Save song') + '">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
 }
 function renderList(banner){
   var db = state.db, list = filtered();
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
   var gkeys = Object.keys(genres).sort();
-  var anyFilter = state.group || state.type || state.genre || state.onlyLyrics || state.q;
-  var nFilters = (state.group?1:0) + (state.type?1:0) + (state.genre?1:0) + (state.onlyLyrics?1:0) + (state.q?1:0);
-  var html = banner +
+  var anyFilter = state.group || state.type || state.genre || state.onlyLyrics || state.onlySaved || state.q;
+  var nFilters = (state.group?1:0) + (state.type?1:0) + (state.genre?1:0) + (state.onlyLyrics?1:0) + (state.onlySaved?1:0) + (state.q?1:0);
+  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2></div>' +
     '<div class="search' + (state.q ? ' has' : '') + '" id="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button></div>' +
     '<div class="filters">' +
@@ -580,6 +678,7 @@ function renderList(banner){
       '<button class="chip' + (state.type === "Original" ? ' on' : '') + '" data-type="Original">Originals</button>' +
       '<button class="chip' + (state.type === "Cover" ? ' on' : '') + '" data-type="Cover">Covers</button>' +
       (gkeys.length ? '<select id="fGenre"><option value="">All rhythms</option>' + gkeys.map(function(k){ return '<option value="' + esc(k) + '"' + (k === state.genre ? ' selected' : '') + '>' + esc(genres[k]) + '</option>'; }).join("") + '</select>' : '') +
+      '<button class="chip' + (state.onlySaved ? ' on' : '') + '" id="fSaved">♥ Saved</button>' +
       '<button class="chip' + (state.onlyLyrics ? ' on' : '') + '" id="fLyr">Has lyrics</button>' +
       (anyFilter ? '<button class="chip clear" id="fClear">Clear filters (' + nFilters + ')</button>' : '') +
     '</div>';
@@ -611,8 +710,10 @@ function renderList(banner){
   if($("fGroup")) $("fGroup").onchange = function(){ state.group = this.value; ls("group", state.group); renderList(banner); };
   if($("fGenre")) $("fGenre").onchange = function(){ state.genre = this.value; ls("genre", state.genre); renderList(banner); };
   document.querySelectorAll("[data-type]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-type"); state.type = state.type === t ? "" : t; ls("type", state.type); renderList(banner); }; });
+  $("fSaved").onclick = function(){ state.onlySaved = !state.onlySaved; if(!state.onlySaved && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); };
+  document.querySelectorAll("[data-heart]").forEach(function(b){ b.onclick = function(ev){ ev.preventDefault(); var id = b.getAttribute("data-heart"); if(state.saved[id]) delete state.saved[id]; else state.saved[id] = 1; ls("saved", state.saved); renderList(banner); }; });
   $("fLyr").onclick = function(){ state.onlyLyrics = !state.onlyLyrics; ls("onlyLyrics", state.onlyLyrics); renderList(banner); };
-  if($("fClear")) $("fClear").onclick = function(){ state.q = state.group = state.type = state.genre = ""; state.onlyLyrics = false; ["q","group","type","genre"].forEach(function(k){ ls(k,""); }); ls("onlyLyrics", false); renderList(banner); };
+  if($("fClear")) $("fClear").onclick = function(){ state.q = state.group = state.type = state.genre = ""; state.onlyLyrics = false; state.onlySaved = false; if(/\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); ["q","group","type","genre"].forEach(function(k){ ls(k,""); }); ls("onlyLyrics", false); renderList(banner); };
 }
 
 /* ---------- one song ---------- */
@@ -665,10 +766,16 @@ function sectionBody(sec, n, flats, showChords){
   if(group) out += '</div>';
   return out;
 }
-function renderSong(id, banner){
+function renderSong(id, banner, ctx){
   var db = state.db, s = null;
   for(var i=0;i<db.songs.length;i++) if(db.songs[i].id === id) s = db.songs[i];
-  if(!s){ $("app").innerHTML = banner + '<div class="card empty">Could not find that song. Its name may have changed in the doc.<br><br><a href="#/">See all songs</a></div>'; return; }
+  if(!s && ctx){
+    var L = ctx.ev.songs, pi = ctx.idx - 1, ni = ctx.idx + 1, eid = encodeURIComponent(ctx.ev.id);
+    $("app").innerHTML = banner + evBarHtml(ctx) + '<div class="card nolyrics"><b style="font-size:20px;color:var(--ink)">' + esc(ctx.item.title) + '</b><br><br>This song is not in the song doc yet, so there are no lyrics to show.</div>' +
+      '<div class="navrow">' + (pi >= 0 ? '<a class="card" href="#/e/' + eid + '/s/' + pi + '"><small>‹ Previous</small><b>' + esc(L[pi].title) + '</b></a>' : '<span style="flex:1"></span>') + (ni < L.length ? '<a class="card next" href="#/e/' + eid + '/s/' + ni + '"><small>Next ›</small><b>' + esc(L[ni].title) + '</b></a>' : '<span style="flex:1"></span>') + '</div>';
+    $("app").setAttribute("data-song", "@" + ctx.idx); scrollTop(); return;
+  }
+  if(!s){ $("app").innerHTML = banner + '<div class="card empty">Could not find that song. Its name may have changed in the doc.<br><br><a href="#/songs">See all songs</a></div>'; return; }
   var n = state.trans[s.id] || 0;
   var flats = s.key ? useFlats(s.key, n) : false;
   var showChords = state.chords && s.hasChords;
@@ -691,8 +798,9 @@ function renderSong(id, banner){
     var i = s.sections.indexOf(x);
     return '<a href="javascript:void 0" data-sec="' + i + '" class="k-' + x.kind + '">' + esc(x.label) + (x.reps ? ' ×' + x.reps : '') + '</a>';
   });
-  var head = '<div class="card"><div class="song-head">' +
-    '<div class="backrow"><a class="ibtn" href="#/" style="text-decoration:none">‹ Songs</a>' + (s.group ? '<span class="muted" style="font-size:13px;text-align:right">' + esc(s.group) + '</span>' : '') + '</div>' +
+  var head = (ctx ? evBarHtml(ctx) : '') + '<div class="card"><div class="song-head">' +
+    '<div class="backrow"><a class="ibtn" href="' + (ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) : '#/songs') + '" style="text-decoration:none">' + (ctx ? '‹ Set list' : '‹ Songs') + '</a><div style="display:flex;gap:6px;align-items:center">' + (s.group ? '<span class="muted" style="font-size:13px;text-align:right">' + esc(s.group) + '</span>' : '') +
+      '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" id="sHeart" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div></div>' +
     '<h1>' + esc(s.title) + '</h1><div class="meta">' + meta.join("") + '</div><div class="tools">' + tools + '</div></div>' +
     (struct.length > 1 ? '<div class="struct">' + struct.map(function(a, k){ return a.replace('">', '"><i>' + (k+1) + '</i>'); }).join("") + '</div>' : '') + '</div>';
 
@@ -712,29 +820,35 @@ function renderSong(id, banner){
       return '<div class="card sec" id="sec-' + i + '">' + h + inner + '</div>';
     }).join("") + '</div>';
   }
-  // previous / next in the list the person came from
+  // previous / next: the set list when playing an event, otherwise the list the person came from
+  if(ctx){
+    var L2 = ctx.ev.songs, eid2 = encodeURIComponent(ctx.ev.id), p2 = ctx.idx - 1, n2 = ctx.idx + 1;
+    body += '<div class="navrow">' + (p2 >= 0 ? '<a class="card" href="#/e/' + eid2 + '/s/' + p2 + '"><small>‹ Previous</small><b>' + esc(L2[p2].title) + '</b></a>' : '<span style="flex:1"></span>') + (n2 < L2.length ? '<a class="card next" href="#/e/' + eid2 + '/s/' + n2 + '"><small>Next song ›</small><b>' + esc(L2[n2].title) + '</b></a>' : '<a class="card next" href="#/e/' + eid2 + '"><small>End of set</small><b>Back to set list</b></a>') + '</div>';
+  }
   var ids = state.lastList.length ? state.lastList : db.songs.slice().sort(byTitle).map(function(x){ return x.id; });
-  var at = ids.indexOf(s.id), prev = at > 0 ? find(ids[at-1]) : null, next = at >= 0 && at < ids.length-1 ? find(ids[at+1]) : null;
+  var at = ctx ? -1 : ids.indexOf(s.id), prev = at > 0 ? find(ids[at-1]) : null, next = at >= 0 && at < ids.length-1 ? find(ids[at+1]) : null;
   if(prev || next) body += '<div class="navrow">' + (prev ? '<a class="card" href="#/c/' + encodeURIComponent(prev.id) + '"><small>‹ Previous</small><b>' + esc(prev.title) + '</b></a>' : '<span style="flex:1"></span>') + (next ? '<a class="card next" href="#/c/' + encodeURIComponent(next.id) + '"><small>Next ›</small><b>' + esc(next.title) + '</b></a>' : '<span style="flex:1"></span>') + '</div>';
 
-  var sameSong = $("app").getAttribute("data-song") === s.id;
+  var songKey = s.id + (ctx ? "@" + ctx.idx : "");
+  var sameSong = $("app").getAttribute("data-song") === songKey;
   var y = window.scrollY;
   $("app").innerHTML = banner + head + body;
-  $("app").setAttribute("data-song", s.id);
+  $("app").setAttribute("data-song", songKey);
   if(sameSong) window.scrollTo(0, y); else scrollTop();
   if(!sameSong){ metro.stop(); }
   metro.song = s;
 
-  function setT(v){ v = ((v % 12) + 12) % 12; if(v > 6) v -= 12; if(v) state.trans[s.id] = v; else delete state.trans[s.id]; ls("trans", state.trans); renderSong(s.id, banner); }
+  function setT(v){ v = ((v % 12) + 12) % 12; if(v > 6) v -= 12; if(v) state.trans[s.id] = v; else delete state.trans[s.id]; ls("trans", state.trans); renderSong(s.id, banner, ctx); }
   if($("tUp")) $("tUp").onclick = function(){ setT(n + 1); };
   if($("tDown")) $("tDown").onclick = function(){ setT(n - 1); };
   if($("tReset")) $("tReset").onclick = function(){ setT(0); };
-  if($("cOn")) $("cOn").onclick = function(){ state.chords = true; ls("chords", true); renderSong(s.id, banner); };
-  if($("cOff")) $("cOff").onclick = function(){ state.chords = false; ls("chords", false); renderSong(s.id, banner); };
+  if($("cOn")) $("cOn").onclick = function(){ state.chords = true; ls("chords", true); renderSong(s.id, banner, ctx); };
+  if($("cOff")) $("cOff").onclick = function(){ state.chords = false; ls("chords", false); renderSong(s.id, banner, ctx); };
   $("zUp").onclick = function(){ setSize(state.size + 2); };
   $("zDown").onclick = function(){ setSize(state.size - 2); };
-  if($("mGo")) $("mGo").onclick = function(){ metro.on ? metro.stop() : metro.start(s); renderSong(s.id, banner); };
-  if($("wk")) $("wk").onclick = function(){ wake.want ? wake.off() : wake.on(); renderSong(s.id, banner); };
+  if($("mGo")) $("mGo").onclick = function(){ metro.on ? metro.stop() : metro.start(s); renderSong(s.id, banner, ctx); };
+  if($("wk")) $("wk").onclick = function(){ wake.want ? wake.off() : wake.on(); renderSong(s.id, banner, ctx); };
+  $("sHeart").onclick = function(){ if(state.saved[s.id]) delete state.saved[s.id]; else state.saved[s.id] = 1; ls("saved", state.saved); renderSong(s.id, banner, ctx); };
   document.querySelectorAll("[data-sec]").forEach(function(a){ a.onclick = function(){ var el = $("sec-" + a.getAttribute("data-sec")); if(el) el.scrollIntoView({ behavior:"smooth", block:"start" }); }; });
 }
 function find(id){ var l = state.db.songs; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
@@ -765,6 +879,248 @@ var wake = { want:false, lock:null,
   on: function(){ var self = this; self.want = true; try{ navigator.wakeLock.request("screen").then(function(l){ self.lock = l; }).catch(function(){}); }catch(e){} },
   off: function(){ this.want = false; try{ if(this.lock) this.lock.release(); }catch(e){} this.lock = null; }
 };
+
+function evBarHtml(ctx){
+  var e = ctx.ev, n = (e.songs || []).length;
+  return '<a class="card evbar" href="#/e/' + encodeURIComponent(e.id) + '"><div style="min-width:0;flex:1"><div class="muted" style="font-size:12px">Set list · song ' + (ctx.idx + 1) + ' of ' + n + '</div><b>' + esc(e.title) + '</b></div><span class="chev">☰</span></a>' +
+    (ctx.item && ctx.item.note ? '<div class="card ev-note"><b>Note for this event:</b> ' + esc(ctx.item.note) + '</div>' : '');
+}
+/* ---------- events (saved in the band's Google Sheet) ---------- */
+var EV_TYPES = ["Service", "Rehearsal", "Wedding", "Campaign", "Youth", "Funeral", "Birthday", "Other"];
+function evTypeClass(t){ var i = EV_TYPES.indexOf(t); return "et et" + (i < 0 ? 7 : i); }
+function ymd(d){ return d.getFullYear() + "-" + ("0" + (d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+function evDate(e){ var p = String(e.date||"").split("-"); return p.length === 3 ? new Date(+p[0], +p[1]-1, +p[2]) : null; }
+function fmtTime(t){ if(!t) return ""; var p = t.split(":"), h = +p[0], m = p[1]; return (h % 12 || 12) + ":" + m + (h < 12 ? " AM" : " PM"); }
+function fmtDate(e, long){
+  var d = evDate(e); if(!d) return e.date || "";
+  var s = d.toLocaleDateString("en-US", long ? { weekday:"long", month:"long", day:"numeric", year:"numeric" } : { weekday:"short", month:"short", day:"numeric" });
+  return s + (e.time ? " · " + fmtTime(e.time) : "");
+}
+function evKey(e){ return (e.date || "") + " " + (e.time || "99:99"); }
+function splitEvents(){
+  var all = (state.events || []).slice(), today = ymd(new Date());
+  var up = all.filter(function(e){ return e.date >= today; }).sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; });
+  var past = all.filter(function(e){ return e.date < today; }).sort(function(a,b){ return evKey(a) > evKey(b) ? -1 : 1; });
+  return { up: up, past: past };
+}
+function findEvent(id){ var l = state.events || []; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
+function songFor(item){
+  if(!state.db) return null;
+  return (item.id && find(item.id)) || findSong(state.db.songs, item.title);
+}
+function loadEvents(force){
+  if(!SCRIPT_URL || state.evLoading) return;
+  if(!force && state.evAt && Date.now() - state.evAt < 30000) return;
+  state.evLoading = true;
+  jsonp(SCRIPT_URL + "?action=events").then(function(d){
+    if(!d || !d.ok) throw new Error((d && d.error) || "bad");
+    state.events = d.events || []; state.evAt = Date.now(); state.evError = "";
+    ls("events", { at: state.evAt, events: state.events });
+  }).catch(function(e){ state.evError = String(e.message || e); state.evAt = Date.now(); })
+    .then(function(){ state.evLoading = false; var hs = location.hash || "#/"; if(/^#\/?(|e\/.*|events)$/.test(hs) && !/\/edit$/.test(hs)) route(); });
+}
+function evBanner(){
+  if(state.evError === "not_set_up") return '<div class="banner warn">Events aren\'t set up yet. Run setupBand once in the RDR Songbook script.</div>';
+  if(state.evError && !state.events) return '<div class="banner bad">Could not load events (' + esc(state.evError) + ').</div>';
+  if(state.evError) return '<div class="banner warn">Could not refresh events. Showing the last copy on this phone.</div>';
+  return "";
+}
+function dateBox(e){
+  var d = evDate(e);
+  return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>';
+}
+function evRow(e){
+  var n = (e.songs || []).length;
+  return '<a class="card ev-row" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) +
+    '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + '</div><div class="s">' +
+    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span> ' : '') +
+    esc(fmtDate(e)) + ' · ' + n + (n === 1 ? ' song' : ' songs') + '</div></div><span class="chev">›</span></a>';
+}
+
+/* ---------- home ---------- */
+function renderHome(banner){
+  var sp = splitEvents(), next = sp.up[0], db = state.db;
+  var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length;
+  var withLyr = db.songs.filter(function(s){ return s.hasLyrics; }).length;
+  var h = banner + evBanner();
+  if(next){
+    h += '<a class="hero" href="#/e/' + encodeURIComponent(next.id) + '"><div class="hero-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div>' +
+      '<div class="hero-t">' + esc(next.title) + '</div><div class="hero-s">' + esc(fmtDate(next, true)) + '</div>' +
+      '<div class="hero-s">' + (next.songs||[]).length + ' songs in the set list</div><span class="hero-b">Open set list ›</span></a>';
+  } else {
+    h += '<div class="hero"><div class="hero-k">Next up</div><div class="hero-t">Nothing planned yet</div><div class="hero-s">No upcoming events.</div><a class="hero-b" href="#/new">+ Create event</a></div>';
+  }
+  // the next two weeks
+  var days = [], byDay = {};
+  sp.up.forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
+  for(var i=0;i<14;i++){ var d = new Date(); d.setDate(d.getDate() + i); days.push(d); }
+  h += '<div class="card week"><div class="week-h">' + days[0].toLocaleDateString("en-US", { weekday:"short", month:"short", day:"numeric" }) + '</div><div class="week-row">' +
+    days.map(function(d, i){
+      var k = ymd(d), evs = byDay[k] || [];
+      var href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : "#/new/" + k;
+      return '<a class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '" href="' + href + '" title="' + (evs.length ? esc(evs.map(function(e){ return e.title; }).join(", ")) : "Plan an event") + '"><span>' +
+        d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></a>';
+    }).join("") + '</div></div>';
+  h += '<div class="grid2"><a class="card stat" href="#/songs?saved"><div class="stat-k"><span class="heart-ic">♥</span> Saved songs</div><div class="stat-v">' + savedN + '</div><div class="muted" style="font-size:12px">Saved on this phone</div></a>' +
+    '<a class="card stat" href="#/songs"><div class="stat-k">Songbook</div><div class="stat-v">' + db.songs.length + '</div><div class="muted" style="font-size:12px">' + withLyr + ' with lyrics</div></a></div>';
+  h += '<div class="sec-title">Upcoming</div>';
+  h += sp.up.length > 1 ? '<div class="songs">' + sp.up.slice(1, 6).map(evRow).join("") + '</div>' : '<div class="card empty">' + (sp.up.length ? 'Nothing else planned after that.' : 'No invitations or planned events yet.') + '</div>';
+  $("app").innerHTML = h;
+}
+
+/* ---------- events list ---------- */
+function renderEvents(banner){
+  var sp = splitEvents(), q = norm(state.evQ || ""), ft = state.evType || "";
+  function ok(e){ return (!ft || e.type === ft) && (!q || norm(e.title + " " + e.type + " " + e.notes + " " + (e.songs||[]).map(function(s){ return s.title; }).join(" ")).indexOf(q) >= 0); }
+  var up = sp.up.filter(ok), past = sp.past.filter(ok);
+  var h = banner + evBanner() +
+    '<div class="pagehead"><h2>Events</h2><a class="ibtn primary" href="#/new">+ New event</a></div>' +
+    '<div class="search' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+    '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button></div>' +
+    '<div class="filters">' + EV_TYPES.map(function(t){ return '<button class="chip' + (ft === t ? ' on' : '') + '" data-et="' + t + '">' + t + '</button>'; }).join("") + '</div>';
+  if(!state.events && state.evLoading) h += '<div class="card empty">Loading events...</div>';
+  else {
+    if(up[0]) h += '<a class="hero" href="#/e/' + encodeURIComponent(up[0].id) + '"><div class="hero-k">Next event' + (up[0].type ? ' · ' + esc(up[0].type) : '') + '</div><div class="hero-t">' + esc(up[0].title) + '</div><div class="hero-s">' + esc(fmtDate(up[0], true)) + ' · ' + (up[0].songs||[]).length + ' songs</div><span class="hero-b">Open set list ›</span></a>';
+    else h += '<div class="hero"><div class="hero-k">No upcoming event</div><div class="hero-s">Nothing planned' + (q || ft ? ' that matches' : '') + '.</div><a class="hero-b" href="#/new">+ Create event</a></div>';
+    if(up.length > 1){ h += '<div class="sec-title">Upcoming</div><div class="songs">' + up.slice(1).map(evRow).join("") + '</div>'; }
+    h += '<div class="sec-title">Past events</div>' + (past.length ? '<div class="songs">' + past.map(evRow).join("") + '</div>' : '<div class="card empty">No past events yet.</div>');
+  }
+  $("app").innerHTML = h;
+  var eq = $("eq");
+  eq.oninput = function(){ state.evQ = eq.value; var pos = eq.selectionStart; renderEvents(banner); var e2 = $("eq"); e2.focus(); try{ e2.setSelectionRange(pos,pos); }catch(e){} };
+  $("eqx").onclick = function(){ state.evQ = ""; renderEvents(banner); };
+  document.querySelectorAll("[data-et]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-et"); state.evType = state.evType === t ? "" : t; renderEvents(banner); }; });
+}
+
+/* ---------- one event ---------- */
+function renderEvent(id, banner){
+  var e = findEvent(id);
+  if(!e){ $("app").innerHTML = banner + evBanner() + '<div class="card empty">' + (state.evLoading || !state.events ? 'Loading event...' : 'This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a>') + '</div>'; return; }
+  var items = e.songs || [];
+  var h = banner + evBanner() + '<div class="card song-head">' +
+    '<div class="backrow"><a class="ibtn" href="#/events" style="text-decoration:none">‹ Events</a><div style="display:flex;gap:6px"><button class="ibtn" id="evCopy">Copy link</button><a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '/edit" style="text-decoration:none">Edit</a></div></div>' +
+    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span>' : '') +
+    '<h1 style="margin-top:8px">' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span><span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
+    (e.notes ? '<div class="ev-notes">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>' : '') +
+    (items.length ? '<a class="btn primary" style="margin-top:14px" href="#/e/' + encodeURIComponent(e.id) + '/s/0">Start set list ›</a>' : '') + '</div>';
+  h += '<div class="sec-title">Set list</div>';
+  if(!items.length) h += '<div class="card empty">No songs yet. Tap Edit to add the set list.</div>';
+  else h += '<div class="songs">' + items.map(function(it, i){
+    var s = songFor(it), bits = [];
+    if(s && s.key) bits.push('<span class="pill">' + esc(keyName(s.key, 0)) + '</span>');
+    if(s && s.bpm) bits.push('<span class="pill">' + s.bpm + ' bpm</span>');
+    return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
+      (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the song doc</div>' : (s.artist && s.type === "Cover" ? '<div class="s">' + esc(s.artist) + '</div>' : '')) +
+      '</div><div class="pills">' + bits.join("") + '</div></a>';
+  }).join("") + '</div>';
+  $("app").innerHTML = h; scrollTop();
+  $("evCopy").onclick = function(){
+    var url = location.href.split("#")[0] + "#/e/" + encodeURIComponent(e.id), b = this;
+    function done(){ b.textContent = "Copied"; setTimeout(function(){ b.textContent = "Copy link"; }, 1500); }
+    try{ navigator.clipboard.writeText(url).then(done, function(){ prompt("Copy this link:", url); }); }catch(x){ prompt("Copy this link:", url); }
+  };
+}
+
+/* ---------- add / edit an event ---------- */
+function renderEditor(id, newDate, banner){
+  var e = id ? findEvent(id) : null;
+  if(id && !e){ $("app").innerHTML = banner + '<div class="card empty">' + (state.events ? 'This event was not found.' : 'Loading event...') + '</div>'; return; }
+  var key = id || ("new" + (newDate || ""));
+  if(!state.draft || state.draftKey !== key){
+    state.draftKey = key;
+    state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type:"Service", date: newDate || ymd(new Date()), time:"19:00", notes:"", songs:[] };
+    state.pick = "";
+  }
+  var d = state.draft;
+  var h = banner + '<div class="card song-head editor">' +
+    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/e/' + encodeURIComponent(id) : '#/events') + '" id="edCancel" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit event' : 'New event') + '</span></div>' +
+    '<label>Event name<input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="e.g. Sunday service, Boda | Rene Mena"></label>' +
+    '<div class="row2"><label>Type<select id="fType">' + EV_TYPES.map(function(t){ return '<option' + (d.type === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label>' +
+    '<label>Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label>Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
+    '<label>Notes<textarea id="fNotes" maxlength="1000" placeholder="Place, who is playing, dress code...">' + esc(d.notes) + '</textarea></label></div>';
+  h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div><div id="selList"></div>';
+  h += '<div class="card song-head"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+    '<input id="pickQ" type="search" placeholder="Add a song: type a title" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div></div>';
+  h += '<div class="card song-head">' + (state.pin ? '' : '<label>Band PIN<input id="fPin" type="password" inputmode="numeric" autocomplete="off" placeholder="Ask Ryan for the band PIN"></label>') +
+    '<div id="edMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn primary" id="edSave">Save event</button>' +
+    (id ? '<button class="btn danger" id="edDel">Delete event</button>' : '') + (state.pin ? '<button class="btn" id="edForget">Forget PIN on this phone</button>' : '') + '</div></div>';
+  $("app").innerHTML = h;
+
+  function bind(idn, key){ $(idn).oninput = function(){ d[key] = this.value; }; }
+  bind("fTitle", "title"); bind("fType", "type"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes");
+  $("fType").onchange = function(){ d.type = this.value; };
+  function drawSel(){
+    $("selCount").textContent = d.songs.length ? "(" + d.songs.length + ")" : "";
+    $("selList").innerHTML = d.songs.length ? '<div class="songs">' + d.songs.map(function(it, i){
+      var s = songFor(it);
+      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="pill">' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
+        '<input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note (optional), e.g. capo 2, skip Verso II" value="' + esc(it.note || "") + '"></div>' +
+        '<div class="sel-btns"><button data-up="' + i + '" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button data-down="' + i + '" aria-label="Move down"' + (i === d.songs.length-1 ? ' disabled' : '') + '>↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
+    }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search below to add them in order.</div>';
+    document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ d.songs[+x.getAttribute("data-note")].note = x.value; }; });
+    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"); var t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
+    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"); var t = d.songs[i+1]; d.songs[i+1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
+    document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ d.songs.splice(+x.getAttribute("data-rm"), 1); drawSel(); drawPick(); }; });
+  }
+  function drawPick(){
+    var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
+    d.songs.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
+    var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
+      .sort(function(a,b){ var at = words.length && a.titleN.indexOf(q) === 0 ? 0 : 1, bt = words.length && b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, q ? 12 : 6);
+    $("pickRes").innerHTML = (q ? '' : '<div class="muted" style="font-size:12px;margin:10px 2px 4px">Type to search all ' + state.db.songs.length + ' songs</div>') + res.map(function(s){
+      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", s.group].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
+        (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
+    }).join("") + (q && !res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
+    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "" }); drawSel(); drawPick(); }; });
+    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"" }); state.pick = ""; $("pickQ").value = ""; drawSel(); drawPick(); };
+  }
+  $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
+  $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
+  drawSel(); drawPick();
+
+  function msg(t, bad){ $("edMsg").innerHTML = t ? '<div class="banner ' + (bad ? 'bad' : 'warn') + '" style="margin:8px 0 0">' + t + '</div>' : ''; }
+  function pinNow(){ return state.pin || ($("fPin") ? $("fPin").value.trim() : ""); }
+  $("edSave").onclick = function(){
+    var b = this, pin = pinNow();
+    if(!d.title.trim()) return msg("Give the event a name.", true);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.", true);
+    if(!pin) return msg("Type the band PIN to save.", true);
+    b.disabled = true; b.textContent = "Saving...";
+    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, notes: d.notes, songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "" }; }) };
+    jsonp(SCRIPT_URL + "?action=save&pin=" + encodeURIComponent(pin) + "&data=" + encodeURIComponent(JSON.stringify(payload)), 30000).then(function(r){
+      if(r && r.ok){
+        state.pin = pin; ls("pin", pin);
+        payload.id = r.id; payload.updated = new Date().toISOString();
+        var l = state.events || [], at = -1; l.forEach(function(x, i){ if(x.id === r.id) at = i; });
+        if(at >= 0) l[at] = payload; else l.push(payload);
+        state.events = l; ls("events", { at: Date.now(), events: l });
+        state.draft = null; state.draftKey = "";
+        location.hash = "#/e/" + encodeURIComponent(r.id);
+        loadEvents(true);
+      } else {
+        b.disabled = false; b.textContent = "Save event";
+        if(r && r.error === "wrong_pin"){ state.pin = ""; ls("pin", ""); renderEditor(id, newDate, banner); msg("That PIN didn't work. Try again.", true); }
+        else msg("Could not save (" + esc((r && r.error) || "unknown") + ").", true);
+      }
+    }).catch(function(x){ b.disabled = false; b.textContent = "Save event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again.", true); });
+  };
+  if($("edDel")) $("edDel").onclick = function(){
+    var pin = pinNow();
+    if(!pin) return msg("Type the band PIN to delete.", true);
+    if(!confirm('Delete "' + d.title + '"? This removes it for everyone.')) return;
+    jsonp(SCRIPT_URL + "?action=delete&pin=" + encodeURIComponent(pin) + "&id=" + encodeURIComponent(id), 30000).then(function(r){
+      if(r && r.ok){
+        state.pin = pin; ls("pin", pin);
+        state.events = (state.events || []).filter(function(x){ return x.id !== id; }); ls("events", { at: Date.now(), events: state.events });
+        state.draft = null; state.draftKey = "";
+        location.hash = "#/events"; loadEvents(true);
+      } else if(r && r.error === "wrong_pin"){ state.pin = ""; ls("pin", ""); renderEditor(id, newDate, banner); msg("That PIN didn't work. Try again.", true); }
+      else msg("Could not delete (" + esc((r && r.error) || "unknown") + ").", true);
+    }).catch(function(x){ msg("Could not reach the server (" + esc(x.message) + ").", true); });
+  };
+  if($("edForget")) $("edForget").onclick = function(){ state.pin = ""; ls("pin", ""); renderEditor(id, newDate, banner); };
+  $("edCancel").onclick = function(){ state.draft = null; state.draftKey = ""; };
+}
 
 /* ---------- set lists (other parts of the document) ---------- */
 function linkLine(text){
@@ -807,6 +1163,8 @@ function helpHtml(){
     '<li><b>//</b> in the lyrics means those lines are sung twice, <b>///</b> three times. The app shows it with a blue bar and ×2 or ×3.</li>' +
     '<li><b>Metronome</b> plays the song\'s tempo. Beat 1 is louder.</li>' +
     '<li><b>Screen: Stays on</b> keeps your phone from going dark while you play.</li>' +
+    '<li><b>Events</b> hold the set list for each service, wedding or rehearsal. Open one and tap Start set list to go song by song. Making or changing an event needs the band PIN.</li>' +
+    '<li><b>♥</b> saves a song to your own list on this phone.</li>' +
     '<li>Changes to the doc show up on their own when you open the app. If not, tap the refresh button at the top.</li>' +
     '<li>To install it: on Android, open the Chrome menu and pick "Add to Home screen". On iPhone, in Safari tap Share, then "Add to Home Screen".</li></ul></div>' +
     '<div class="card block help"><h2>How to write a song in the doc</h2>' +
@@ -817,14 +1175,15 @@ function helpHtml(){
     '<li>If a part repeats exactly, just write its name again. The app shows the lyrics from the first time.</li>' +
     '<li>Chords: on their own line, like <code>[D] - [Bm] - [G] - [A]</code>, or above the words.</li>' +
     '<li>Notes like (Repeat everything) go in parentheses.</li>' +
-    '<li>Set lists (by event or service) go at the end of the doc under a heading called Set Lists. They show up under Set Lists here.</li></ul>' +
+    '<li>New songs go in their album tab (or Other Artists for covers). Set lists for events are made in the app under Events, not in the doc.</li></ul>' +
     '<p><a href="' + esc(DOC_URL) + '" target="_blank" rel="noopener">Open the song doc</a></p></div>' +
     '<div class="card block miss"><h2>What\'s missing in the doc</h2>' +
     '<h3>No lyrics (' + noLyr.length + ')</h3>' + li(noLyr) +
     '<h3>No key (' + noKey.length + ')</h3>' + li(noKey) +
     '<h3>No tempo (' + noBpm.length + ')</h3>' + li(noBpm) +
     '<h3>No rhythm / genre (' + noGenre.length + ')</h3>' + li(noGenre) +
-    '<h3>Lyrics but no chords (' + noChords.length + ')</h3>' + li(noChords) + '</div>';
+    '<h3>Lyrics but no chords (' + noChords.length + ')</h3>' + li(noChords) + '</div>' +
+    '<div class="sec-title">Playlists in the song doc</div>' + listsHtml();
 }
 function setupHtml(){
   return '<div class="card setup"><h2 style="margin-top:0">The song doc isn\'t connected yet</h2><p>This app reads the songs from the band\'s Google Doc through a small Apps Script. Steps (one time):</p>' +
@@ -833,6 +1192,7 @@ function setupHtml(){
 
 /* ---------- start ---------- */
 var c = ls("cache");
+var ce = ls("events"); if(ce && ce.events){ state.events = ce.events; }
 if(SCRIPT_URL && c && c.data){ try{ useData(c.data, "cache", c.at); state.source = "cache"; }catch(e){} }
 load(false);
 if(!state.db) route();
