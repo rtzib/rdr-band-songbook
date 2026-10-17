@@ -2,7 +2,7 @@
  * Rey de Reyes Songbook - backend for the web app (file "Reader.gs" in the RDR Songbook Apps Script project).
  *
  * Everything lives in one Google Sheet that works like a database (tabs):
- *   Songs, Albums, Artists, Genres, Themes, Members, Events, SetList
+ *   Songs, Albums, Artists, Genres, Themes, EventTypes, Members, Events, SetList
  * A song has one genre (the rhythm, like Soca) and any number of themes (the occasion, like Wedding), saved as "Wedding, Birthday".
  * The app reads it all at once (action=data) and writes with the band PIN.
  *
@@ -25,12 +25,14 @@ var TABLES = {
   Artists: ["Name"],
   Genres:  ["Name"],
   Themes:  ["Name"],
+  EventTypes: ["Name"],
   Members: ["ID", "Name", "Instruments", "Active"],
   Events:  ["ID", "Title", "Type", "Date", "Time", "Location", "Notes", "Updated", "Players", "Status", "StatusNote"],
   SetList: ["EventID", "Order", "SongTitle", "SongID", "Note", "Key"]
 };
 var START_GENRES = ["Adoracion", "Balada", "Cumbia", "Jubilo", "Parranda", "Punta", "Reggae", "Rock", "Soca", "Waltz"];
 var START_THEMES = ["Birthday", "September Celebration", "Wedding"];
+var START_EVENT_TYPES = ["Service", "Rehearsal", "Wedding", "Campaign", "Youth", "Funeral", "Birthday", "Other"];
 var START_ARTISTS = ["Rey de Reyes Band", "Ilasmos", "Juan Carlos Alvarado", "Marcos Witt", "Miel San Marcos", "Miguel Leal"];
 var BAND_ARTIST = "Rey de Reyes Band";
 
@@ -95,6 +97,7 @@ function setupBand() {
   var ar = rows_(ss, "Artists").map(function (r) { return low_(r.Name); });
   START_ARTISTS.forEach(function (n) { if (ar.indexOf(low_(n)) < 0) appendRow_(ss, "Artists", { Name: n }); });
   START_THEMES.forEach(function (n) { addToList_(ss, "Themes", n); });
+  eventTypes_(ss);
   if (!props.getProperty("BAND_PIN")) props.setProperty("BAND_PIN", String(Math.floor(1000 + Math.random() * 9000)));
   cacheClear_();
   Logger.log("Database sheet: " + ss.getUrl());
@@ -189,10 +192,11 @@ function dataJson_(fresh) {
   var artists = rows_(ss, "Artists").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; });
   var genres = rows_(ss, "Genres").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; });
   var themes = rows_(ss, "Themes").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; });
+  var eventTypes = eventTypes_(ss);
   var members = rows_(ss, "Members").filter(function (r) { return r.ID && r.Name; }).map(function (r) {
     return { id: r.ID, name: r.Name, instruments: r.Instruments, active: r.Active !== "no" };
   });
-  body = JSON.stringify({ ok: true, version: 2, read: new Date().toISOString(), songs: songs, albums: albums, artists: artists, genres: genres, themes: themes, members: members, events: listEvents_(ss) });
+  body = JSON.stringify({ ok: true, version: 2, read: new Date().toISOString(), songs: songs, albums: albums, artists: artists, genres: genres, themes: themes, eventTypes: eventTypes, members: members, events: listEvents_(ss) });
   cachePut_(body);
   return body;
 }
@@ -242,9 +246,58 @@ function addToList_(ss, name, value) {
   if (!rows_(ss, name).some(function (r) { return low_(r.Name) === low_(value); })) appendRow_(ss, name, { Name: value });
 }
 
+/* ================= event types ================= */
+// the first time, fill the EventTypes tab with the starting list (and any type an event already uses)
+// locked: true when called from inside write_ (it already holds the lock)
+function eventTypes_(ss, locked) {
+  function names() { return rows_(ss, "EventTypes").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; }); }
+  var list = names();
+  if (list.length) return list;
+  var lock = locked ? null : LockService.getScriptLock();
+  if (lock && !lock.tryLock(10000)) return START_EVENT_TYPES.slice();
+  try {
+    list = names();
+    if (list.length) return list;
+    var all = START_EVENT_TYPES.slice();
+    rows_(ss, "Events").forEach(function (r) { var t = clean_(r.Type, 30); if (t && !all.some(function (x) { return low_(x) === low_(t); })) all.push(t); });
+    all.forEach(function (n) { appendRow_(ss, "EventTypes", { Name: n }); });
+    return all;
+  } finally { if (lock) lock.releaseLock(); }
+}
+function eventTypeOp_(ss, d) {
+  var op = String(d.op || ""), name = clean_(d.name, 30), old = clean_(d.old, 30);
+  eventTypes_(ss, true);
+  var list = rows_(ss, "EventTypes"), events = rows_(ss, "Events");
+  if (op === "add") {
+    if (!name) return { ok: false, error: "no_name" };
+    if (list.some(function (r) { return low_(r.Name) === low_(name); })) return { ok: false, error: "exists" };
+    appendRow_(ss, "EventTypes", { Name: name });
+    return { ok: true };
+  }
+  var row = list.filter(function (r) { return low_(r.Name) === low_(old); })[0];
+  if (!row) return { ok: false, error: "not_found" };
+  function uses(e) { return low_(e.Type) === low_(old); }
+  if (op === "rename") {
+    if (!name) return { ok: false, error: "no_name" };
+    if (low_(name) !== low_(old) && list.some(function (r) { return low_(r.Name) === low_(name); })) return { ok: false, error: "exists" };
+    updateRow_(ss, "EventTypes", row._row, { Name: name });
+    events.forEach(function (e) { if (uses(e)) updateRow_(ss, "Events", e._row, { Type: name }); });
+    return { ok: true };
+  }
+  if (op === "delete") {
+    var used = events.filter(uses).length;
+    if (used && !d.force) return { ok: false, error: "in_use", count: used };
+    table_(ss, "EventTypes").sh.deleteRow(row._row);
+    events.forEach(function (e) { if (uses(e)) updateRow_(ss, "Events", e._row, { Type: "" }); });
+    return { ok: true };
+  }
+  return { ok: false, error: "bad_op" };
+}
+
 /* ================= albums / artists / genres / members ================= */
 function listOp_(d) {
   var ss = sheet_(), kind = String(d.kind || ""), op = String(d.op || "");
+  if (kind === "EventTypes") return eventTypeOp_(ss, d);
   var name = clean_(d.name, 100), old = clean_(d.old, 100);
   var songCol = { Albums: "Album", Artists: "Artist", Genres: "Genre", Themes: "Themes" }[kind];
   // a song can have many themes, so check and change them one by one
@@ -327,6 +380,8 @@ function saveEvent_(e) {
                Status: e.status === "canceled" ? "Canceled" : "", StatusNote: e.status === "canceled" ? clean_(e.statusNote, 200) : "" };
   var mine = rows_(ss, "Events").filter(function (r) { return r.ID === id; })[0];
   if (mine) updateRow_(ss, "Events", mine._row, vals); else appendRow_(ss, "Events", vals);
+  eventTypes_(ss, true);
+  addToList_(ss, "EventTypes", vals.Type);
   writeSetList_(ss, id, songs);
   return { ok: true, id: id };
 }
