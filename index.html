@@ -442,6 +442,8 @@ body.noscroll{overflow:hidden}
 .switch-row input:checked + i{background:var(--accent)}
 .switch-row input:checked + i::after{left:21px}
 .sheet .seg button{font-size:13px}
+.sheet .seg{flex-wrap:wrap}
+.sheet .seg button{flex:1 1 auto}
 .sheet-foot{display:flex;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--line)}
 .sheet-foot .btn{flex:1}
 .sheet-foot .btn.primary{flex:2}
@@ -758,7 +760,8 @@ var state = {
   q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
   chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
   saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
-  events: null, evQ: "", evType: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
+  ef: (function(){ var f = ls("ef") || {}; return { view: f.view || "upcoming", types: f.types || [], when: f.when || "any", sort: f.sort || "" }; })(),
+  events: null, evQ: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
 };
 function leader(){ return !!state.pin; }
 
@@ -1338,21 +1341,77 @@ function startCountdown(e){
 }
 
 /* ---------- events list ---------- */
+var WHENS = { any: "Any time", month: "This month", next90: "Next 3 months", year: "This year" };
+var ESORTS = { soon: "Earliest first", late: "Latest first" };
+function evFiltered(f){
+  var today = ymd(new Date()), now = new Date(), q = norm(state.evQ || "");
+  var mStart = ymd(new Date(now.getFullYear(), now.getMonth(), 1)), mEnd = ymd(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+  var n90 = new Date(); n90.setDate(n90.getDate() + 90);
+  var yStart = now.getFullYear() + "-01-01", yEnd = now.getFullYear() + "-12-31";
+  var list = (state.events || []).filter(function(e){
+    if(f.view === "upcoming" && e.date < today) return false;
+    if(f.view === "past" && e.date >= today) return false;
+    if(f.types.length && f.types.indexOf(e.type || "Other") < 0) return false;
+    if(f.when === "month" && (e.date < mStart || e.date > mEnd)) return false;
+    if(f.when === "next90" && (e.date < today || e.date > ymd(n90))) return false;
+    if(f.when === "year" && (e.date < yStart || e.date > yEnd)) return false;
+    if(q && norm(e.title + " " + e.type + " " + (e.location || "") + " " + e.notes + " " + (e.songs||[]).map(function(s){ return s.title; }).join(" ")).indexOf(q) < 0) return false;
+    return true;
+  });
+  var sort = f.sort || (f.view === "upcoming" ? "soon" : "late");
+  return list.sort(function(a,b){ var x = evKey(a), y = evKey(b); return sort === "soon" ? (x < y ? -1 : x > y ? 1 : 0) : (x > y ? -1 : x < y ? 1 : 0); });
+}
+function evSheetCount(f){ return f.types.length + (f.when !== "any" ? 1 : 0) + (f.sort ? 1 : 0); }
 function renderEvents(banner){
-  var sp = splitEvents(), q = norm(state.evQ || ""), ft = state.evType || "";
-  function ok(e){ return (!ft || e.type === ft) && (!q || norm(e.title + " " + e.type + " " + (e.location || "") + " " + e.notes + " " + (e.songs||[]).map(function(s){ return s.title; }).join(" ")).indexOf(q) >= 0); }
-  var up = sp.up.filter(ok), past = sp.past.filter(ok);
-  var h = banner + '<div class="pagehead"><h2>Events</h2></div>' +
-    '<div class="search' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-    '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button></div>' +
-    '<div class="filters">' + EV_TYPES.map(function(t){ return '<button class="chip' + (ft === t ? ' on' : '') + '" data-et="' + t + '">' + t + '</button>'; }).join("") + '</div>';
-  h += up.length ? '<div class="sec-title">Upcoming</div><div class="songs">' + up.map(evRow).join("") + '</div>' : '<div class="card empty">No upcoming events' + (q || ft ? ' that match' : '') + '.</div>';
-  h += '<div class="sec-title">Past events</div>' + (past.length ? '<div class="songs">' + past.map(evRow).join("") + '</div>' : '<div class="card empty">No past events yet.</div>');
+  var f = state.ef, list = evFiltered(f), n = evSheetCount(f);
+  var views = [["upcoming","Upcoming"],["past","Past"],["all","All"]];
+  var chips = [];
+  f.types.forEach(function(t){ chips.push('<button class="fchip" data-rm-type="' + esc(t) + '">' + esc(t) + ' <b>×</b></button>'); });
+  if(f.when !== "any") chips.push('<button class="fchip" data-rm-when="1">' + WHENS[f.when] + ' <b>×</b></button>');
+  if(f.sort) chips.push('<button class="fchip" data-rm-esort="1">' + ESORTS[f.sort] + ' <b>×</b></button>');
+  if(chips.length > 1) chips.push('<button class="fchip clear" id="efClearAll">Clear all</button>');
+  var h = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Events</h2></div>' +
+    '<div class="search has-filter' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+    '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button>' +
+    '<button class="fbtn' + (n ? ' on' : '') + '" id="efOpen" aria-label="Filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>' + (n ? '<i>' + n + '</i>' : '') + '</button></div>' +
+    '<div class="seg">' + views.map(function(v){ return '<button class="' + (f.view === v[0] ? 'on' : '') + '" data-ev="' + v[0] + '">' + v[1] + '</button>'; }).join("") + '</div>' +
+    (chips.length ? '<div class="fchips">' + chips.join("") + '</div>' : '');
+  if(!list.length) h += '<div class="card empty">' + (n || state.evQ ? 'No events match.' : f.view === "upcoming" ? 'Nothing planned yet.' + (leader() ? ' Tap + to add an event.' : '') : f.view === "past" ? 'No past events yet.' : 'No events yet.') + '</div>';
+  else h += '<div class="songs">' + list.map(evRow).join("") + '</div>';
   $("app").innerHTML = h;
   var eq = $("eq");
   eq.oninput = function(){ state.evQ = eq.value; var pos = eq.selectionStart; renderEvents(banner); var e2 = $("eq"); e2.focus(); try{ e2.setSelectionRange(pos,pos); }catch(e){} };
   $("eqx").onclick = function(){ state.evQ = ""; renderEvents(banner); };
-  document.querySelectorAll("[data-et]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-et"); state.evType = state.evType === t ? "" : t; renderEvents(banner); }; });
+  $("efOpen").onclick = function(){ openEventFilters(banner); };
+  function save(){ ls("ef", state.ef); renderEvents(banner); }
+  document.querySelectorAll("[data-ev]").forEach(function(b){ b.onclick = function(){ f.view = b.getAttribute("data-ev"); save(); }; });
+  document.querySelectorAll("[data-rm-type]").forEach(function(b){ b.onclick = function(){ f.types = f.types.filter(function(x){ return x !== b.getAttribute("data-rm-type"); }); save(); }; });
+  document.querySelectorAll("[data-rm-when]").forEach(function(b){ b.onclick = function(){ f.when = "any"; save(); }; });
+  document.querySelectorAll("[data-rm-esort]").forEach(function(b){ b.onclick = function(){ f.sort = ""; save(); }; });
+  if($("efClearAll")) $("efClearAll").onclick = function(){ f.types = []; f.when = "any"; f.sort = ""; save(); };
+}
+function openEventFilters(banner){
+  var d = JSON.parse(JSON.stringify(state.ef));
+  var ov = document.createElement("div"); ov.className = "sheet-bg"; ov.id = "efsheet";
+  document.body.appendChild(ov); document.body.classList.add("noscroll");
+  function cnt(t){ return (state.events || []).filter(function(e){ return (e.type || "Other") === t; }).length; }
+  function draw(){
+    ov.innerHTML = '<div class="sheet"><div class="sheet-grab"></div><div class="sheet-head"><b>Filters</b><button class="xclose" id="efX" aria-label="Close">×</button></div><div class="sheet-body">' +
+      '<div class="sheet-h">Type</div><div class="gchips">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.types.indexOf(t) >= 0 ? ' on' : '') + '" data-ty="' + t + '">' + t + ' <span class="muted" style="font-size:12px">' + cnt(t) + '</span></button>'; }).join("") + '</div>' +
+      '<div class="sheet-h">When</div><div class="seg">' + Object.keys(WHENS).map(function(k){ return '<button class="' + (d.when === k ? 'on' : '') + '" data-wh="' + k + '">' + WHENS[k] + '</button>'; }).join("") + '</div>' +
+      '<div class="sheet-h">Sort by date</div><div class="seg"><button class="' + (!d.sort ? 'on' : '') + '" data-es="">Automatic</button>' + Object.keys(ESORTS).map(function(k){ return '<button class="' + (d.sort === k ? 'on' : '') + '" data-es="' + k + '">' + ESORTS[k] + '</button>'; }).join("") + '</div>' +
+      '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: upcoming events soonest first, past events most recent first.</div>' +
+      '</div><div class="sheet-foot"><button class="btn" id="efClear">Clear all</button><button class="btn primary" id="efGo">Show ' + evFiltered(d).length + ' events</button></div></div>';
+    ov.querySelectorAll("[data-ty]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-ty"), i = d.types.indexOf(t); if(i >= 0) d.types.splice(i, 1); else d.types.push(t); draw(); }; });
+    ov.querySelectorAll("[data-wh]").forEach(function(b){ b.onclick = function(){ d.when = b.getAttribute("data-wh"); draw(); }; });
+    ov.querySelectorAll("[data-es]").forEach(function(b){ b.onclick = function(){ d.sort = b.getAttribute("data-es"); draw(); }; });
+    $("efClear").onclick = function(){ d.types = []; d.when = "any"; d.sort = ""; draw(); };
+    $("efGo").onclick = function(){ state.ef = d; ls("ef", d); close(); renderEvents(banner); };
+    $("efX").onclick = close;
+  }
+  function close(){ ov.remove(); document.body.classList.remove("noscroll"); }
+  ov.onclick = function(e){ if(e.target === ov) close(); };
+  draw();
 }
 
 /* ---------- one event ---------- */
