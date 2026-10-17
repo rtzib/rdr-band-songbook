@@ -201,6 +201,8 @@ main{padding:14px 0 40px}
 .et0{background:#dbeafe;color:#1e40af}.et1{background:#e0e7ff;color:#4338ca}.et2{background:#fce7f3;color:#be185d}.et3{background:#dcfce7;color:#166534}
 .et4{background:#fef3c7;color:#92400e}.et5{background:#e5e7eb;color:#374151}.et6{background:#ffedd5;color:#9a3412}.et7{background:#f1f5f9;color:#475569}
 html.dark .et{filter:brightness(.85) saturate(1.2)}
+.loc{display:inline-flex;align-items:center;gap:5px;font-size:13px;background:var(--soft);border-radius:999px;padding:4px 10px;color:var(--accent);text-decoration:none;font-weight:600}
+.loc svg{width:14px;height:14px}
 .ev-notes{margin-top:12px;font-size:15px;line-height:1.5;background:var(--bg);border-radius:10px;padding:10px 12px}
 .num{flex:0 0 30px;height:30px;border-radius:50%;background:var(--soft);color:var(--accent);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
 .note-line{font-size:13px;color:var(--chord);margin-top:3px;font-weight:600}
@@ -229,9 +231,62 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .sel-btns button{width:34px;height:30px;border:1px solid var(--line);background:var(--card);border-radius:8px;font-weight:700}
 .sel-btns button:disabled{opacity:.35}
 .sel-btns .rm{color:var(--bad)}
+.partbtns{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+.partbtns .chip{height:32px;font-size:13px}
+.editor textarea.lyrics-in{height:320px;font-family:var(--mono);font-size:15px;line-height:1.5;white-space:pre;overflow-x:auto}
 .pick-row{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line)}
 .pick-row:last-child{border-bottom:0}
 .pick-row .s{font-size:12px;color:var(--muted)}
+
+/* v2: simpler song screen, rehearsal mode, guide, leader tools */
+.song-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn.big{height:52px;font-size:17px;padding:0 22px;border-radius:14px}
+.hero{color:#fff}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.hero-b{display:inline-flex;align-items:center;border:0;background:#fff;color:#1d4ed8;border-radius:12px;padding:10px 16px;font-weight:800;font-size:15px;text-decoration:none;cursor:pointer}
+.hero-b.big{font-size:18px;padding:12px 26px}
+.hero-b.ghost{background:rgba(255,255,255,.18);color:#fff}
+.tip{display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:10px;border-color:var(--accent)}
+.xclose{border:0;background:transparent;color:var(--muted);font-size:22px;width:34px;height:34px}
+.foot{text-align:center;font-size:13px;color:var(--muted);margin:22px 0 4px}
+.foot a{color:var(--muted)}
+.players{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.players span{font-size:13px;background:var(--soft);border-radius:999px;padding:4px 10px}
+.pill.hl{border-color:var(--accent);color:var(--accent)}
+.setnav{display:flex;gap:8px;margin-top:14px}
+.snbtn{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit;min-height:64px}
+.snbtn.next{text-align:right;border-color:var(--accent)}
+.snbtn.off{visibility:hidden}
+.snbtn small{display:block;color:var(--muted);font-size:12px}
+.snbtn b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
+body.stage header.top,body.stage nav.bottom{display:none}
+body.stage main{padding-top:10px;padding-bottom:110px}
+body.stage .setnav.fixed{position:fixed;left:0;right:0;bottom:0;margin:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);z-index:40}
+.guide{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;padding:14px}
+@media (min-width:641px){ .guide{align-items:center} }
+.guide-card{background:var(--card);color:var(--ink);border-radius:20px;padding:20px;max-width:480px;width:100%;font-size:16px;line-height:1.5}
+.guide-card h2{margin:6px 0 8px;font-size:22px}
+.guide-top{display:flex;justify-content:space-between;align-items:center}
+.guide-dots{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.guide-dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.guide-dots i.on{background:var(--accent)}
+.guide-card .btn.big{width:100%}
+.addrow{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.addrow input{flex:1;min-width:120px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 10px;color:var(--ink);font-size:15px}
+.mrow{display:flex;align-items:center;gap:6px;padding:8px 0;border-top:1px solid var(--line);font-size:15px}
+.banner.ok{background:rgba(4,120,87,.15);color:var(--k-chorus)}
+.pgrid{display:grid;gap:8px}
+.prow{display:flex;align-items:center;gap:10px;font-size:15px}
+.prow input[type=checkbox]{width:20px;height:20px}
+.prow b{min-width:90px}
+.prow .note-in{margin:0;flex:1}
+.sel-in{display:flex;gap:6px;margin-top:6px}
+.sel-in .key-in{height:36px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:0 6px;font-size:14px;max-width:110px}
+.sel-in .note-in{margin:0}
+.partbtns{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+.partbtns .chip{height:32px;font-size:13px}
+.editor textarea.lyrics-in{height:320px;font-family:var(--mono);font-size:15px;line-height:1.5;white-space:pre;overflow-x:auto}
+@media (max-width:640px){ .song-head h1{font-size:24px} }
 </style>
 </head>
 <body>
@@ -489,7 +544,7 @@ function parseDoc(data){
     s.titleN = norm(s.title);
     delete s.raw;
   });
-  return { songs: songs, lists: lists, groups: groups, name: data.name || "", updated: data.updated || "" };
+  return { songs: songs, lists: lists, groups: groups, tabsAll: (data.tabs || []).map(function(t){ return { title: t.title || "", parent: t.parent || "" }; }), name: data.name || "", updated: data.updated || "" };
 }
 
 // match a line from a set list ("2. Si supieras [D]") to a song
@@ -506,6 +561,29 @@ function findSong(songs, text){
   }
   return best;
 }
+// the band database (Google Sheet) -> songs ready to show
+function parseDb(raw){
+  var songs = (raw.songs || []).map(function(r){
+    var s = { id: r.id, title: String(r.title || ""), album: r.album || "", type: /cover/i.test(r.type || "") ? "Cover" : "Original", artist: r.artist || "",
+              keyText: r.key || "", key: parseKey(r.key), bpm: parseInt(r.bpm, 10) || null, time: r.time || "", genre: r.genre || "", link: r.link || "", lyrics: String(r.lyrics || "") };
+    s.group = s.album || (s.type === "Cover" ? "Covers" : "No album");
+    var lines = splitLines(s.lyrics);
+    s.sections = buildSections(lines);
+    s.hasChords = lines.some(isChordLine);
+    s.hasLyrics = s.sections.some(function(x){ return x.kind !== "inst" && x.kind !== "intro" && x.lines.some(function(l){ return l.trim() && !isChordLine(l) && !/^\(.*\)$/.test(l.trim()); }); });
+    s.search = norm(s.title + " " + s.artist + " " + s.genre + " " + s.album + " " + s.lyrics);
+    s.titleN = norm(s.title);
+    return s;
+  });
+  var albums = (raw.albums || []).map(function(a){ return { name: a.name, year: a.year || "" }; });
+  var groups = [], seen = {};
+  function add(g){ if(g && !seen[g] && songs.some(function(s){ return s.group === g; })){ seen[g] = 1; groups.push(g); } }
+  albums.forEach(function(a){ add(a.name); });
+  songs.forEach(function(s){ if(s.album) add(s.album); });
+  add("Covers"); add("No album");
+  function abc(a, b){ return norm(a) < norm(b) ? -1 : 1; }
+  return { songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), members: raw.members || [] };
+}
 /* CORE-END */
 </script>
 
@@ -519,11 +597,12 @@ var $ = function(id){ return document.getElementById(id); };
 
 var state = {
   db: null, source: "", loadedAt: 0, error: "", loading: false,
-  q: ls("q") || "", group: ls("group") || "", type: ls("type") || "", genre: ls("genre") || "", onlyLyrics: !!ls("onlyLyrics"),
-  chords: ls("chords") !== false, size: ls("size") || 18, trans: ls("trans") || {}, lastList: [],
-  saved: ls("saved") || {}, onlySaved: false, pin: ls("pin") || "",
-  events: null, evAt: 0, evError: "", evLoading: false, evQ: "", evType: "", draft: null, draftKey: "", pick: ""
+  q: ls("q") || "", group: ls("group") || "", type: ls("type") || "", genre: ls("genre") || "", onlyLyrics: !!ls("onlyLyrics"), onlySaved: false,
+  chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
+  saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
+  events: null, evQ: "", evType: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
 };
+function leader(){ return !!state.pin; }
 
 /* theme */
 function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#0b1120" : "#1d4ed8"; }
@@ -531,12 +610,12 @@ setTheme(ls("theme") || "dark");
 $("btnTheme").onclick = function(){ setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"); };
 document.documentElement.style.setProperty("--lyric", state.size + "px");
 
-/* ---------- data ---------- */
+/* ---------- talking to the Google script ---------- */
 function jsonp(url, ms){
   return new Promise(function(res, rej){
     var name = "cb_" + Date.now() + "_" + Math.floor(Math.random()*1e6);
     var tag = document.createElement("script"), done = false;
-    var timer = setTimeout(function(){ finish(); rej(new Error("timeout")); }, ms || 25000);
+    var timer = setTimeout(function(){ finish(); rej(new Error("timeout")); }, ms || 30000);
     function finish(){ done = true; clearTimeout(timer); try{ delete window[name]; }catch(e){ window[name] = undefined; } if(tag.parentNode) tag.parentNode.removeChild(tag); }
     window[name] = function(d){ if(done) return; finish(); res(d); };
     tag.onerror = function(){ if(done) return; finish(); rej(new Error("network")); };
@@ -544,70 +623,83 @@ function jsonp(url, ms){
     document.head.appendChild(tag);
   });
 }
+// long data (lyrics) goes in pieces, because a web link can only be so long
+function send(action, pin, obj){
+  var str = JSON.stringify(obj), size = 1500;
+  if(str.length <= size) return jsonp(SCRIPT_URL + "?action=" + action + "&pin=" + encodeURIComponent(pin) + "&data=" + encodeURIComponent(str), 45000);
+  var key = "k" + Date.now() + Math.floor(Math.random()*1e6), n = Math.ceil(str.length / size), i = 0;
+  function next(){
+    if(i >= n) return jsonp(SCRIPT_URL + "?action=" + action + "&pin=" + encodeURIComponent(pin) + "&key=" + key, 45000);
+    var idx = i++;
+    return jsonp(SCRIPT_URL + "?action=part&pin=" + encodeURIComponent(pin) + "&key=" + key + "&i=" + idx + "&n=" + n + "&chunk=" + encodeURIComponent(str.slice(idx*size, (idx+1)*size)), 30000)
+      .then(function(r){ return r && r.ok ? next() : (r || { ok:false, error:"part_failed" }); });
+  }
+  return next();
+}
 function useData(raw, source, when){
-  state.db = parseDoc(raw); state.source = source; state.loadedAt = when || Date.now();
+  state.db = parseDb(raw); state.events = raw.events || []; state.source = source; state.loadedAt = when || Date.now();
   route();
 }
 function load(force){
-  if(state.loading) return;
-  if(!SCRIPT_URL){
-    if(window.SNAPSHOT){ useData(window.SNAPSHOT, "snapshot"); }
-    else { state.error = "setup"; route(); }
-    return;
-  }
+  if(state.loading) return Promise.resolve();
+  if(!SCRIPT_URL){ if(window.SNAPSHOT) useData(window.SNAPSHOT, "snapshot"); else { state.error = "setup"; route(); } return Promise.resolve(); }
   state.loading = true; $("btnRefresh").classList.add("spin"); status();
-  jsonp(SCRIPT_URL + (force ? "?fresh=1" : "")).then(function(d){
+  return jsonp(SCRIPT_URL + "?action=data" + (force ? "&fresh=1" : "")).then(function(d){
     if(!d || !d.ok) throw new Error((d && d.error) || "bad");
     state.error = "";
-    ls("cache", { at: Date.now(), data: d });
+    ls("cache2", { at: Date.now(), data: d });
     useData(d, "live");
   }).catch(function(e){
     state.error = String(e.message || e);
-    if(!state.db){
-      var c = ls("cache");
-      if(c && c.data) useData(c.data, "cache", c.at); else route();
-    } else route();
+    if(!state.db){ var c = ls("cache2"); if(c && c.data) useData(c.data, "cache", c.at); else route(); } else route();
   }).then(function(){ state.loading = false; $("btnRefresh").classList.remove("spin"); status(); });
 }
 function status(){
   var s = "Rey de Reyes";
   if(state.loading) s = "Refreshing...";
   else if(state.db){
-    var d = new Date(state.loadedAt);
-    var hhmm = d.toLocaleTimeString("en-US", { hour:"numeric", minute:"2-digit" });
+    var d = new Date(state.loadedAt), hhmm = d.toLocaleTimeString("en-US", { hour:"numeric", minute:"2-digit" });
     var day = d.toDateString() === new Date().toDateString() ? "" : d.toLocaleDateString("en-US", { day:"numeric", month:"short" }) + " ";
     s = state.source === "snapshot" ? "Test copy" : (state.source === "cache" ? "Offline, copy from " + day + hhmm : "Updated " + day + hhmm);
   }
+  if(leader()) s += " · Leader";
   $("status").textContent = s;
 }
-$("btnRefresh").onclick = function(){ load(true); loadEvents(true); };
+$("btnRefresh").onclick = function(){ load(true); };
 document.addEventListener("visibilitychange", function(){
   if(document.visibilityState === "visible"){
     if(SCRIPT_URL && Date.now() - state.loadedAt > REFRESH_MINUTES*60000) load(false);
     if(wake.want) wake.on();
   }
 });
+window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); state.installEvt = e; });
 
 /* ---------- routing ---------- */
 function route(){
   status();
   var h = location.hash.replace(/^#\/?/,""), m;
   var view = "home", arg = "", arg2 = "";
-  if(/^c\//.test(h)){ view = "song"; arg = decodeURIComponent(h.slice(2)); }
+  if((m = h.match(/^c\/([^\/]+)\/edit$/))){ view = "songedit"; arg = decodeURIComponent(m[1]); }
+  else if(/^c\//.test(h)){ view = "song"; arg = decodeURIComponent(h.slice(2)); }
+  else if(h === "newsong"){ view = "songedit"; arg = ""; }
   else if(/^songs/.test(h)){ view = "songs"; if(/\?saved/.test(h)) state.onlySaved = true; }
   else if(h === "events") view = "events";
   else if((m = h.match(/^e\/([^\/]+)\/s\/(\d+)$/))){ view = "evsong"; arg = decodeURIComponent(m[1]); arg2 = +m[2]; }
   else if((m = h.match(/^e\/([^\/]+)\/edit$/))){ view = "edit"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^e\/([^\/]+)$/))){ view = "event"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
-  else if(h === "help" || h === "ayuda" || h === "listas") view = "help";
-  var tab = { song:"songs", songs:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home" }[view] || "";
+  else if(h === "manage") view = "manage";
+  else if(/^help/.test(h)) view = "help";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
+  if(view !== "evsong" && state.stage) endStage(true);
+  document.body.classList.toggle("stage", view === "evsong" && state.stage);
   if(view !== "edit"){ state.draft = null; state.draftKey = ""; }
+  if(view !== "songedit") state.sdraft = null;
   var app = $("app");
   if(!state.db){
-    if(state.error === "setup") app.innerHTML = setupHtml();
+    if(state.error === "setup") app.innerHTML = '<div class="card empty">The app is not connected to the band database yet.</div>';
     else if(state.error) app.innerHTML = '<div class="banner bad">Could not load the songbook (' + esc(state.error) + '). Check the internet and tap Refresh.</div>';
     else app.innerHTML = '<div class="empty">Loading songs...</div>';
     return;
@@ -615,14 +707,16 @@ function route(){
   var banner = "";
   if(state.error && state.source === "cache") banner = '<div class="banner warn">No internet. You are seeing the last copy saved on this phone.</div>';
   else if(state.error && state.source === "live") banner = '<div class="banner warn">Could not refresh. You are seeing the last version that loaded.</div>';
-  if(view === "home" || view === "events" || view === "event" || view === "evsong") loadEvents(false);
+  var needsLeader = { songedit:1, edit:1, manage:1 };
+  if(needsLeader[view] && !leader()){ app.innerHTML = banner + leaderGateHtml(); bindLeaderGate(); return; }
   if(view === "song") renderSong(arg, banner);
   else if(view === "songs") renderList(banner);
-  else if(view === "events"){ renderEvents(banner); }
+  else if(view === "songedit") renderSongEditor(arg, banner);
+  else if(view === "events") renderEvents(banner);
   else if(view === "event") renderEvent(arg, banner);
   else if(view === "evsong"){
     var ev = findEvent(arg);
-    if(!ev){ renderEvent(arg, banner); }
+    if(!ev) renderEvent(arg, banner);
     else {
       var it = (ev.songs || [])[arg2];
       if(!it){ location.hash = "#/e/" + encodeURIComponent(ev.id); return; }
@@ -631,13 +725,36 @@ function route(){
     }
   }
   else if(view === "edit") renderEditor(arg, arg2, banner);
-  else if(view === "help"){ app.innerHTML = banner + helpHtml(); scrollTop(); }
+  else if(view === "manage") renderManage(banner);
+  else if(view === "help"){ app.innerHTML = banner + helpHtml(); bindHelp(); scrollTop(); }
   else { renderHome(banner); scrollTop(); }
+  if(!ls("guideDone") && view === "home" && !state.guideShown){ state.guideShown = true; showGuide(0); }
 }
 function scrollTop(){ window.scrollTo(0,0); }
-window.addEventListener("hashchange", function(){ route(); if(!/^#\/?c\//.test(location.hash)) {} });
+window.addEventListener("hashchange", route);
 
-/* ---------- song list ---------- */
+/* ---------- leader sign-in (only the leader sees the edit buttons) ---------- */
+function leaderGateHtml(){
+  return '<div class="card song-head editor"><h2 style="margin:0 0 6px">Leader sign-in</h2><p class="muted" style="margin:0 0 4px">Adding and changing songs, events and lists is only for band leaders. Type the band PIN once and this phone remembers it.</p>' +
+    '<label>Band PIN<input id="lgPin" type="password" inputmode="numeric" autocomplete="off"></label><div id="lgMsg"></div>' +
+    '<div style="display:flex;gap:8px;margin-top:12px"><button class="btn primary" id="lgGo">Sign in</button><a class="btn" href="#/">Cancel</a></div></div>';
+}
+function bindLeaderGate(after){
+  $("lgGo").onclick = function(){
+    var pin = $("lgPin").value.trim(), b = this;
+    if(!pin) return;
+    b.disabled = true; b.textContent = "Checking...";
+    jsonp(SCRIPT_URL + "?action=ping&pin=" + encodeURIComponent(pin)).then(function(r){
+      if(r && r.pinOk){ state.pin = pin; ls("pin", pin); if(after) after(); else route(); }
+      else { b.disabled = false; b.textContent = "Sign in"; $("lgMsg").innerHTML = '<div class="banner bad" style="margin:10px 0 0">That PIN didn\'t work.</div>'; }
+    }).catch(function(){ b.disabled = false; b.textContent = "Sign in"; $("lgMsg").innerHTML = '<div class="banner bad" style="margin:10px 0 0">No internet. Try again.</div>'; });
+  };
+  $("lgPin").onkeydown = function(e){ if(e.key === "Enter") $("lgGo").click(); };
+}
+function signOut(){ state.pin = ""; ls("pin", ""); route(); }
+function wrongPin(){ state.pin = ""; ls("pin", ""); alert("The band PIN changed or is wrong. Please sign in again."); route(); }
+
+/* ---------- songs list ---------- */
 function filtered(){
   var db = state.db, q = norm(state.q), words = q ? q.split(" ") : [];
   return db.songs.filter(function(s){
@@ -651,70 +768,59 @@ function filtered(){
   });
 }
 function byTitle(a,b){ return a.titleN < b.titleN ? -1 : a.titleN > b.titleN ? 1 : 0; }
+function keyLabel(k){ return k ? keyName(k, 0).replace(/m$/, "") + (k.minor ? " Minor" : " Major") : ""; }
 function songRow(s){
   var bits = [];
   if(s.artist && s.type === "Cover") bits.push(esc(s.artist));
   if(s.genre) bits.push(esc(s.genre));
   var tags = "";
   if(!s.hasLyrics) tags += '<span class="tag w">No lyrics</span>';
-  if(s.hasChords) tags += '<span class="tag c">Chords</span>';
-  if(s.type === "Cover") tags += '<span class="tag">Cover</span>';
-  var pills = (s.key ? '<span class="pill">' + esc(keyName(s.key, 0) + (s.key.minor ? " Minor" : " Major").replace(/m Minor$/, " Minor")) + '</span>' : '') + (s.bpm ? '<span class="pill">' + s.bpm + ' bpm</span>' : '');
+  if(s.link) tags += '<span class="tag">▶</span>';
+  var pills = (s.key ? '<span class="pill">' + esc(keyLabel(s.key)) + '</span>' : '') + (s.bpm ? '<span class="pill">' + s.bpm + ' bpm</span>' : '');
   return '<div class="card song-row"><a class="song-link" href="#/c/' + encodeURIComponent(s.id) + '">' +
     '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div><div class="pills">' + pills + '</div></a>' +
-    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="' + (state.saved[s.id] ? 'Remove from saved' : 'Save song') + '">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
+    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
 }
 function renderList(banner){
   var db = state.db, list = filtered();
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
   var gkeys = Object.keys(genres).sort();
-  var anyFilter = state.group || state.type || state.genre || state.onlyLyrics || state.onlySaved || state.q;
   var nFilters = (state.group?1:0) + (state.type?1:0) + (state.genre?1:0) + (state.onlyLyrics?1:0) + (state.onlySaved?1:0) + (state.q?1:0);
-  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2></div>' +
-    '<div class="search' + (state.q ? ' has' : '') + '" id="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2>' + (leader() ? '<a class="ibtn primary" href="#/newsong" style="text-decoration:none">+ New song</a>' : '') + '</div>' +
+    '<div class="search' + (state.q ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button></div>' +
     '<div class="filters">' +
-      (db.groups.length > 1 ? '<select id="fGroup"><option value="">All parts</option>' + db.groups.map(function(g){ return '<option' + (g === state.group ? ' selected' : '') + '>' + esc(g) + '</option>'; }).join("") + '</select>' : '') +
+      '<button class="chip' + (state.onlySaved ? ' on' : '') + '" id="fSaved">♥ Saved</button>' +
+      (db.groups.length > 1 ? '<select id="fGroup"><option value="">All albums</option>' + db.groups.map(function(g){ return '<option' + (g === state.group ? ' selected' : '') + '>' + esc(g) + '</option>'; }).join("") + '</select>' : '') +
       '<button class="chip' + (state.type === "Original" ? ' on' : '') + '" data-type="Original">Originals</button>' +
       '<button class="chip' + (state.type === "Cover" ? ' on' : '') + '" data-type="Cover">Covers</button>' +
-      (gkeys.length ? '<select id="fGenre"><option value="">All rhythms</option>' + gkeys.map(function(k){ return '<option value="' + esc(k) + '"' + (k === state.genre ? ' selected' : '') + '>' + esc(genres[k]) + '</option>'; }).join("") + '</select>' : '') +
-      '<button class="chip' + (state.onlySaved ? ' on' : '') + '" id="fSaved">♥ Saved</button>' +
+      (gkeys.length ? '<select id="fGenre"><option value="">All genres</option>' + gkeys.map(function(k){ return '<option value="' + esc(k) + '"' + (k === state.genre ? ' selected' : '') + '>' + esc(genres[k]) + '</option>'; }).join("") + '</select>' : '') +
       '<button class="chip' + (state.onlyLyrics ? ' on' : '') + '" id="fLyr">Has lyrics</button>' +
-      (anyFilter ? '<button class="chip clear" id="fClear">Clear filters (' + nFilters + ')</button>' : '') +
+      (nFilters ? '<button class="chip clear" id="fClear">Clear (' + nFilters + ')</button>' : '') +
     '</div>';
-  var withLyr = list.filter(function(s){ return s.hasLyrics; }).length;
-  html += '<div class="count">' + list.length + (list.length === 1 ? ' song' : ' songs') + ' · ' + withLyr + ' with lyrics</div>';
   var order = [];
   if(!list.length) html += '<div class="card empty">No songs match.</div>';
-  else if(state.q || state.group){
-    var l2 = list.slice().sort(byTitle); order = l2;
-    html += '<div class="songs">' + l2.map(songRow).join("") + '</div>';
-  } else {
-    db.groups.forEach(function(g){
-      var gs = list.filter(function(s){ return s.group === g; }).sort(byTitle);
-      if(!gs.length) return;
-      order = order.concat(gs);
-      if(db.groups.length > 1) html += '<div class="group-h">' + esc(g) + ' <span style="font-weight:600">(' + gs.length + ')</span></div>';
-      html += '<div class="songs">' + gs.map(songRow).join("") + '</div>';
-    });
-  }
+  else if(state.q || state.group || state.onlySaved){ var l2 = list.slice().sort(byTitle); order = l2; html += '<div class="songs">' + l2.map(songRow).join("") + '</div>'; }
+  else db.groups.forEach(function(g){
+    var gs = list.filter(function(s){ return s.group === g; }).sort(byTitle);
+    if(!gs.length) return;
+    order = order.concat(gs);
+    html += '<div class="group-h">' + esc(g) + ' <span style="font-weight:600">(' + gs.length + ')</span></div><div class="songs">' + gs.map(songRow).join("") + '</div>';
+  });
   state.lastList = order.map(function(s){ return s.id; });
   $("app").innerHTML = html;
-
   var q = $("q");
-  q.oninput = function(){
-    state.q = q.value; ls("q", state.q);
-    var pos = q.selectionStart; renderList(banner); var q2 = $("q"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){}
-  };
+  q.oninput = function(){ state.q = q.value; ls("q", state.q); var pos = q.selectionStart; renderList(banner); var q2 = $("q"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){} };
   $("qx").onclick = function(){ state.q = ""; ls("q",""); renderList(banner); };
   if($("fGroup")) $("fGroup").onchange = function(){ state.group = this.value; ls("group", state.group); renderList(banner); };
   if($("fGenre")) $("fGenre").onchange = function(){ state.genre = this.value; ls("genre", state.genre); renderList(banner); };
   document.querySelectorAll("[data-type]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-type"); state.type = state.type === t ? "" : t; ls("type", state.type); renderList(banner); }; });
   $("fSaved").onclick = function(){ state.onlySaved = !state.onlySaved; if(!state.onlySaved && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); };
-  document.querySelectorAll("[data-heart]").forEach(function(b){ b.onclick = function(ev){ ev.preventDefault(); var id = b.getAttribute("data-heart"); if(state.saved[id]) delete state.saved[id]; else state.saved[id] = 1; ls("saved", state.saved); renderList(banner); }; });
   $("fLyr").onclick = function(){ state.onlyLyrics = !state.onlyLyrics; ls("onlyLyrics", state.onlyLyrics); renderList(banner); };
-  if($("fClear")) $("fClear").onclick = function(){ state.q = state.group = state.type = state.genre = ""; state.onlyLyrics = false; state.onlySaved = false; if(/\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); ["q","group","type","genre"].forEach(function(k){ ls(k,""); }); ls("onlyLyrics", false); renderList(banner); };
+  if($("fClear")) $("fClear").onclick = function(){ state.q = state.group = state.type = state.genre = ""; state.onlyLyrics = state.onlySaved = false; ["q","group","type","genre"].forEach(function(k){ ls(k,""); }); ls("onlyLyrics", false); if(/\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); };
+  document.querySelectorAll("[data-heart]").forEach(function(b){ b.onclick = function(ev){ ev.preventDefault(); toggleSaved(b.getAttribute("data-heart")); renderList(banner); }; });
 }
+function toggleSaved(id){ if(state.saved[id]) delete state.saved[id]; else state.saved[id] = 1; ls("saved", state.saved); }
 
 /* ---------- one song ---------- */
 function chordHtml(line){ return esc(line).replace(CHORD_G, function(all, pre, ch){ return pre + '<span class="ch">' + ch + '</span>'; }); }
@@ -733,12 +839,9 @@ function sectionBody(sec, n, flats, showChords){
     if(!l.trim()){ if(!group) out += '<div class="gap"></div>'; continue; }
     if(isChordLine(l)){
       if(!showChords) continue;
-      var cl = transposeLine(l, n, flats);
-      var nx = lines[i+1];
-      if(nx && nx.trim() && !isChordLine(nx) && /\s{2,}/.test(cl.trim()) || (nx && nx.trim() && !isChordLine(nx) && /^\s+\S/.test(cl))){
-        // chords written above the words
-        var ly = nx.replace(/\s+$/,""), lead = ly.match(/^\s*(\/{2,4})/), trail = ly.match(/(\/{2,4})\s*$/);
-        var opened = false;
+      var cl = transposeLine(l, n, flats), nx = lines[i+1];
+      if(nx && nx.trim() && !isChordLine(nx) && (/\s{2,}/.test(cl.trim()) || /^\s+\S/.test(cl))){
+        var ly = nx.replace(/\s+$/,""), lead = ly.match(/^\s*(\/{2,4})/), trail = ly.match(/(\/{2,4})\s*$/), opened = false;
         if(lead && !trail && !group){ group = lead[1].length; opened = true; ly = ly.replace(/^(\s*)\/{2,4}/,"$1"); var cut = lead[1].length; if(/^ +/.test(cl) && cl.match(/^ +/)[0].length >= cut) cl = cl.slice(cut); }
         var closing = false;
         if(trail && group){ ly = ly.replace(/\/{2,4}\s*$/,""); closing = true; }
@@ -766,101 +869,142 @@ function sectionBody(sec, n, flats, showChords){
   if(group) out += '</div>';
   return out;
 }
+function sectionsHtml(sections, n, flats, showChords){
+  return '<div class="sections body">' + sections.map(function(x, i){
+    var src = x.lines.length ? x : (x.copyOf || null), inner = "";
+    if(src && src !== x) inner = '<div class="copied-lbl">Same as before</div><div class="copied">' + sectionBody(src, n, flats, showChords) + '</div>';
+    else if(src) inner = sectionBody(x, n, flats, showChords);
+    else if(x.kind !== "inst" && x.kind !== "intro" && x.kind !== "outro" && x.kind !== "other") inner = '<div class="pending">Lyrics missing</div>';
+    var h = x.label ? '<div class="sec-h k-' + x.kind + '"><span class="bar"></span>' + esc(x.label) + (x.reps ? '<span class="xb">×' + x.reps + '</span>' : '') + (x.note ? '<span class="muted" style="text-transform:none;letter-spacing:0;font-weight:600">' + esc(x.note) + '</span>' : '') + '</div>' : '';
+    if(!h && !inner) return "";
+    return '<div class="card sec" id="sec-' + i + '">' + h + inner + '</div>';
+  }).join("") + '</div>';
+}
+function semis(fromKey, toText){ var to = parseKey(toText); if(!fromKey || !to) return 0; var d = (NOTE_IDX[to.root] - NOTE_IDX[fromKey.root] + 12) % 12; return d > 6 ? d - 12 : d; }
+function lastPlayed(id){
+  var today = ymd(new Date()), best = null;
+  (state.events || []).forEach(function(e){ if(e.date >= today) return; (e.songs || []).forEach(function(it){ var s = songFor(it); if(s && s.id === id && (!best || e.date > best.date)) best = e; }); });
+  return best;
+}
+function ago(dateStr){
+  var d = evDate({ date: dateStr }); if(!d) return "";
+  var days = Math.round((new Date().setHours(0,0,0,0) - d.getTime()) / 86400000);
+  if(days <= 0) return "today"; if(days === 1) return "yesterday"; if(days < 14) return days + " days ago"; if(days < 60) return Math.round(days/7) + " weeks ago";
+  return Math.round(days/30) + " months ago";
+}
 function renderSong(id, banner, ctx){
-  var db = state.db, s = null;
-  for(var i=0;i<db.songs.length;i++) if(db.songs[i].id === id) s = db.songs[i];
+  var db = state.db, s = id ? find(id) : null;
   if(!s && ctx){
-    var L = ctx.ev.songs, pi = ctx.idx - 1, ni = ctx.idx + 1, eid = encodeURIComponent(ctx.ev.id);
-    $("app").innerHTML = banner + evBarHtml(ctx) + '<div class="card nolyrics"><b style="font-size:20px;color:var(--ink)">' + esc(ctx.item.title) + '</b><br><br>This song is not in the song doc yet, so there are no lyrics to show.</div>' +
-      '<div class="navrow">' + (pi >= 0 ? '<a class="card" href="#/e/' + eid + '/s/' + pi + '"><small>‹ Previous</small><b>' + esc(L[pi].title) + '</b></a>' : '<span style="flex:1"></span>') + (ni < L.length ? '<a class="card next" href="#/e/' + eid + '/s/' + ni + '"><small>Next ›</small><b>' + esc(L[ni].title) + '</b></a>' : '<span style="flex:1"></span>') + '</div>';
-    $("app").setAttribute("data-song", "@" + ctx.idx); scrollTop(); return;
+    var L = ctx.ev.songs, eid = encodeURIComponent(ctx.ev.id);
+    $("app").innerHTML = banner + evBarHtml(ctx) + '<div class="card nolyrics"><b style="font-size:22px;color:var(--ink)">' + esc(ctx.item.title) + '</b><br><br>This song is not in the songbook yet, so there are no lyrics to show.</div>' + setNav(ctx);
+    $("app").setAttribute("data-song", "@" + ctx.idx); scrollTop(); bindStage(ctx); return;
   }
-  if(!s){ $("app").innerHTML = banner + '<div class="card empty">Could not find that song. Its name may have changed in the doc.<br><br><a href="#/songs">See all songs</a></div>'; return; }
-  var n = state.trans[s.id] || 0;
-  var flats = s.key ? useFlats(s.key, n) : false;
-  var showChords = state.chords && s.hasChords;
+  if(!s){ $("app").innerHTML = banner + '<div class="card empty">Could not find that song. It may have been renamed or removed.<br><br><a href="#/songs">See all songs</a></div>'; return; }
+  var tk = ctx ? "@" + ctx.ev.id + ":" + ctx.idx : s.id;
+  var evShift = ctx && ctx.item.key ? semis(s.key, ctx.item.key) : 0;
+  var n = state.trans[tk] != null ? state.trans[tk] : evShift;
+  var flats = s.key ? useFlats(s.key, n) : false, showChords = state.chords && s.hasChords;
   var meta = [];
-  if(s.key || s.keyText) meta.push('<span>Key <b>' + (s.key ? esc(keyName(s.key, n)) : esc(s.keyText)) + '</b>' + (n && s.key ? ' <span class="muted">(original ' + esc(keyName(s.key,0)) + ')</span>' : '') + '</span>');
+  if(s.key || s.keyText) meta.push('<span>Key <b>' + (s.key ? esc(keyName(s.key, n)) : esc(s.keyText)) + '</b>' + (n && s.key ? ' <span class="muted">(written in ' + esc(keyName(s.key,0)) + ')</span>' : '') + '</span>');
   if(s.bpm) meta.push('<span><b>' + s.bpm + '</b> BPM</span>');
   if(s.time) meta.push('<span>Time <b>' + esc(s.time) + '</b></span>');
   if(s.genre) meta.push('<span>' + esc(s.genre) + '</span>');
-  meta.push('<span>' + (s.type === 'Cover' && s.artist ? 'Cover of <b>' + esc(s.artist) + '</b>' : esc(s.type)) + '</span>');
-  if(s.meta.instruments) meta.push('<span>Instruments: ' + esc(s.meta.instruments) + '</span>');
-
+  meta.push('<span>' + (s.type === 'Cover' && s.artist ? 'Cover of <b>' + esc(s.artist) + '</b>' : esc(s.artist || s.type)) + '</span>');
+  var lp = lastPlayed(s.id);
   var tools = "";
-  if(s.key || s.hasChords) tools += '<div class="tool"><span class="lbl">Key</span><button id="tDown" aria-label="Down a half step">−</button><span class="val">' + (n > 0 ? "+" + n : n) + '</span><button id="tUp" aria-label="Up a half step">+</button>' + (n ? '<button id="tReset">Reset</button>' : '') + '</div>';
+  if(s.key || s.hasChords) tools += '<div class="tool"><span class="lbl">Key</span><button id="tDown" aria-label="Down a half step">−</button><span class="val">' + (n > 0 ? "+" + n : n) + '</span><button id="tUp" aria-label="Up a half step">+</button>' + (state.trans[tk] != null ? '<button id="tReset">Reset</button>' : '') + '</div>';
   if(s.hasChords) tools += '<div class="tool"><span class="lbl">Chords</span><button id="cOn" class="' + (state.chords ? 'on' : '') + '">On</button><button id="cOff" class="' + (state.chords ? '' : 'on') + '">Off</button></div>';
   tools += '<div class="tool"><span class="lbl">Text</span><button id="zDown" aria-label="Smaller text">A−</button><button id="zUp" aria-label="Bigger text">A+</button></div>';
   if(s.bpm) tools += '<div class="tool"><span class="lbl">Metronome</span><span class="beat" id="beat"></span><button id="mGo" class="' + (metro.on ? 'on' : '') + '">' + (metro.on ? 'Stop' : 'Play') + '</button></div>';
   if("wakeLock" in navigator) tools += '<div class="tool"><span class="lbl">Screen</span><button id="wk" class="' + (wake.want ? 'on' : '') + '">' + (wake.want ? 'Stays on' : 'Normal') + '</button></div>';
-
-  var struct = s.sections.filter(function(x){ return x.label; }).map(function(x){
-    var i = s.sections.indexOf(x);
-    return '<a href="javascript:void 0" data-sec="' + i + '" class="k-' + x.kind + '">' + esc(x.label) + (x.reps ? ' ×' + x.reps : '') + '</a>';
+  var struct = s.sections.filter(function(x){ return x.label; }).map(function(x, k){
+    return '<a href="javascript:void 0" data-sec="' + s.sections.indexOf(x) + '" class="k-' + x.kind + '"><i>' + (k+1) + '</i>' + esc(x.label) + (x.reps ? ' ×' + x.reps : '') + '</a>';
   });
+  var back = ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) : '#/songs';
   var head = (ctx ? evBarHtml(ctx) : '') + '<div class="card"><div class="song-head">' +
-    '<div class="backrow"><a class="ibtn" href="' + (ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) : '#/songs') + '" style="text-decoration:none">' + (ctx ? '‹ Set list' : '‹ Songs') + '</a><div style="display:flex;gap:6px;align-items:center">' + (s.group ? '<span class="muted" style="font-size:13px;text-align:right">' + esc(s.group) + '</span>' : '') +
-      '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" id="sHeart" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div></div>' +
-    '<h1>' + esc(s.title) + '</h1><div class="meta">' + meta.join("") + '</div><div class="tools">' + tools + '</div></div>' +
-    (struct.length > 1 ? '<div class="struct">' + struct.map(function(a, k){ return a.replace('">', '"><i>' + (k+1) + '</i>'); }).join("") + '</div>' : '') + '</div>';
-
-  var body = "";
-  if(!s.sections.length || (!s.hasLyrics && !s.hasChords)){
-    body += '<div class="card nolyrics">This song does not have lyrics in the doc yet.</div>';
+    (state.stage ? '' : '<div class="backrow"><a class="ibtn" href="' + back + '" style="text-decoration:none">' + (ctx ? '‹ Set list' : '‹ Songs') + '</a><div style="display:flex;gap:6px;align-items:center">' +
+      (leader() ? '<a class="ibtn" href="#/c/' + encodeURIComponent(s.id) + '/edit" style="text-decoration:none">Edit</a>' : '') +
+      '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" id="sHeart" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div></div>') +
+    '<h1>' + esc(s.title) + '</h1><div class="meta">' + meta.join("") + '</div>' +
+    '<div class="song-actions">' + (s.link ? '<a class="btn small primary" href="' + esc(s.link) + '" target="_blank" rel="noopener">▶ Listen</a>' : '') +
+      '<button class="btn small" id="optBtn">' + (state.showTools ? 'Hide options ▴' : 'Options ▾') + '</button>' +
+      '<span class="muted" style="font-size:12px">' + (lp ? 'Last played ' + esc(ago(lp.date)) + ' · ' + esc(lp.title) : 'Not played at an event yet') + '</span></div>' +
+    (state.showTools ? '<div class="tools">' + tools + '</div>' : '') + '</div>' +
+    (struct.length > 1 ? '<div class="struct">' + struct.join("") + '</div>' : '') + '</div>';
+  var body = (!s.sections.length || (!s.hasLyrics && !s.hasChords)) ? '<div class="card nolyrics">This song does not have lyrics yet.' + (leader() ? ' <a href="#/c/' + encodeURIComponent(s.id) + '/edit">Add them</a>.' : '') + '</div>' : '';
+  if(s.sections.length) body += sectionsHtml(s.sections, n, flats, showChords);
+  if(ctx) body += setNav(ctx);
+  else {
+    var ids = state.lastList.length ? state.lastList : db.songs.slice().sort(byTitle).map(function(x){ return x.id; });
+    var at = ids.indexOf(s.id), prev = at > 0 ? find(ids[at-1]) : null, next = at >= 0 && at < ids.length-1 ? find(ids[at+1]) : null;
+    if(prev || next) body += '<div class="navrow">' + (prev ? '<a class="card" href="#/c/' + encodeURIComponent(prev.id) + '"><small>‹ Previous</small><b>' + esc(prev.title) + '</b></a>' : '<span style="flex:1"></span>') + (next ? '<a class="card next" href="#/c/' + encodeURIComponent(next.id) + '"><small>Next ›</small><b>' + esc(next.title) + '</b></a>' : '<span style="flex:1"></span>') + '</div>';
   }
-  if(s.sections.length){
-    body += '<div class="sections body">' + s.sections.map(function(x, i){
-      var src = x.lines.length ? x : (x.copyOf || null);
-      var inner = "";
-      if(src && src !== x) inner = '<div class="copied-lbl">Same as before</div><div class="copied">' + sectionBody(src, n, flats, showChords) + '</div>';
-      else if(src) inner = sectionBody(x, n, flats, showChords);
-      else if(x.kind !== "inst" && x.kind !== "intro" && x.kind !== "outro" && x.kind !== "other") inner = '<div class="pending">Lyrics missing</div>';
-      var h = x.label ? '<div class="sec-h k-' + x.kind + '"><span class="bar"></span>' + esc(x.label) + (x.reps ? '<span class="xb">×' + x.reps + '</span>' : '') + (x.note ? '<span class="muted" style="text-transform:none;letter-spacing:0;font-weight:600">' + esc(x.note) + '</span>' : '') + '</div>' : '';
-      if(!h && !inner) return "";
-      return '<div class="card sec" id="sec-' + i + '">' + h + inner + '</div>';
-    }).join("") + '</div>';
-  }
-  // previous / next: the set list when playing an event, otherwise the list the person came from
-  if(ctx){
-    var L2 = ctx.ev.songs, eid2 = encodeURIComponent(ctx.ev.id), p2 = ctx.idx - 1, n2 = ctx.idx + 1;
-    body += '<div class="navrow">' + (p2 >= 0 ? '<a class="card" href="#/e/' + eid2 + '/s/' + p2 + '"><small>‹ Previous</small><b>' + esc(L2[p2].title) + '</b></a>' : '<span style="flex:1"></span>') + (n2 < L2.length ? '<a class="card next" href="#/e/' + eid2 + '/s/' + n2 + '"><small>Next song ›</small><b>' + esc(L2[n2].title) + '</b></a>' : '<a class="card next" href="#/e/' + eid2 + '"><small>End of set</small><b>Back to set list</b></a>') + '</div>';
-  }
-  var ids = state.lastList.length ? state.lastList : db.songs.slice().sort(byTitle).map(function(x){ return x.id; });
-  var at = ctx ? -1 : ids.indexOf(s.id), prev = at > 0 ? find(ids[at-1]) : null, next = at >= 0 && at < ids.length-1 ? find(ids[at+1]) : null;
-  if(prev || next) body += '<div class="navrow">' + (prev ? '<a class="card" href="#/c/' + encodeURIComponent(prev.id) + '"><small>‹ Previous</small><b>' + esc(prev.title) + '</b></a>' : '<span style="flex:1"></span>') + (next ? '<a class="card next" href="#/c/' + encodeURIComponent(next.id) + '"><small>Next ›</small><b>' + esc(next.title) + '</b></a>' : '<span style="flex:1"></span>') + '</div>';
-
-  var songKey = s.id + (ctx ? "@" + ctx.idx : "");
-  var sameSong = $("app").getAttribute("data-song") === songKey;
-  var y = window.scrollY;
+  var songKey = s.id + (ctx ? "@" + ctx.idx : ""), same = $("app").getAttribute("data-song") === songKey, y = window.scrollY;
   $("app").innerHTML = banner + head + body;
   $("app").setAttribute("data-song", songKey);
-  if(sameSong) window.scrollTo(0, y); else scrollTop();
-  if(!sameSong){ metro.stop(); }
-  metro.song = s;
-
-  function setT(v){ v = ((v % 12) + 12) % 12; if(v > 6) v -= 12; if(v) state.trans[s.id] = v; else delete state.trans[s.id]; ls("trans", state.trans); renderSong(s.id, banner, ctx); }
+  if(same) window.scrollTo(0, y); else { scrollTop(); metro.stop(); }
+  function again(){ renderSong(s.id, banner, ctx); }
+  function setT(v){ v = ((v % 12) + 12) % 12; if(v > 6) v -= 12; if(v === evShift) delete state.trans[tk]; else state.trans[tk] = v; ls("trans", state.trans); again(); }
   if($("tUp")) $("tUp").onclick = function(){ setT(n + 1); };
   if($("tDown")) $("tDown").onclick = function(){ setT(n - 1); };
-  if($("tReset")) $("tReset").onclick = function(){ setT(0); };
-  if($("cOn")) $("cOn").onclick = function(){ state.chords = true; ls("chords", true); renderSong(s.id, banner, ctx); };
-  if($("cOff")) $("cOff").onclick = function(){ state.chords = false; ls("chords", false); renderSong(s.id, banner, ctx); };
-  $("zUp").onclick = function(){ setSize(state.size + 2); };
-  $("zDown").onclick = function(){ setSize(state.size - 2); };
-  if($("mGo")) $("mGo").onclick = function(){ metro.on ? metro.stop() : metro.start(s); renderSong(s.id, banner, ctx); };
-  if($("wk")) $("wk").onclick = function(){ wake.want ? wake.off() : wake.on(); renderSong(s.id, banner, ctx); };
-  $("sHeart").onclick = function(){ if(state.saved[s.id]) delete state.saved[s.id]; else state.saved[s.id] = 1; ls("saved", state.saved); renderSong(s.id, banner, ctx); };
+  if($("tReset")) $("tReset").onclick = function(){ delete state.trans[tk]; ls("trans", state.trans); again(); };
+  if($("cOn")) $("cOn").onclick = function(){ state.chords = true; ls("chords", true); again(); };
+  if($("cOff")) $("cOff").onclick = function(){ state.chords = false; ls("chords", false); again(); };
+  if($("zUp")) $("zUp").onclick = function(){ setSize(state.size + 2); };
+  if($("zDown")) $("zDown").onclick = function(){ setSize(state.size - 2); };
+  if($("mGo")) $("mGo").onclick = function(){ metro.on ? metro.stop() : metro.start(s); again(); };
+  if($("wk")) $("wk").onclick = function(){ wake.want ? wake.off() : wake.on(); again(); };
+  if($("sHeart")) $("sHeart").onclick = function(){ toggleSaved(s.id); again(); };
+  $("optBtn").onclick = function(){ state.showTools = !state.showTools; ls("showTools", state.showTools); again(); };
   document.querySelectorAll("[data-sec]").forEach(function(a){ a.onclick = function(){ var el = $("sec-" + a.getAttribute("data-sec")); if(el) el.scrollIntoView({ behavior:"smooth", block:"start" }); }; });
+  if(ctx) bindStage(ctx);
 }
 function find(id){ var l = state.db.songs; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
-function setSize(v){ state.size = Math.max(12, Math.min(34, v)); ls("size", state.size); document.documentElement.style.setProperty("--lyric", state.size + "px"); }
+function setSize(v){ state.size = Math.max(14, Math.min(40, v)); ls("size", state.size); document.documentElement.style.setProperty("--lyric", state.size + "px"); }
+
+/* ---------- set list mode + rehearsal (stage) mode ---------- */
+function evBarHtml(ctx){
+  var e = ctx.ev, n = (e.songs || []).length;
+  return '<div class="card evbar"><div style="min-width:0;flex:1"><div class="muted" style="font-size:12px">' + esc(e.title) + '</div><b>Song ' + (ctx.idx + 1) + ' of ' + n + '</b></div>' +
+    (state.stage ? '<button class="ibtn" id="stEnd">✕ End</button>' : '<a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '" style="text-decoration:none">☰ List</a>') + '</div>' +
+    (ctx.item && (ctx.item.key || ctx.item.note) ? '<div class="card ev-note">' + (ctx.item.key ? '<b>Play in ' + esc(ctx.item.key) + '</b>' : '') + (ctx.item.key && ctx.item.note ? ' · ' : '') + (ctx.item.note ? esc(ctx.item.note) : '') + '</div>' : '');
+}
+function setNav(ctx){
+  var L = ctx.ev.songs, eid = encodeURIComponent(ctx.ev.id), p = ctx.idx - 1, nx = ctx.idx + 1;
+  return '<div class="setnav' + (state.stage ? ' fixed' : '') + '">' +
+    (p >= 0 ? '<a class="snbtn" href="#/e/' + eid + '/s/' + p + '"><small>‹ Previous</small><b>' + esc(L[p].title) + '</b></a>' : '<span class="snbtn off"></span>') +
+    (nx < L.length ? '<a class="snbtn next" href="#/e/' + eid + '/s/' + nx + '"><small>Next song ›</small><b>' + esc(L[nx].title) + '</b></a>' : '<a class="snbtn next" href="#/e/' + eid + '" id="snDone"><small>End of set</small><b>Back to the list</b></a>') + '</div>';
+}
+var swipe = { x: 0, y: 0, ctx: null };
+function bindStage(ctx){
+  swipe.ctx = ctx;
+  if($("stEnd")) $("stEnd").onclick = function(){ endStage(); location.hash = "#/e/" + encodeURIComponent(ctx.ev.id); };
+  if($("snDone") && state.stage) $("snDone").onclick = function(){ endStage(); };
+}
+document.addEventListener("touchstart", function(e){ if(!document.body.classList.contains("stage")) return; var t = e.touches[0]; swipe.x = t.clientX; swipe.y = t.clientY; }, { passive: true });
+document.addEventListener("touchend", function(e){
+  if(!document.body.classList.contains("stage") || !swipe.ctx) return;
+  var t = e.changedTouches[0], dx = t.clientX - swipe.x, dy = t.clientY - swipe.y;
+  if(Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+  var c = swipe.ctx, to = c.idx + (dx < 0 ? 1 : -1);
+  if(to >= 0 && to < c.ev.songs.length) location.hash = "#/e/" + encodeURIComponent(c.ev.id) + "/s/" + to;
+}, { passive: true });
+function startStage(ev){
+  state.stage = true; wake.on();
+  try{ var el = document.documentElement; (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el); }catch(e){}
+  location.hash = "#/e/" + encodeURIComponent(ev.id) + "/s/0";
+}
+function endStage(quiet){
+  state.stage = false; document.body.classList.remove("stage"); wake.off(); metro.stop();
+  try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+}
 
 /* metronome */
-var metro = { on:false, ctx:null, timer:null, next:0, beat:0, song:null,
+var metro = { on:false, ctx:null, timer:null, next:0, beat:0,
   start: function(s){
     try{ this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)(); this.ctx.resume(); }catch(e){ return; }
-    var self = this; self.on = true; self.song = s; self.beat = 0; self.next = self.ctx.currentTime + 0.1;
-    var per = parseInt((s.time || "4/4").split("/")[0], 10) || 4;
-    var spb = 60 / s.bpm;
+    var self = this; self.on = true; self.beat = 0; self.next = self.ctx.currentTime + 0.1;
+    var per = parseInt((s.time || "4/4").split("/")[0], 10) || 4, spb = 60 / s.bpm;
     self.timer = setInterval(function(){
       while(self.next < self.ctx.currentTime + 0.12){
         var o = self.ctx.createOscillator(), g = self.ctx.createGain(), one = self.beat % per === 0;
@@ -874,117 +1018,99 @@ var metro = { on:false, ctx:null, timer:null, next:0, beat:0, song:null,
   },
   stop: function(){ this.on = false; if(this.timer) clearInterval(this.timer); this.timer = null; }
 };
-/* keep the screen on */
 var wake = { want:false, lock:null,
   on: function(){ var self = this; self.want = true; try{ navigator.wakeLock.request("screen").then(function(l){ self.lock = l; }).catch(function(){}); }catch(e){} },
   off: function(){ this.want = false; try{ if(this.lock) this.lock.release(); }catch(e){} this.lock = null; }
 };
 
-function evBarHtml(ctx){
-  var e = ctx.ev, n = (e.songs || []).length;
-  return '<a class="card evbar" href="#/e/' + encodeURIComponent(e.id) + '"><div style="min-width:0;flex:1"><div class="muted" style="font-size:12px">Set list · song ' + (ctx.idx + 1) + ' of ' + n + '</div><b>' + esc(e.title) + '</b></div><span class="chev">☰</span></a>' +
-    (ctx.item && ctx.item.note ? '<div class="card ev-note"><b>Note for this event:</b> ' + esc(ctx.item.note) + '</div>' : '');
-}
-/* ---------- events (saved in the band's Google Sheet) ---------- */
+/* ---------- events helpers ---------- */
 var EV_TYPES = ["Service", "Rehearsal", "Wedding", "Campaign", "Youth", "Funeral", "Birthday", "Other"];
 function evTypeClass(t){ var i = EV_TYPES.indexOf(t); return "et et" + (i < 0 ? 7 : i); }
 function ymd(d){ return d.getFullYear() + "-" + ("0" + (d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
 function evDate(e){ var p = String(e.date||"").split("-"); return p.length === 3 ? new Date(+p[0], +p[1]-1, +p[2]) : null; }
-function fmtTime(t){ if(!t) return ""; var p = t.split(":"), h = +p[0], m = p[1]; return (h % 12 || 12) + ":" + m + (h < 12 ? " AM" : " PM"); }
+function fmtTime(t){ if(!t) return ""; var p = t.split(":"), h = +p[0]; return (h % 12 || 12) + ":" + p[1] + (h < 12 ? " AM" : " PM"); }
 function fmtDate(e, long){
   var d = evDate(e); if(!d) return e.date || "";
-  var s = d.toLocaleDateString("en-US", long ? { weekday:"long", month:"long", day:"numeric", year:"numeric" } : { weekday:"short", month:"short", day:"numeric" });
-  return s + (e.time ? " · " + fmtTime(e.time) : "");
+  return d.toLocaleDateString("en-US", long ? { weekday:"long", month:"long", day:"numeric", year:"numeric" } : { weekday:"short", month:"short", day:"numeric" }) + (e.time ? " · " + fmtTime(e.time) : "");
 }
 function evKey(e){ return (e.date || "") + " " + (e.time || "99:99"); }
 function splitEvents(){
   var all = (state.events || []).slice(), today = ymd(new Date());
-  var up = all.filter(function(e){ return e.date >= today; }).sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; });
-  var past = all.filter(function(e){ return e.date < today; }).sort(function(a,b){ return evKey(a) > evKey(b) ? -1 : 1; });
-  return { up: up, past: past };
+  return { up: all.filter(function(e){ return e.date >= today; }).sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; }),
+           past: all.filter(function(e){ return e.date < today; }).sort(function(a,b){ return evKey(a) > evKey(b) ? -1 : 1; }) };
 }
 function findEvent(id){ var l = state.events || []; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
-function songFor(item){
-  if(!state.db) return null;
-  return (item.id && find(item.id)) || findSong(state.db.songs, item.title);
-}
-function loadEvents(force){
-  if(!SCRIPT_URL || state.evLoading) return;
-  if(!force && state.evAt && Date.now() - state.evAt < 30000) return;
-  state.evLoading = true;
-  jsonp(SCRIPT_URL + "?action=events").then(function(d){
-    if(!d || !d.ok) throw new Error((d && d.error) || "bad");
-    state.events = d.events || []; state.evAt = Date.now(); state.evError = "";
-    ls("events", { at: state.evAt, events: state.events });
-  }).catch(function(e){ state.evError = String(e.message || e); state.evAt = Date.now(); })
-    .then(function(){ state.evLoading = false; var hs = location.hash || "#/"; if(/^#\/?(|e\/.*|events)$/.test(hs) && !/\/edit$/.test(hs)) route(); });
-}
-function evBanner(){
-  if(state.evError === "not_set_up") return '<div class="banner warn">Events aren\'t set up yet. Run setupBand once in the RDR Songbook script.</div>';
-  if(state.evError && !state.events) return '<div class="banner bad">Could not load events (' + esc(state.evError) + ').</div>';
-  if(state.evError) return '<div class="banner warn">Could not refresh events. Showing the last copy on this phone.</div>';
-  return "";
-}
-function dateBox(e){
-  var d = evDate(e);
-  return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>';
-}
+function songFor(item){ if(!state.db) return null; return (item.id && find(item.id)) || findSong(state.db.songs, item.title); }
+function dateBox(e){ var d = evDate(e); return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>'; }
 function evRow(e){
   var n = (e.songs || []).length;
-  return '<a class="card ev-row" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) +
-    '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + '</div><div class="s">' +
-    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span> ' : '') +
-    esc(fmtDate(e)) + ' · ' + n + (n === 1 ? ' song' : ' songs') + '</div></div><span class="chev">›</span></a>';
+  return '<a class="card ev-row" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) + '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + '</div><div class="s">' +
+    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span> ' : '') + esc(fmtDate(e)) + (e.location ? ' · ' + esc(e.location) : '') + ' · ' + n + (n === 1 ? ' song' : ' songs') + '</div></div><span class="chev">›</span></a>';
 }
+function shareText(e){
+  var lines = ["*" + e.title + "*", fmtDate(e, true)];
+  if(e.location) lines.push(e.location);
+  if(e.players && e.players.length) lines.push("Playing: " + e.players.map(function(p){ return p.name + (p.role ? " (" + p.role + ")" : ""); }).join(", "));
+  if(e.notes) lines.push(e.notes);
+  if((e.songs || []).length){
+    lines.push("", "Set list:");
+    e.songs.forEach(function(it, i){ var s = songFor(it), k = it.key || (s && s.key ? keyName(s.key, 0) : ""); lines.push((i+1) + ". " + (s ? s.title : it.title) + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
+  }
+  lines.push("", "Open it in the app: " + location.href.split("#")[0] + "#/e/" + encodeURIComponent(e.id));
+  return lines.join("\n");
+}
+function shareEvent(e){
+  var text = shareText(e);
+  if(navigator.share){ navigator.share({ text: text }).catch(function(){}); return; }
+  window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+}
+function isInstalled(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
 
 /* ---------- home ---------- */
 function renderHome(banner){
-  var sp = splitEvents(), next = sp.up[0], db = state.db;
+  var sp = splitEvents(), next = sp.up[0], db = state.db, today = ymd(new Date());
+  var tmw = new Date(); tmw.setDate(tmw.getDate() + 1);
   var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length;
-  var withLyr = db.songs.filter(function(s){ return s.hasLyrics; }).length;
-  var h = banner + evBanner();
+  var h = banner;
+  if(!isInstalled() && !ls("installHidden")) h += '<div class="card tip"><div style="flex:1"><b>Put the app on your home screen</b><div class="muted" style="font-size:13px">Then it opens like any other app, no link needed.</div></div><button class="btn small primary" id="instBtn">Show me how</button><button class="xclose" id="instHide" aria-label="Hide">×</button></div>';
+  if(leader() && next && (next.date === today || next.date === ymd(tmw))) h += '<div class="card tip"><div style="flex:1"><b>' + (next.date === today ? 'Today' : 'Tomorrow') + ': ' + esc(next.title) + '</b><div class="muted" style="font-size:13px">Send the band a reminder with the set list.</div></div><button class="btn small primary" id="remBtn">Send reminder</button></div>';
   if(next){
-    h += '<a class="hero" href="#/e/' + encodeURIComponent(next.id) + '"><div class="hero-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div>' +
-      '<div class="hero-t">' + esc(next.title) + '</div><div class="hero-s">' + esc(fmtDate(next, true)) + '</div>' +
-      '<div class="hero-s">' + (next.songs||[]).length + ' songs in the set list</div><span class="hero-b">Open set list ›</span></a>';
+    h += '<div class="hero"><div class="hero-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><div class="hero-t">' + esc(next.title) + '</div>' +
+      '<div class="hero-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="hero-s">' + esc(next.location) + '</div>' : '') +
+      '<div class="hero-btns">' + ((next.songs||[]).length ? '<button class="hero-b big" id="heroStart">▶ Start</button>' : '') + '<a class="hero-b ghost" href="#/e/' + encodeURIComponent(next.id) + '">Set list (' + (next.songs||[]).length + ')</a></div></div>';
   } else {
-    h += '<div class="hero"><div class="hero-k">Next up</div><div class="hero-t">Nothing planned yet</div><div class="hero-s">No upcoming events.</div><a class="hero-b" href="#/new">+ Create event</a></div>';
+    h += '<div class="hero"><div class="hero-k">Next up</div><div class="hero-t">Nothing planned yet</div><div class="hero-s">No upcoming events.</div>' + (leader() ? '<div class="hero-btns"><a class="hero-b" href="#/new">+ Create event</a></div>' : '') + '</div>';
   }
-  // the next two weeks
   var days = [], byDay = {};
   sp.up.forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
   for(var i=0;i<14;i++){ var d = new Date(); d.setDate(d.getDate() + i); days.push(d); }
-  h += '<div class="card week"><div class="week-h">' + days[0].toLocaleDateString("en-US", { weekday:"short", month:"short", day:"numeric" }) + '</div><div class="week-row">' +
-    days.map(function(d, i){
-      var k = ymd(d), evs = byDay[k] || [];
-      var href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : "#/new/" + k;
-      return '<a class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '" href="' + href + '" title="' + (evs.length ? esc(evs.map(function(e){ return e.title; }).join(", ")) : "Plan an event") + '"><span>' +
-        d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></a>';
-    }).join("") + '</div></div>';
-  h += '<div class="grid2"><a class="card stat" href="#/songs?saved"><div class="stat-k"><span class="heart-ic">♥</span> Saved songs</div><div class="stat-v">' + savedN + '</div><div class="muted" style="font-size:12px">Saved on this phone</div></a>' +
-    '<a class="card stat" href="#/songs"><div class="stat-k">Songbook</div><div class="stat-v">' + db.songs.length + '</div><div class="muted" style="font-size:12px">' + withLyr + ' with lyrics</div></a></div>';
-  h += '<div class="sec-title">Upcoming</div>';
-  h += sp.up.length > 1 ? '<div class="songs">' + sp.up.slice(1, 6).map(evRow).join("") + '</div>' : '<div class="card empty">' + (sp.up.length ? 'Nothing else planned after that.' : 'No invitations or planned events yet.') + '</div>';
+  h += '<div class="card week"><div class="week-h">Next two weeks</div><div class="week-row">' + days.map(function(d, i){
+    var k = ymd(d), evs = byDay[k] || [], href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : (leader() ? "#/new/" + k : "");
+    return '<' + (href ? 'a href="' + href + '"' : 'span') + ' class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></' + (href ? 'a' : 'span') + '>';
+  }).join("") + '</div></div>';
+  h += '<div class="grid2"><a class="card stat" href="#/songs?saved"><div class="stat-k"><span class="heart-ic">♥</span> My saved songs</div><div class="stat-v">' + savedN + '</div></a>' +
+    '<a class="card stat" href="#/songs"><div class="stat-k">Songbook</div><div class="stat-v">' + db.songs.length + '</div></a></div>';
+  h += '<div class="sec-title">Coming up</div>' + (sp.up.length > 1 ? '<div class="songs">' + sp.up.slice(1, 6).map(evRow).join("") + '</div>' : '<div class="card empty">' + (sp.up.length ? 'Nothing else planned after that.' : 'Nothing planned yet.') + '</div>');
+  h += '<div class="foot">' + (leader() ? '<a href="#/manage">Leader tools</a> · <a href="javascript:void 0" id="soBtn">Leader sign out</a>' : '<a href="#/manage">Leader sign-in</a>') + ' · <a href="#/help">Help</a></div>';
   $("app").innerHTML = h;
+  if($("instBtn")) $("instBtn").onclick = function(){ showGuide(0); };
+  if($("instHide")) $("instHide").onclick = function(){ ls("installHidden", true); renderHome(banner); };
+  if($("remBtn")) $("remBtn").onclick = function(){ shareEvent(next); };
+  if($("heroStart")) $("heroStart").onclick = function(){ startStage(next); };
+  if($("soBtn")) $("soBtn").onclick = signOut;
 }
 
 /* ---------- events list ---------- */
 function renderEvents(banner){
   var sp = splitEvents(), q = norm(state.evQ || ""), ft = state.evType || "";
-  function ok(e){ return (!ft || e.type === ft) && (!q || norm(e.title + " " + e.type + " " + e.notes + " " + (e.songs||[]).map(function(s){ return s.title; }).join(" ")).indexOf(q) >= 0); }
+  function ok(e){ return (!ft || e.type === ft) && (!q || norm(e.title + " " + e.type + " " + (e.location || "") + " " + e.notes + " " + (e.songs||[]).map(function(s){ return s.title; }).join(" ")).indexOf(q) >= 0); }
   var up = sp.up.filter(ok), past = sp.past.filter(ok);
-  var h = banner + evBanner() +
-    '<div class="pagehead"><h2>Events</h2><a class="ibtn primary" href="#/new">+ New event</a></div>' +
+  var h = banner + '<div class="pagehead"><h2>Events</h2>' + (leader() ? '<a class="ibtn primary" href="#/new" style="text-decoration:none">+ New event</a>' : '') + '</div>' +
     '<div class="search' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button></div>' +
     '<div class="filters">' + EV_TYPES.map(function(t){ return '<button class="chip' + (ft === t ? ' on' : '') + '" data-et="' + t + '">' + t + '</button>'; }).join("") + '</div>';
-  if(!state.events && state.evLoading) h += '<div class="card empty">Loading events...</div>';
-  else {
-    if(up[0]) h += '<a class="hero" href="#/e/' + encodeURIComponent(up[0].id) + '"><div class="hero-k">Next event' + (up[0].type ? ' · ' + esc(up[0].type) : '') + '</div><div class="hero-t">' + esc(up[0].title) + '</div><div class="hero-s">' + esc(fmtDate(up[0], true)) + ' · ' + (up[0].songs||[]).length + ' songs</div><span class="hero-b">Open set list ›</span></a>';
-    else h += '<div class="hero"><div class="hero-k">No upcoming event</div><div class="hero-s">Nothing planned' + (q || ft ? ' that matches' : '') + '.</div><a class="hero-b" href="#/new">+ Create event</a></div>';
-    if(up.length > 1){ h += '<div class="sec-title">Upcoming</div><div class="songs">' + up.slice(1).map(evRow).join("") + '</div>'; }
-    h += '<div class="sec-title">Past events</div>' + (past.length ? '<div class="songs">' + past.map(evRow).join("") + '</div>' : '<div class="card empty">No past events yet.</div>');
-  }
+  h += up.length ? '<div class="sec-title">Upcoming</div><div class="songs">' + up.map(evRow).join("") + '</div>' : '<div class="card empty">No upcoming events' + (q || ft ? ' that match' : '') + '.</div>';
+  h += '<div class="sec-title">Past events</div>' + (past.length ? '<div class="songs">' + past.map(evRow).join("") + '</div>' : '<div class="card empty">No past events yet.</div>');
   $("app").innerHTML = h;
   var eq = $("eq");
   eq.oninput = function(){ state.evQ = eq.value; var pos = eq.selectionStart; renderEvents(banner); var e2 = $("eq"); e2.focus(); try{ e2.setSelectionRange(pos,pos); }catch(e){} };
@@ -995,71 +1121,93 @@ function renderEvents(banner){
 /* ---------- one event ---------- */
 function renderEvent(id, banner){
   var e = findEvent(id);
-  if(!e){ $("app").innerHTML = banner + evBanner() + '<div class="card empty">' + (state.evLoading || !state.events ? 'Loading event...' : 'This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a>') + '</div>'; return; }
+  if(!e){ $("app").innerHTML = banner + '<div class="card empty">This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a></div>'; return; }
   var items = e.songs || [];
-  var h = banner + evBanner() + '<div class="card song-head">' +
-    '<div class="backrow"><a class="ibtn" href="#/events" style="text-decoration:none">‹ Events</a><div style="display:flex;gap:6px"><button class="ibtn" id="evCopy">Copy link</button><a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '/edit" style="text-decoration:none">Edit</a></div></div>' +
+  var MAP = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(e.location || "");
+  var h = banner + '<div class="card song-head">' +
+    '<div class="backrow"><a class="ibtn" href="#/events" style="text-decoration:none">‹ Events</a><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' +
+      '<button class="ibtn" id="evShare">Share</button>' +
+      (leader() ? '<button class="ibtn" id="evDup">Copy</button><a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '/edit" style="text-decoration:none">Edit</a>' : '') + '</div></div>' +
     (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span>' : '') +
-    '<h1 style="margin-top:8px">' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span><span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
+    '<h1 style="margin-top:8px">' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span>' +
+    (e.location ? '<a class="loc" href="' + esc(MAP) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' + esc(e.location) + '</a>' : '') + '<span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
+    (e.players && e.players.length ? '<div class="players">' + e.players.map(function(p){ return '<span><b>' + esc(p.name) + '</b>' + (p.role ? ' ' + esc(p.role) : '') + '</span>'; }).join("") + '</div>' : '') +
     (e.notes ? '<div class="ev-notes">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>' : '') +
-    (items.length ? '<a class="btn primary" style="margin-top:14px" href="#/e/' + encodeURIComponent(e.id) + '/s/0">Start set list ›</a>' : '') + '</div>';
+    (items.length ? '<button class="btn primary big" style="margin-top:14px" id="evStart">▶ Start rehearsal</button>' : '') + '</div>';
   h += '<div class="sec-title">Set list</div>';
-  if(!items.length) h += '<div class="card empty">No songs yet. Tap Edit to add the set list.</div>';
+  if(!items.length) h += '<div class="card empty">No songs yet.' + (leader() ? ' Tap Edit to add the set list.' : '') + '</div>';
   else h += '<div class="songs">' + items.map(function(it, i){
-    var s = songFor(it), bits = [];
-    if(s && s.key) bits.push('<span class="pill">' + esc(keyName(s.key, 0)) + '</span>');
+    var s = songFor(it), bits = [], k = it.key || (s && s.key ? keyName(s.key, 0) : "");
+    if(k) bits.push('<span class="pill' + (it.key ? ' hl' : '') + '">' + esc(k) + '</span>');
     if(s && s.bpm) bits.push('<span class="pill">' + s.bpm + ' bpm</span>');
     return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
-      (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the song doc</div>' : (s.artist && s.type === "Cover" ? '<div class="s">' + esc(s.artist) + '</div>' : '')) +
+      (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : (s.artist && s.type === "Cover" ? '<div class="s">' + esc(s.artist) + '</div>' : '')) +
       '</div><div class="pills">' + bits.join("") + '</div></a>';
   }).join("") + '</div>';
   $("app").innerHTML = h; scrollTop();
-  $("evCopy").onclick = function(){
-    var url = location.href.split("#")[0] + "#/e/" + encodeURIComponent(e.id), b = this;
-    function done(){ b.textContent = "Copied"; setTimeout(function(){ b.textContent = "Copy link"; }, 1500); }
-    try{ navigator.clipboard.writeText(url).then(done, function(){ prompt("Copy this link:", url); }); }catch(x){ prompt("Copy this link:", url); }
+  $("evShare").onclick = function(){ shareEvent(e); };
+  if($("evStart")) $("evStart").onclick = function(){ startStage(e); };
+  if($("evDup")) $("evDup").onclick = function(){
+    var c = JSON.parse(JSON.stringify(e)), d = evDate(e) || new Date();
+    d.setDate(d.getDate() + 7); c.id = ""; c.date = ymd(d);
+    state.draft = c; state.draftKey = "new"; state.pick = "";
+    location.hash = "#/new";
   };
 }
 
 /* ---------- add / edit an event ---------- */
+function keySelect(cls, val, data){
+  var o = '<option value="">Song key</option>';
+  KEYS.forEach(function(k){ o += '<option' + (val === k ? ' selected' : '') + '>' + k + '</option>'; });
+  KEYS.forEach(function(k){ o += '<option' + (val === k + "m" ? ' selected' : '') + '>' + k + 'm</option>'; });
+  return '<select class="' + cls + '" ' + data + '>' + o + '</select>';
+}
 function renderEditor(id, newDate, banner){
   var e = id ? findEvent(id) : null;
-  if(id && !e){ $("app").innerHTML = banner + '<div class="card empty">' + (state.events ? 'This event was not found.' : 'Loading event...') + '</div>'; return; }
-  var key = id || ("new" + (newDate || ""));
-  if(!state.draft || state.draftKey !== key){
+  if(id && !e){ $("app").innerHTML = banner + '<div class="card empty">This event was not found.</div>'; return; }
+  var key = id || "new" + (newDate || "");
+  if(!state.draft || (state.draftKey !== key && !(state.draftKey === "new" && !id))){
     state.draftKey = key;
-    state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type:"Service", date: newDate || ymd(new Date()), time:"19:00", notes:"", songs:[] };
+    state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type:"Service", date: newDate || ymd(new Date()), time:"19:00", location:"", notes:"", songs:[], players:[] };
     state.pick = "";
   }
-  var d = state.draft;
+  var d = state.draft; d.players = d.players || [];
+  var members = (state.db.members || []).filter(function(m){ return m.active; });
   var h = banner + '<div class="card song-head editor">' +
-    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/e/' + encodeURIComponent(id) : '#/events') + '" id="edCancel" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit event' : 'New event') + '</span></div>' +
+    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/e/' + encodeURIComponent(id) : '#/events') + '" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit event' : 'New event') + '</span></div>' +
     '<label>Event name<input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="e.g. Sunday service, Boda | Rene Mena"></label>' +
     '<div class="row2"><label>Type<select id="fType">' + EV_TYPES.map(function(t){ return '<option' + (d.type === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label>' +
     '<label>Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label>Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
-    '<label>Notes<textarea id="fNotes" maxlength="1000" placeholder="Place, who is playing, dress code...">' + esc(d.notes) + '</textarea></label></div>';
+    '<label>Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="e.g. Rey de Reyes church, San Antonio"></label>' +
+    '<label>Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label></div>';
+  h += '<div class="sec-title">Who\'s playing</div><div class="card song-head">' + (members.length ? '<div class="pgrid">' + members.map(function(m){
+      var p = d.players.filter(function(x){ return x.id === m.id; })[0];
+      return '<label class="prow"><input type="checkbox" data-pl="' + esc(m.id) + '"' + (p ? ' checked' : '') + '><b>' + esc(m.name) + '</b><input class="note-in" data-role="' + esc(m.id) + '" placeholder="Plays..." value="' + esc(p ? p.role : (m.instruments || "")) + '"></label>';
+    }).join("") + '</div>' : '<div class="muted" style="font-size:14px">No band members yet. Add them in <a href="#/manage">Leader tools</a>.</div>') + '</div>';
   h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div><div id="selList"></div>';
-  h += '<div class="card song-head"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+  h += '<div class="card song-head" style="margin-top:10px"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="pickQ" type="search" placeholder="Add a song: type a title" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div></div>';
-  h += '<div class="card song-head">' + (state.pin ? '' : '<label>Band PIN<input id="fPin" type="password" inputmode="numeric" autocomplete="off" placeholder="Ask Ryan for the band PIN"></label>') +
-    '<div id="edMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn primary" id="edSave">Save event</button>' +
-    (id ? '<button class="btn danger" id="edDel">Delete event</button>' : '') + (state.pin ? '<button class="btn" id="edForget">Forget PIN on this phone</button>' : '') + '</div></div>';
+  h += '<div class="card song-head" style="margin-top:10px"><div id="edMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="edSave">Save event</button>' + (id ? '<button class="btn danger" id="edDel">Delete event</button>' : '') + '</div></div>';
   $("app").innerHTML = h;
-
-  function bind(idn, key){ $(idn).oninput = function(){ d[key] = this.value; }; }
-  bind("fTitle", "title"); bind("fType", "type"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes");
-  $("fType").onchange = function(){ d.type = this.value; };
+  function bind(idn, k){ $(idn).oninput = $(idn).onchange = function(){ d[k] = this.value; }; }
+  bind("fTitle", "title"); bind("fType", "type"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes"); bind("fLoc", "location");
+  function readPlayers(){
+    d.players = [];
+    document.querySelectorAll("[data-pl]").forEach(function(c){ if(c.checked){ var mid = c.getAttribute("data-pl"), m = members.filter(function(x){ return x.id === mid; })[0], r = document.querySelector('[data-role="' + mid + '"]'); d.players.push({ id: mid, name: m ? m.name : "", role: r ? r.value.trim() : "" }); } });
+  }
+  document.querySelectorAll("[data-pl],[data-role]").forEach(function(x){ x.oninput = x.onchange = readPlayers; });
   function drawSel(){
     $("selCount").textContent = d.songs.length ? "(" + d.songs.length + ")" : "";
     $("selList").innerHTML = d.songs.length ? '<div class="songs">' + d.songs.map(function(it, i){
       var s = songFor(it);
-      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="pill">' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
-        '<input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note (optional), e.g. capo 2, skip Verso II" value="' + esc(it.note || "") + '"></div>' +
-        '<div class="sel-btns"><button data-up="' + i + '" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button data-down="' + i + '" aria-label="Move down"' + (i === d.songs.length-1 ? ' disabled' : '') + '>↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
+      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="muted" style="font-size:12px">written in ' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
+        '<div class="sel-in">' + keySelect("key-in", it.key || "", 'data-key="' + i + '"') + '<input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
+        '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === d.songs.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
     }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search below to add them in order.</div>';
     document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ d.songs[+x.getAttribute("data-note")].note = x.value; }; });
-    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"); var t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
-    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"); var t = d.songs[i+1]; d.songs[i+1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
+    document.querySelectorAll("[data-key]").forEach(function(x){ x.onchange = function(){ d.songs[+x.getAttribute("data-key")].key = x.value; }; });
+    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
+    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = d.songs[i+1]; d.songs[i+1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
     document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ d.songs.splice(+x.getAttribute("data-rm"), 1); drawSel(); drawPick(); }; });
   }
   function drawPick(){
@@ -1068,136 +1216,248 @@ function renderEditor(id, newDate, banner){
     var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
       .sort(function(a,b){ var at = words.length && a.titleN.indexOf(q) === 0 ? 0 : 1, bt = words.length && b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, q ? 12 : 6);
     $("pickRes").innerHTML = (q ? '' : '<div class="muted" style="font-size:12px;margin:10px 2px 4px">Type to search all ' + state.db.songs.length + ' songs</div>') + res.map(function(s){
-      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", s.group].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
+      var lp = lastPlayed(s.id);
+      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
         (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
     }).join("") + (q && !res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
-    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "" }); drawSel(); drawPick(); }; });
-    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"" }); state.pick = ""; $("pickQ").value = ""; drawSel(); drawPick(); };
+    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "", key: "" }); drawSel(); drawPick(); }; });
+    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"", key:"" }); state.pick = ""; $("pickQ").value = ""; drawSel(); drawPick(); };
   }
   $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
   $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
   drawSel(); drawPick();
-
-  function msg(t, bad){ $("edMsg").innerHTML = t ? '<div class="banner ' + (bad ? 'bad' : 'warn') + '" style="margin:8px 0 0">' + t + '</div>' : ''; }
-  function pinNow(){ return state.pin || ($("fPin") ? $("fPin").value.trim() : ""); }
+  function msg(t){ $("edMsg").innerHTML = t ? '<div class="banner bad" style="margin:0 0 10px">' + t + '</div>' : ''; }
   $("edSave").onclick = function(){
-    var b = this, pin = pinNow();
-    if(!d.title.trim()) return msg("Give the event a name.", true);
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.", true);
-    if(!pin) return msg("Type the band PIN to save.", true);
+    var b = this; readPlayers();
+    if(!d.title.trim()) return msg("Give the event a name.");
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.");
     b.disabled = true; b.textContent = "Saving...";
-    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, notes: d.notes, songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "" }; }) };
-    jsonp(SCRIPT_URL + "?action=save&pin=" + encodeURIComponent(pin) + "&data=" + encodeURIComponent(JSON.stringify(payload)), 30000).then(function(r){
-      if(r && r.ok){
-        state.pin = pin; ls("pin", pin);
-        payload.id = r.id; payload.updated = new Date().toISOString();
-        var l = state.events || [], at = -1; l.forEach(function(x, i){ if(x.id === r.id) at = i; });
-        if(at >= 0) l[at] = payload; else l.push(payload);
-        state.events = l; ls("events", { at: Date.now(), events: l });
-        state.draft = null; state.draftKey = "";
-        location.hash = "#/e/" + encodeURIComponent(r.id);
-        loadEvents(true);
-      } else {
-        b.disabled = false; b.textContent = "Save event";
-        if(r && r.error === "wrong_pin"){ state.pin = ""; ls("pin", ""); renderEditor(id, newDate, banner); msg("That PIN didn't work. Try again.", true); }
-        else msg("Could not save (" + esc((r && r.error) || "unknown") + ").", true);
-      }
-    }).catch(function(x){ b.disabled = false; b.textContent = "Save event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again.", true); });
+    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: d.players,
+      songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: it.key || "" }; }) };
+    send("save", state.pin, payload).then(function(r){
+      if(r && r.ok){ state.draft = null; state.draftKey = ""; return load(true).then(function(){ location.hash = "#/e/" + encodeURIComponent(r.id); }); }
+      b.disabled = false; b.textContent = "Save event";
+      if(r && r.error === "wrong_pin") return wrongPin();
+      msg("Could not save (" + esc((r && r.error) || "unknown") + ").");
+    }).catch(function(x){ b.disabled = false; b.textContent = "Save event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again."); });
   };
   if($("edDel")) $("edDel").onclick = function(){
-    var pin = pinNow();
-    if(!pin) return msg("Type the band PIN to delete.", true);
     if(!confirm('Delete "' + d.title + '"? This removes it for everyone.')) return;
-    jsonp(SCRIPT_URL + "?action=delete&pin=" + encodeURIComponent(pin) + "&id=" + encodeURIComponent(id), 30000).then(function(r){
-      if(r && r.ok){
-        state.pin = pin; ls("pin", pin);
-        state.events = (state.events || []).filter(function(x){ return x.id !== id; }); ls("events", { at: Date.now(), events: state.events });
-        state.draft = null; state.draftKey = "";
-        location.hash = "#/events"; loadEvents(true);
-      } else if(r && r.error === "wrong_pin"){ state.pin = ""; ls("pin", ""); renderEditor(id, newDate, banner); msg("That PIN didn't work. Try again.", true); }
-      else msg("Could not delete (" + esc((r && r.error) || "unknown") + ").", true);
-    }).catch(function(x){ msg("Could not reach the server (" + esc(x.message) + ").", true); });
+    jsonp(SCRIPT_URL + "?action=delete&pin=" + encodeURIComponent(state.pin) + "&id=" + encodeURIComponent(id), 30000).then(function(r){
+      if(r && r.ok){ state.draft = null; return load(true).then(function(){ location.hash = "#/events"; }); }
+      if(r && r.error === "wrong_pin") return wrongPin();
+      msg("Could not delete (" + esc((r && r.error) || "unknown") + ").");
+    }).catch(function(x){ msg("Could not reach the server (" + esc(x.message) + ")."); });
   };
-  if($("edForget")) $("edForget").onclick = function(){ state.pin = ""; ls("pin", ""); renderEditor(id, newDate, banner); };
-  $("edCancel").onclick = function(){ state.draft = null; state.draftKey = ""; };
 }
 
-/* ---------- set lists (other parts of the document) ---------- */
-function linkLine(text){
-  var s = findSong(state.db.songs, text);
-  return s ? '<a href="#/c/' + encodeURIComponent(s.id) + '">' + esc(text) + '</a>' : esc(text);
-}
-function listsHtml(){
-  var L = state.db.lists;
-  if(!L.length) return '<div class="card empty">No set lists yet. Any tab in the song doc that has song lists (by event or service) instead of songs shows up here.</div>';
-  return L.map(function(t){
-    var h = '<div class="card block"><h2>' + esc(t.title) + '</h2>', listOpen = false;
-    t.blocks.forEach(function(b){
-      if(b.t === "li"){ if(!listOpen){ h += '<ul>'; listOpen = true; } h += '<li>' + linkLine(b.text) + '</li>'; return; }
-      if(listOpen){ h += '</ul>'; listOpen = false; }
-      if(b.t === "table"){
-        h += '<div class="tbl"><table>' + b.rows.map(function(r){
-          return '<tr>' + r.map(function(c){ return '<td>' + splitLines(c).filter(function(x){ return x.trim(); }).map(function(x){ return '<div>' + linkLine(x.trim()) + '</div>'; }).join("") + '</td>'; }).join("") + '</tr>';
-        }).join("") + '</table></div>';
-      } else if(b.t === "p"){
-        var tx = String(b.text||"").trim(); if(!tx) return;
-        if(/HEADING|TITLE/i.test(b.h||"") && !/NORMAL/i.test(b.h||"")) h += '<h3>' + esc(tx) + '</h3>';
-        else h += splitLines(tx).map(function(x){ return x.trim() ? '<div>' + linkLine(x.trim()) + '</div>' : ''; }).join("");
-      }
+/* ---------- add / edit a song ---------- */
+var KEYS = ["C","C#","Db","D","Eb","E","F","F#","Gb","G","Ab","A","Bb","B"];
+var PARTS = ["Intro", "Verso I", "Verso II", "Pre-Coro", "Coro", "Puente", "Instrumental", "Outro"];
+function renderSongEditor(id, banner){
+  var s = id ? find(id) : null, db = state.db;
+  if(id && !s){ $("app").innerHTML = banner + '<div class="card empty">Song not found.</div>'; return; }
+  if(!state.sdraft || state.sdraft._for !== (id || "new")){
+    state.sdraft = s ? { _for: id, id: s.id, title: s.title, album: s.album, type: s.type, artist: s.artist, key: s.keyText, bpm: s.bpm ? String(s.bpm) : "", time: s.time || "4/4", genre: s.genre, link: s.link, lyrics: s.lyrics }
+                     : { _for: "new", id: "", title: "", album: "", type: "Original", artist: "Rey de Reyes Band", key: "", bpm: "", time: "4/4", genre: "", link: "", lyrics: "" };
+  }
+  var d = state.sdraft;
+  function opts(list, val, none){
+    var seen = {}, o = '<option value="">' + none + '</option>';
+    list.concat(val ? [val] : []).forEach(function(x){ if(!x || seen[norm(x)]) return; seen[norm(x)] = 1; o += '<option' + (norm(x) === norm(val) ? ' selected' : '') + '>' + esc(x) + '</option>'; });
+    return o + '<option value="__new">+ Add new...</option>';
+  }
+  var keyOpts = '<option value="">(not sure yet)</option>' + KEYS.map(function(k){ return '<option' + (d.key === k ? ' selected' : '') + '>' + k + '</option>'; }).join("") + KEYS.map(function(k){ return '<option' + (d.key === k + "m" ? ' selected' : '') + '>' + k + 'm</option>'; }).join("");
+  var h = banner + '<div class="card song-head editor">' +
+    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/c/' + encodeURIComponent(id) : '#/songs') + '" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit song' : 'New song') + '</span></div>' +
+    '<label>Song title<input id="sTitle" maxlength="100" value="' + esc(d.title) + '"></label>' +
+    '<div class="row2"><label>Album<select id="sAlbum">' + opts(db.albums.map(function(a){ return a.name; }), d.album, "(no album)") + '</select></label>' +
+    '<label>Type<select id="sType"><option' + (d.type === "Original" ? ' selected' : '') + '>Original</option><option' + (d.type === "Cover" ? ' selected' : '') + '>Cover</option></select></label>' +
+    '<label>Artist<select id="sArtist">' + opts(db.artists, d.artist, "(choose)") + '</select></label></div>' +
+    '<div class="row2"><label>Key<select id="sKey">' + keyOpts + '</select></label>' +
+    '<label>Tempo (BPM)<input id="sBpm" type="number" inputmode="numeric" min="30" max="250" value="' + esc(d.bpm) + '" placeholder="e.g. 100"></label>' +
+    '<label>Time<select id="sTime">' + ["4/4","3/4","2/2","6/8","2/4","12/8"].map(function(t){ return '<option' + (d.time === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label></div>' +
+    '<div class="row2"><label>Genre<select id="sGenre">' + opts(db.genres, d.genre, "(choose)") + '</select></label>' +
+    '<label style="grid-column:span 2">Practice link (YouTube or audio)<input id="sLink" type="url" maxlength="500" value="' + esc(d.link) + '" placeholder="https://youtube.com/..."></label></div>' +
+    '<label>Lyrics</label><div class="partbtns">' + PARTS.map(function(p){ return '<button class="chip" data-part="' + esc(p) + '">+ ' + esc(p) + '</button>'; }).join("") + '</div>' +
+    '<textarea id="sLyrics" class="lyrics-in" spellcheck="false" placeholder="Intro\n[G] - [C] - [D]\n\nVerso I\nFirst line\n//These two lines\nare sung twice//\n\nCoro (x2)\n...">' + esc(d.lyrics) + '</textarea>' +
+    '<div class="muted" style="font-size:12px;margin-top:6px">Part names on their own line. <b>//</b> around lines = sing twice, <b>///</b> = three times. Chords on their own line like [D] - [Bm], or above the words.</div></div>' +
+    '<div class="sec-title">Preview</div><div id="sPrev"></div>' +
+    '<div class="card song-head" style="margin-top:10px"><div id="sMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="sSave">' + (id ? 'Save changes' : 'Add song') + '</button>' + (id ? '<button class="btn danger" id="sDel">Delete song</button>' : '') + '</div></div>';
+  $("app").innerHTML = h;
+  function bind(i, k){ $(i).oninput = $(i).onchange = function(){ d[k] = this.value; if(k === "lyrics" || k === "key") drawPrev(); }; }
+  bind("sTitle","title"); bind("sKey","key"); bind("sBpm","bpm"); bind("sTime","time"); bind("sLink","link"); bind("sLyrics","lyrics");
+  function pickNew(sel, k, what){
+    $(sel).onchange = function(){
+      if(this.value === "__new"){
+        var v = (prompt("New " + what + " name:") || "").trim();
+        if(v){ d[k] = v; renderSongEditor(id, banner); } else this.value = d[k] || "";
+      } else d[k] = this.value;
+    };
+  }
+  pickNew("sAlbum", "album", "album"); pickNew("sArtist", "artist", "artist"); pickNew("sGenre", "genre", "genre");
+  $("sType").onchange = function(){ d.type = this.value; if(d.type === "Cover" && d.artist === "Rey de Reyes Band"){ d.artist = ""; renderSongEditor(id, banner); } else if(d.type === "Original" && !d.artist){ d.artist = "Rey de Reyes Band"; renderSongEditor(id, banner); } };
+  document.querySelectorAll("[data-part]").forEach(function(b){ b.onclick = function(){
+    var ta = $("sLyrics"), p = b.getAttribute("data-part"), at = ta.selectionStart || ta.value.length, before = ta.value.slice(0, at), after = ta.value.slice(at);
+    var ins = (before && !/\n\n$/.test(before) ? (/\n$/.test(before) ? "\n" : "\n\n") : "") + p + "\n";
+    ta.value = before + ins + after; d.lyrics = ta.value; ta.focus(); var pos = (before + ins).length; ta.setSelectionRange(pos, pos); drawPrev();
+  }; });
+  function drawPrev(){
+    var secs = buildSections(splitLines(d.lyrics)), k = parseKey(d.key);
+    $("sPrev").innerHTML = d.lyrics.trim() ? sectionsHtml(secs, 0, k ? useFlats(k, 0) : false, true) : '<div class="card empty" style="padding:16px">Type the lyrics above to see how the band will see them.</div>';
+  }
+  drawPrev();
+  function msg(t){ $("sMsg").innerHTML = t ? '<div class="banner bad" style="margin:0 0 10px">' + t + '</div>' : ''; }
+  $("sSave").onclick = function(){
+    var b = this;
+    if(!d.title.trim()) return msg("Give the song a title.");
+    if(db.songs.some(function(x){ return x.id !== d.id && x.titleN === norm(d.title); })) return msg("Another song already has that title.");
+    b.disabled = true; b.textContent = "Saving...";
+    var payload = { id: d.id, title: d.title.trim(), album: d.album, type: d.type, artist: d.artist, key: d.key, bpm: d.bpm, time: d.time, genre: d.genre, link: (d.link || "").trim(), lyrics: d.lyrics };
+    send("savesong", state.pin, payload).then(function(r){
+      if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = "#/c/" + encodeURIComponent(r.id); }); }
+      b.disabled = false; b.textContent = id ? "Save changes" : "Add song";
+      if(r && r.error === "wrong_pin") return wrongPin();
+      msg(r && r.error === "exists" ? "Another song already has that title." : "Could not save (" + esc((r && r.error) || "unknown") + ").");
+    }).catch(function(x){ b.disabled = false; b.textContent = id ? "Save changes" : "Add song"; msg("Could not reach the server (" + esc(x.message) + "). Your changes are still here; try again."); });
+  };
+  if($("sDel")) $("sDel").onclick = function(){
+    if(!confirm('Delete "' + d.title + '" from the songbook? This removes it for everyone.')) return;
+    jsonp(SCRIPT_URL + "?action=deletesong&pin=" + encodeURIComponent(state.pin) + "&id=" + encodeURIComponent(id)).then(function(r){
+      if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = "#/songs"; }); }
+      if(r && r.error === "wrong_pin") return wrongPin();
+      msg("Could not delete (" + esc((r && r.error) || "unknown") + ").");
     });
-    if(listOpen) h += '</ul>';
-    return h + '</div>';
-  }).join("");
+  };
+}
+
+/* ---------- leader tools: albums, artists, genres, members ---------- */
+function renderManage(banner){
+  var db = state.db;
+  function count(field, name){ return db.songs.filter(function(s){ return norm(s[field]) === norm(name); }).length; }
+  function block(kind, title, items, field, extra){
+    return '<div class="card block"><h2>' + title + ' <span class="muted" style="font-size:14px">(' + items.length + ')</span></h2>' +
+      '<div class="addrow"><input id="add' + kind + '" placeholder="New ' + title.toLowerCase().replace(/s$/, "") + ' name">' + (extra || '') + '<button class="btn small primary" data-addk="' + kind + '">+ Add</button></div>' +
+      items.map(function(it){ var name = it.name || it; return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(name) + '</b>' + (it.year ? ' <span class="muted">' + esc(it.year) + '</span>' : '') + ' <span class="muted" style="font-size:12px">· ' + count(field, name) + ' songs</span></div>' +
+        '<button class="btn small" data-ren="' + kind + '" data-name="' + esc(name) + '">Rename</button><button class="btn small danger" data-del="' + kind + '" data-name="' + esc(name) + '">Delete</button></div>'; }).join("") + '</div>';
+  }
+  var h = banner + '<div class="pagehead"><h2>Leader tools</h2><button class="ibtn" id="mSignOut">Sign out</button></div><div id="mMsg"></div>' +
+    '<div class="card block"><h2>Band members <span class="muted" style="font-size:14px">(' + (db.members || []).length + ')</span></h2>' +
+    '<div class="addrow"><input id="addMembers" placeholder="Name"><input id="addInst" placeholder="Plays (e.g. guitar, vocals)"><button class="btn small primary" data-addk="Members">+ Add</button></div>' +
+    (db.members || []).map(function(m){ return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(m.name) + '</b> <span class="muted">' + esc(m.instruments || "") + '</span></div>' +
+      '<button class="btn small" data-medit="' + esc(m.id) + '">Edit</button><button class="btn small danger" data-mdel="' + esc(m.id) + '">Delete</button></div>'; }).join("") + '</div>' +
+    block("Albums", "Albums", db.albums, "album", '<input id="addYear" placeholder="Year" style="max-width:90px" inputmode="numeric">') +
+    block("Artists", "Artists", db.artists, "artist") +
+    block("Genres", "Genres", db.genres, "genre");
+  $("app").innerHTML = h; scrollTop();
+  function op(data, okMsg){
+    $("mMsg").innerHTML = '<div class="banner warn">Saving...</div>';
+    send("listop", state.pin, data).then(function(r){
+      if(r && r.ok) return load(true).then(function(){ renderManage(banner); $("mMsg").innerHTML = '<div class="banner ok">' + okMsg + '</div>'; });
+      if(r && r.error === "wrong_pin") return wrongPin();
+      if(r && r.error === "in_use"){
+        if(confirm(r.count + " songs use this. Delete it anyway? Those songs will have it left blank.")) return op(Object.assign({}, data, { force: true }), okMsg);
+        $("mMsg").innerHTML = ""; return;
+      }
+      $("mMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
+    }).catch(function(x){ $("mMsg").innerHTML = '<div class="banner bad">No internet (' + esc(x.message) + ').</div>'; });
+  }
+  $("mSignOut").onclick = signOut;
+  document.querySelectorAll("[data-addk]").forEach(function(b){ b.onclick = function(){
+    var k = b.getAttribute("data-addk"), name = $("add" + k).value.trim(); if(!name) return;
+    var data = { kind: k, op: "add", name: name };
+    if(k === "Members") data.instruments = $("addInst").value.trim();
+    if(k === "Albums") data.year = $("addYear").value.trim();
+    op(data, "Added " + name + ".");
+  }; });
+  document.querySelectorAll("[data-ren]").forEach(function(b){ b.onclick = function(){
+    var k = b.getAttribute("data-ren"), old = b.getAttribute("data-name"), name = (prompt("New name for " + old + ":", old) || "").trim();
+    if(!name || name === old) return;
+    op({ kind: k, op: "rename", old: old, name: name }, "Renamed. Songs using it were updated too.");
+  }; });
+  document.querySelectorAll("[data-del]").forEach(function(b){ b.onclick = function(){
+    var k = b.getAttribute("data-del"), old = b.getAttribute("data-name");
+    if(!confirm("Delete " + old + "?")) return;
+    op({ kind: k, op: "delete", old: old }, "Deleted " + old + ".");
+  }; });
+  document.querySelectorAll("[data-medit]").forEach(function(b){ b.onclick = function(){
+    var m = db.members.filter(function(x){ return x.id === b.getAttribute("data-medit"); })[0]; if(!m) return;
+    var name = prompt("Name:", m.name); if(name == null) return;
+    var inst = prompt("Plays:", m.instruments || ""); if(inst == null) return;
+    op({ kind: "Members", op: "update", id: m.id, name: name.trim(), instruments: inst.trim() }, "Saved " + name + ".");
+  }; });
+  document.querySelectorAll("[data-mdel]").forEach(function(b){ b.onclick = function(){
+    var m = db.members.filter(function(x){ return x.id === b.getAttribute("data-mdel"); })[0];
+    if(m && confirm("Remove " + m.name + " from the band list?")) op({ kind: "Members", op: "delete", id: m.id }, "Removed " + m.name + ".");
+  }; });
 }
 
 /* ---------- help ---------- */
 function helpHtml(){
   var S = state.db.songs;
   var noLyr = S.filter(function(s){ return !s.hasLyrics; }), noKey = S.filter(function(s){ return !s.key; }), noBpm = S.filter(function(s){ return !s.bpm; }), noGenre = S.filter(function(s){ return !s.genre; });
-  var noChords = S.filter(function(s){ return s.hasLyrics && !s.hasChords; });
   function li(arr){ return arr.length ? '<ul>' + arr.slice().sort(byTitle).map(function(s){ return '<li><a href="#/c/' + encodeURIComponent(s.id) + '">' + esc(s.title) + '</a></li>'; }).join("") + '</ul>' : '<p class="muted">None.</p>'; }
-  return '<div class="card block help"><h2>How to use the songbook</h2>' +
-    '<ul><li>Search for a song by its title or by any line of the lyrics.</li>' +
-    '<li>Inside a song, the row of colored buttons at the top is the song order. Tap one to jump to that part.</li>' +
-    '<li><b>Key + / −</b> moves the chords up or down a half step. It\'s saved on your phone for that song and doesn\'t change the doc.</li>' +
-    '<li><b>//</b> in the lyrics means those lines are sung twice, <b>///</b> three times. The app shows it with a blue bar and ×2 or ×3.</li>' +
-    '<li><b>Metronome</b> plays the song\'s tempo. Beat 1 is louder.</li>' +
-    '<li><b>Screen: Stays on</b> keeps your phone from going dark while you play.</li>' +
-    '<li><b>Events</b> hold the set list for each service, wedding or rehearsal. Open one and tap Start set list to go song by song. Making or changing an event needs the band PIN.</li>' +
-    '<li><b>♥</b> saves a song to your own list on this phone.</li>' +
-    '<li>Changes to the doc show up on their own when you open the app. If not, tap the refresh button at the top.</li>' +
-    '<li>To install it: on Android, open the Chrome menu and pick "Add to Home screen". On iPhone, in Safari tap Share, then "Add to Home Screen".</li></ul></div>' +
-    '<div class="card block help"><h2>How to write a song in the doc</h2>' +
-    '<p>The app reads the doc by itself, but every song has to follow the same layout:</p>' +
-    '<pre>Song title\n[table]  Type                 | Original  (or Cover)\n         Artist               | Rey de Reyes  (or the band we cover)\n         Key                  | G\n         Tempo/Time Signature | 120 BPM - 4/4\n         Genre                | Cumbia\n\nIntro\n||: [G] - [C] - [D] :||\n\nVerso I (x2)\nFirst line of the lyrics\n//These two lines\nare sung twice//\n\nCoro\n...\n\n────────────  (horizontal line or page break between songs)</pre>' +
-    '<ul><li>The title goes on its own line (Heading 2), with the table right under it: Type, Artist, Key, Tempo/Time Signature, Genre. Nothing else goes inside the table.</li>' +
-    '<li>Each part goes on its own line: Intro, Verso/Verse, Pre-Coro, Coro/Chorus, Puente/Bridge, Instrumental, Outro, Final. Numbers (Verso II) and repeats (Coro (x2)) are fine.</li>' +
-    '<li>If a part repeats exactly, just write its name again. The app shows the lyrics from the first time.</li>' +
-    '<li>Chords: on their own line, like <code>[D] - [Bm] - [G] - [A]</code>, or above the words.</li>' +
-    '<li>Notes like (Repeat everything) go in parentheses.</li>' +
-    '<li>New songs go in their album tab (or Other Artists for covers). Set lists for events are made in the app under Events, not in the doc.</li></ul>' +
-    '<p><a href="' + esc(DOC_URL) + '" target="_blank" rel="noopener">Open the song doc</a></p></div>' +
-    '<div class="card block miss"><h2>What\'s missing in the doc</h2>' +
-    '<h3>No lyrics (' + noLyr.length + ')</h3>' + li(noLyr) +
-    '<h3>No key (' + noKey.length + ')</h3>' + li(noKey) +
-    '<h3>No tempo (' + noBpm.length + ')</h3>' + li(noBpm) +
-    '<h3>No rhythm / genre (' + noGenre.length + ')</h3>' + li(noGenre) +
-    '<h3>Lyrics but no chords (' + noChords.length + ')</h3>' + li(noChords) + '</div>' +
-    '<div class="sec-title">Playlists in the song doc</div>' + listsHtml();
+  var h = '<div class="card block help"><h2>How to use the songbook</h2>' +
+    '<p><button class="btn primary" id="hGuide">Show the quick guide</button></p>' +
+    '<ul><li><b>Home</b> shows the next event. Tap <b>▶ Start</b> to go through the set list song by song. Swipe left or right to change songs.</li>' +
+    '<li><b>Songs</b>: search by title or by any line of the lyrics. Tap ♡ to save a song to your own list.</li>' +
+    '<li>In a song, <b>Options</b> lets you change the key, hide chords, make the text bigger, use the metronome and keep the screen on. Changes stay on your phone only.</li>' +
+    '<li><b>▶ Listen</b> opens the practice recording when the song has one.</li>' +
+    '<li><b>//</b> means sing those lines twice, <b>///</b> three times.</li>' +
+    '<li><b>Events</b>: each one has its set list. Tap <b>Share</b> to send it to the band on WhatsApp.</li></ul></div>';
+  h += '<div class="card block help"><h2>Band leaders</h2>' + (leader() ? '<p>You are signed in as a leader on this phone. You can add and edit songs and events, and manage albums, artists, genres and members.</p><p><a class="btn" href="#/manage">Leader tools</a> <button class="btn" id="hOut">Sign out</button></p>' :
+    '<p>Leaders can add and change songs, events and lists. Sign in once with the band PIN.</p><p><a class="btn" href="#/manage">Leader sign-in</a></p>') + '</div>';
+  if(leader()) h += '<div class="card block miss"><h2>What\'s missing in the songbook</h2><h3>No lyrics (' + noLyr.length + ')</h3>' + li(noLyr) + '<h3>No key (' + noKey.length + ')</h3>' + li(noKey) +
+    '<h3>No tempo (' + noBpm.length + ')</h3>' + li(noBpm) + '<h3>No genre (' + noGenre.length + ')</h3>' + li(noGenre) + '</div>';
+  return h;
 }
-function setupHtml(){
-  return '<div class="card setup"><h2 style="margin-top:0">The song doc isn\'t connected yet</h2><p>This app reads the songs from the band\'s Google Doc through a small Apps Script. Steps (one time):</p>' +
-    '<ol><li>Open script.google.com and make a new project.</li><li>Paste in <code>apps-script/Code.gs</code> from this repo and save.</li><li>Deploy &gt; New deployment &gt; Web app. Execute as: Me. Who has access: Anyone.</li><li>Copy the link that ends in <code>/exec</code> and put it in <code>SCRIPT_URL</code> at the top of <code>index.html</code>.</li></ol></div>';
+function bindHelp(){
+  if($("hGuide")) $("hGuide").onclick = function(){ showGuide(0); };
+  if($("hOut")) $("hOut").onclick = signOut;
+}
+
+/* ---------- first-run guide (English / Spanish) + install help ---------- */
+var GUIDE = {
+  en: { title: ["Put the app on your phone", "Open the next event", "Play song by song"],
+        next: "Next", done: "Got it", lang: "Español",
+        install: "Install now",
+        android: "On Android: open this page in <b>Chrome</b>, tap the <b>⋮ menu</b> at the top right, then <b>Add to Home screen</b> (or <b>Install app</b>).",
+        iphone: "On iPhone: open this page in <b>Safari</b>, tap the <b>Share</b> button (square with an arrow), then <b>Add to Home Screen</b>.",
+        s2: "The <b>Home</b> page always shows the next service or event. Tap <b>▶ Start</b> to open its set list.",
+        s3: "<b>Swipe left</b> for the next song, <b>swipe right</b> to go back. Tap <b>Options</b> in a song for bigger text or a different key. The screen stays on while you play." },
+  es: { title: ["Ponga la app en su teléfono", "Abra el próximo evento", "Toque canción por canción"],
+        next: "Siguiente", done: "Listo", lang: "English",
+        install: "Instalar ahora",
+        android: "En Android: abra esta página en <b>Chrome</b>, toque el <b>menú ⋮</b> arriba a la derecha y luego <b>Agregar a la pantalla principal</b> (o <b>Instalar app</b>).",
+        iphone: "En iPhone: abra esta página en <b>Safari</b>, toque <b>Compartir</b> (el cuadro con una flecha) y luego <b>Agregar a inicio</b>.",
+        s2: "La página de <b>Inicio</b> siempre muestra el próximo servicio o evento. Toque <b>▶ Start</b> para abrir la lista de canciones.",
+        s3: "<b>Deslice a la izquierda</b> para la siguiente canción y <b>a la derecha</b> para regresar. Toque <b>Options</b> en una canción para letra más grande o cambiar el tono. La pantalla se queda encendida mientras toca." }
+};
+function showGuide(step){
+  var g = GUIDE[state.lang] || GUIDE.en, ua = navigator.userAgent, ios = /iPhone|iPad|iPod/i.test(ua), android = /Android/i.test(ua);
+  var body = step === 0 ? (isInstalled() ? '<p>✓ ' + (state.lang === "es" ? "Ya está instalada en este teléfono." : "It's already installed on this phone.") + '</p>' :
+      (state.installEvt ? '<p><button class="btn primary big" id="gInstall">' + g.install + '</button></p>' : '') + (ios ? '<p>' + g.iphone + '</p>' : android ? '<p>' + g.android + '</p>' : '<p>' + g.android + '</p><p>' + g.iphone + '</p>'))
+    : step === 1 ? '<p>' + g.s2 + '</p>' : '<p>' + g.s3 + '</p>';
+  var ov = $("guide") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "guide" }));
+  ov.className = "guide";
+  ov.innerHTML = '<div class="guide-card"><div class="guide-top"><span class="muted">' + (step + 1) + ' / 3</span><button class="btn small" id="gLang">' + g.lang + '</button></div>' +
+    '<h2>' + g.title[step] + '</h2>' + body +
+    '<div class="guide-dots">' + [0,1,2].map(function(i){ return '<i class="' + (i === step ? 'on' : '') + '"></i>'; }).join("") + '</div>' +
+    '<button class="btn primary big" id="gNext">' + (step < 2 ? g.next : g.done) + '</button></div>';
+  $("gNext").onclick = function(){ if(step < 2) showGuide(step + 1); else { ls("guideDone", true); ov.remove(); } };
+  $("gLang").onclick = function(){ state.lang = state.lang === "es" ? "en" : "es"; ls("lang", state.lang); showGuide(step); };
+  if($("gInstall")) $("gInstall").onclick = function(){ var e = state.installEvt; state.installEvt = null; e.prompt(); e.userChoice.then(function(){ showGuide(0); }); };
+  ov.onclick = function(e){ if(e.target === ov){ ls("guideDone", true); ov.remove(); } };
 }
 
 /* ---------- start ---------- */
-var c = ls("cache");
-var ce = ls("events"); if(ce && ce.events){ state.events = ce.events; }
-if(SCRIPT_URL && c && c.data){ try{ useData(c.data, "cache", c.at); state.source = "cache"; }catch(e){} }
+var c = ls("cache2");
+if(SCRIPT_URL && c && c.data){ try{ useData(c.data, "cache", c.at); }catch(e){} }
 load(false);
 if(!state.db) route();
 if("serviceWorker" in navigator && location.protocol === "https:"){ navigator.serviceWorker.register("sw.js").catch(function(){}); }
 })();
+
 </script>
 </body>
 </html>
