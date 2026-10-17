@@ -901,7 +901,7 @@ function renderSong(id, banner, ctx){
   }
   if(!s){ $("app").innerHTML = banner + '<div class="card empty">Could not find that song. It may have been renamed or removed.<br><br><a href="#/songs">See all songs</a></div>'; return; }
   var tk = ctx ? "@" + ctx.ev.id + ":" + ctx.idx : s.id;
-  var evShift = ctx && ctx.item.key ? semis(s.key, ctx.item.key) : 0;
+  var evShift = 0;
   var n = state.trans[tk] != null ? state.trans[tk] : evShift;
   var flats = s.key ? useFlats(s.key, n) : false, showChords = state.chords && s.hasChords;
   var meta = [];
@@ -967,7 +967,7 @@ function evBarHtml(ctx){
   var e = ctx.ev, n = (e.songs || []).length;
   return '<div class="card evbar"><div style="min-width:0;flex:1"><div class="muted" style="font-size:12px">' + esc(e.title) + '</div><b>Song ' + (ctx.idx + 1) + ' of ' + n + '</b></div>' +
     (state.stage ? '<button class="ibtn" id="stEnd">✕ End</button>' : '<a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '" style="text-decoration:none">☰ List</a>') + '</div>' +
-    (ctx.item && (ctx.item.key || ctx.item.note) ? '<div class="card ev-note">' + (ctx.item.key ? '<b>Play in ' + esc(ctx.item.key) + '</b>' : '') + (ctx.item.key && ctx.item.note ? ' · ' : '') + (ctx.item.note ? esc(ctx.item.note) : '') + '</div>' : '');
+    (ctx.item && ctx.item.note ? '<div class="card ev-note"><b>Note:</b> ' + esc(ctx.item.note) + '</div>' : '');
 }
 function setNav(ctx){
   var L = ctx.ev.songs, eid = encodeURIComponent(ctx.ev.id), p = ctx.idx - 1, nx = ctx.idx + 1;
@@ -1050,11 +1050,10 @@ function evRow(e){
 function shareText(e){
   var lines = ["*" + e.title + "*", fmtDate(e, true)];
   if(e.location) lines.push(e.location);
-  if(e.players && e.players.length) lines.push("Playing: " + e.players.map(function(p){ return p.name + (p.role ? " (" + p.role + ")" : ""); }).join(", "));
   if(e.notes) lines.push(e.notes);
   if((e.songs || []).length){
     lines.push("", "Set list:");
-    e.songs.forEach(function(it, i){ var s = songFor(it), k = it.key || (s && s.key ? keyName(s.key, 0) : ""); lines.push((i+1) + ". " + (s ? s.title : it.title) + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
+    e.songs.forEach(function(it, i){ var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : ""; lines.push((i+1) + ". " + (s ? s.title : it.title) + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
   }
   lines.push("", "Open it in the app: " + location.href.split("#")[0] + "#/e/" + encodeURIComponent(e.id));
   return lines.join("\n");
@@ -1131,14 +1130,13 @@ function renderEvent(id, banner){
     (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span>' : '') +
     '<h1 style="margin-top:8px">' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span>' +
     (e.location ? '<a class="loc" href="' + esc(MAP) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' + esc(e.location) + '</a>' : '') + '<span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
-    (e.players && e.players.length ? '<div class="players">' + e.players.map(function(p){ return '<span><b>' + esc(p.name) + '</b>' + (p.role ? ' ' + esc(p.role) : '') + '</span>'; }).join("") + '</div>' : '') +
     (e.notes ? '<div class="ev-notes">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>' : '') +
     (items.length ? '<button class="btn primary big" style="margin-top:14px" id="evStart">▶ Start rehearsal</button>' : '') + '</div>';
   h += '<div class="sec-title">Set list</div>';
   if(!items.length) h += '<div class="card empty">No songs yet.' + (leader() ? ' Tap Edit to add the set list.' : '') + '</div>';
   else h += '<div class="songs">' + items.map(function(it, i){
-    var s = songFor(it), bits = [], k = it.key || (s && s.key ? keyName(s.key, 0) : "");
-    if(k) bits.push('<span class="pill' + (it.key ? ' hl' : '') + '">' + esc(k) + '</span>');
+    var s = songFor(it), bits = [], k = s && s.key ? keyName(s.key, 0) : "";
+    if(k) bits.push('<span class="pill">' + esc(k) + '</span>');
     if(s && s.bpm) bits.push('<span class="pill">' + s.bpm + ' bpm</span>');
     return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
       (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : (s.artist && s.type === "Cover" ? '<div class="s">' + esc(s.artist) + '</div>' : '')) +
@@ -1172,7 +1170,6 @@ function renderEditor(id, newDate, banner){
     state.pick = "";
   }
   var d = state.draft; d.players = d.players || [];
-  var members = (state.db.members || []).filter(function(m){ return m.active; });
   var h = banner + '<div class="card song-head editor">' +
     '<div class="backrow"><a class="ibtn" href="' + (id ? '#/e/' + encodeURIComponent(id) : '#/events') + '" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit event' : 'New event') + '</span></div>' +
     '<label>Event name<input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="e.g. Sunday service, Boda | Rene Mena"></label>' +
@@ -1180,10 +1177,6 @@ function renderEditor(id, newDate, banner){
     '<label>Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label>Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
     '<label>Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="e.g. Rey de Reyes church, San Antonio"></label>' +
     '<label>Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label></div>';
-  h += '<div class="sec-title">Who\'s playing</div><div class="card song-head">' + (members.length ? '<div class="pgrid">' + members.map(function(m){
-      var p = d.players.filter(function(x){ return x.id === m.id; })[0];
-      return '<label class="prow"><input type="checkbox" data-pl="' + esc(m.id) + '"' + (p ? ' checked' : '') + '><b>' + esc(m.name) + '</b><input class="note-in" data-role="' + esc(m.id) + '" placeholder="Plays..." value="' + esc(p ? p.role : (m.instruments || "")) + '"></label>';
-    }).join("") + '</div>' : '<div class="muted" style="font-size:14px">No band members yet. Add them in <a href="#/manage">Leader tools</a>.</div>') + '</div>';
   h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div>';
   h += '<div class="card song-head picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="pickQ" type="search" placeholder="Add a song: type a title" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div></div>';
@@ -1192,21 +1185,15 @@ function renderEditor(id, newDate, banner){
   $("app").innerHTML = h;
   function bind(idn, k){ $(idn).oninput = $(idn).onchange = function(){ d[k] = this.value; }; }
   bind("fTitle", "title"); bind("fType", "type"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes"); bind("fLoc", "location");
-  function readPlayers(){
-    d.players = [];
-    document.querySelectorAll("[data-pl]").forEach(function(c){ if(c.checked){ var mid = c.getAttribute("data-pl"), m = members.filter(function(x){ return x.id === mid; })[0], r = document.querySelector('[data-role="' + mid + '"]'); d.players.push({ id: mid, name: m ? m.name : "", role: r ? r.value.trim() : "" }); } });
-  }
-  document.querySelectorAll("[data-pl],[data-role]").forEach(function(x){ x.oninput = x.onchange = readPlayers; });
   function drawSel(){
     $("selCount").textContent = d.songs.length ? "(" + d.songs.length + ")" : "";
     $("selList").innerHTML = d.songs.length ? '<div class="muted" style="font-size:12px;margin:0 2px 6px">In this set (' + d.songs.length + ')</div><div class="songs">' + d.songs.map(function(it, i){
       var s = songFor(it);
-      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="muted" style="font-size:12px">written in ' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
-        '<div class="sel-in">' + keySelect("key-in", it.key || "", 'data-key="' + i + '"') + '<input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
+      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="pill">' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
+        '<div class="sel-in"><input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
         '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === d.songs.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
     }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search above to add them in order.</div>';
     document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ d.songs[+x.getAttribute("data-note")].note = x.value; }; });
-    document.querySelectorAll("[data-key]").forEach(function(x){ x.onchange = function(){ d.songs[+x.getAttribute("data-key")].key = x.value; }; });
     document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
     document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = d.songs[i+1]; d.songs[i+1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
     document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ d.songs.splice(+x.getAttribute("data-rm"), 1); drawSel(); drawPick(); }; });
@@ -1231,12 +1218,12 @@ function renderEditor(id, newDate, banner){
   drawSel(); drawPick();
   function msg(t){ $("edMsg").innerHTML = t ? '<div class="banner bad" style="margin:0 0 10px">' + t + '</div>' : ''; }
   $("edSave").onclick = function(){
-    var b = this; readPlayers();
+    var b = this;
     if(!d.title.trim()) return msg("Give the event a name.");
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.");
     b.disabled = true; b.textContent = "Saving...";
-    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: d.players,
-      songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: it.key || "" }; }) };
+    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: [],
+      songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
     send("save", state.pin, payload).then(function(r){
       if(r && r.ok){ state.draft = null; state.draftKey = ""; return load(true).then(function(){ location.hash = "#/e/" + encodeURIComponent(r.id); }); }
       b.disabled = false; b.textContent = "Save event";
@@ -1408,6 +1395,8 @@ function helpHtml(){
     '<li><b>▶ Listen</b> opens the practice recording when the song has one.</li>' +
     '<li><b>//</b> means sing those lines twice, <b>///</b> three times.</li>' +
     '<li><b>Events</b>: each one has its set list. Tap <b>Share</b> to send it to the band on WhatsApp.</li></ul></div>';
+  var mem = state.db.members || [];
+  if(mem.length) h += '<div class="card block help"><h2>The band</h2><div class="players">' + mem.map(function(m){ return '<span><b>' + esc(m.name) + '</b> ' + esc(m.instruments || "") + '</span>'; }).join("") + '</div></div>';
   h += '<div class="card block help"><h2>Band leaders</h2>' + (leader() ? '<p>You are signed in as a leader on this phone. You can add and edit songs and events, and manage albums, artists, genres and members.</p><p><a class="btn" href="#/manage">Leader tools</a> <button class="btn" id="hOut">Sign out</button></p>' :
     '<p>Leaders can add and change songs, events and lists. Sign in once with the band PIN.</p><p><a class="btn" href="#/manage">Leader sign-in</a></p>') + '</div>';
   if(leader()) h += '<div class="card block miss"><h2>What\'s missing in the songbook</h2><h3>No lyrics (' + noLyr.length + ')</h3>' + li(noLyr) + '<h3>No key (' + noKey.length + ')</h3>' + li(noKey) +
