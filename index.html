@@ -238,6 +238,14 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .pick-row:last-child{border-bottom:0}
 .pick-row .s{font-size:12px;color:var(--muted)}
 
+/* floating + button */
+.fab{position:fixed;right:20px;bottom:24px;z-index:35;width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25);text-decoration:none}
+.fab svg{width:26px;height:26px}
+.fab:active{transform:scale(.95)}
+body.hasfab main{padding-bottom:110px}
+@media (max-width:640px){ body.hasfab main{padding-bottom:calc(var(--navh, 72px) + 100px)} }
+@media (max-width:640px){ .fab{bottom:calc(var(--navh, 72px) + 16px)} }
+body.stage .fab{display:none !important}
 /* countdown */
 .countdown{margin-top:14px}
 .cd-k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.85;margin-bottom:6px}
@@ -838,9 +846,19 @@ function route(){
   else if(view === "manage") renderManage(banner);
   else if(view === "help"){ app.innerHTML = banner + helpHtml(); bindHelp(); scrollTop(); }
   else { renderHome(banner); scrollTop(); }
+  setFab(view);
   if(!ls("guideDone") && view === "home" && !state.guideShown){ state.guideShown = true; showGuide(0); }
 }
 function scrollTop(){ window.scrollTo(0,0); }
+function setFab(view){
+  var fab = $("fab");
+  if(!fab){ fab = document.createElement("a"); fab.id = "fab"; fab.className = "fab"; fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'; document.body.appendChild(fab); }
+  var to = { songs: ["#/newsong", "New song"], events: ["#/new", "New event"] }[view];
+  var on = !!(to && leader() && state.db);
+  if(on){ fab.href = to[0]; fab.setAttribute("aria-label", to[1]); fab.title = to[1]; }
+  fab.style.display = on ? "" : "none";
+  document.body.classList.toggle("hasfab", on);
+}
 window.addEventListener("hashchange", route);
 
 /* ---------- leader sign-in (only the leader sees the edit buttons) ---------- */
@@ -896,7 +914,7 @@ function renderList(banner){
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
   var gkeys = Object.keys(genres).sort();
   var nFilters = (state.group?1:0) + (state.type?1:0) + (state.genre?1:0) + (state.onlyLyrics?1:0) + (state.onlySaved?1:0) + (state.q?1:0);
-  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2>' + (leader() ? '<a class="ibtn primary" href="#/newsong" style="text-decoration:none">+ New song</a>' : '') + '</div>' +
+  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2>' + '</div>' +
     '<div class="search' + (state.q ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button></div>' +
     '<div class="filters">' +
@@ -1242,7 +1260,7 @@ function renderEvents(banner){
   var sp = splitEvents(), q = norm(state.evQ || ""), ft = state.evType || "";
   function ok(e){ return (!ft || e.type === ft) && (!q || norm(e.title + " " + e.type + " " + (e.location || "") + " " + e.notes + " " + (e.songs||[]).map(function(s){ return s.title; }).join(" ")).indexOf(q) >= 0); }
   var up = sp.up.filter(ok), past = sp.past.filter(ok);
-  var h = banner + '<div class="pagehead"><h2>Events</h2>' + (leader() ? '<a class="ibtn primary" href="#/new" style="text-decoration:none">+ New event</a>' : '') + '</div>' +
+  var h = banner + '<div class="pagehead"><h2>Events</h2></div>' +
     '<div class="search' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button></div>' +
     '<div class="filters">' + EV_TYPES.map(function(t){ return '<button class="chip' + (ft === t ? ' on' : '') + '" data-et="' + t + '">' + t + '</button>'; }).join("") + '</div>';
