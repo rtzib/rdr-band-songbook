@@ -54,7 +54,7 @@ nav.bottom{display:none}
   nav.bottom a{flex:1;text-align:center;padding:9px 0 10px;text-decoration:none;color:var(--muted);font-size:12px;font-weight:600}
   nav.bottom a svg{display:block;margin:0 auto 2px;width:22px;height:22px}
   nav.bottom a.on{color:var(--accent)}
-  main{padding-bottom:80px}
+  body main{padding-bottom:calc(var(--navh, 90px) + 28px)}
 }
 
 main{padding:14px 0 40px}
@@ -260,7 +260,7 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .snbtn small{display:block;color:var(--muted);font-size:12px}
 .snbtn b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
 body.stage header.top,body.stage nav.bottom{display:none}
-body.stage main{padding-top:10px;padding-bottom:110px}
+body.stage main{padding-top:10px;padding-bottom:calc(var(--stageh, 110px) + 28px)}
 body.stage .setnav.fixed{position:fixed;left:0;right:0;bottom:0;margin:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);z-index:40}
 .guide{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;padding:14px}
 @media (min-width:641px){ .guide{align-items:center} }
@@ -1184,9 +1184,10 @@ function renderEditor(id, newDate, banner){
       var p = d.players.filter(function(x){ return x.id === m.id; })[0];
       return '<label class="prow"><input type="checkbox" data-pl="' + esc(m.id) + '"' + (p ? ' checked' : '') + '><b>' + esc(m.name) + '</b><input class="note-in" data-role="' + esc(m.id) + '" placeholder="Plays..." value="' + esc(p ? p.role : (m.instruments || "")) + '"></label>';
     }).join("") + '</div>' : '<div class="muted" style="font-size:14px">No band members yet. Add them in <a href="#/manage">Leader tools</a>.</div>') + '</div>';
-  h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div><div id="selList"></div>';
-  h += '<div class="card song-head" style="margin-top:10px"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+  h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div>';
+  h += '<div class="card song-head picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="pickQ" type="search" placeholder="Add a song: type a title" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div></div>';
+  h += '<div id="selList" style="margin-top:10px"></div>';
   h += '<div class="card song-head" style="margin-top:10px"><div id="edMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="edSave">Save event</button>' + (id ? '<button class="btn danger" id="edDel">Delete event</button>' : '') + '</div></div>';
   $("app").innerHTML = h;
   function bind(idn, k){ $(idn).oninput = $(idn).onchange = function(){ d[k] = this.value; }; }
@@ -1198,12 +1199,12 @@ function renderEditor(id, newDate, banner){
   document.querySelectorAll("[data-pl],[data-role]").forEach(function(x){ x.oninput = x.onchange = readPlayers; });
   function drawSel(){
     $("selCount").textContent = d.songs.length ? "(" + d.songs.length + ")" : "";
-    $("selList").innerHTML = d.songs.length ? '<div class="songs">' + d.songs.map(function(it, i){
+    $("selList").innerHTML = d.songs.length ? '<div class="muted" style="font-size:12px;margin:0 2px 6px">In this set (' + d.songs.length + ')</div><div class="songs">' + d.songs.map(function(it, i){
       var s = songFor(it);
       return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="muted" style="font-size:12px">written in ' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
         '<div class="sel-in">' + keySelect("key-in", it.key || "", 'data-key="' + i + '"') + '<input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
         '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === d.songs.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
-    }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search below to add them in order.</div>';
+    }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search above to add them in order.</div>';
     document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ d.songs[+x.getAttribute("data-note")].note = x.value; }; });
     document.querySelectorAll("[data-key]").forEach(function(x){ x.onchange = function(){ d.songs[+x.getAttribute("data-key")].key = x.value; }; });
     document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
@@ -1212,17 +1213,19 @@ function renderEditor(id, newDate, banner){
   }
   function drawPick(){
     var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
+    if(!q){ $("pickRes").innerHTML = ""; return; }   // no suggestions until something is typed
     d.songs.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
     var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
       .sort(function(a,b){ var at = words.length && a.titleN.indexOf(q) === 0 ? 0 : 1, bt = words.length && b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, q ? 12 : 6);
-    $("pickRes").innerHTML = (q ? '' : '<div class="muted" style="font-size:12px;margin:10px 2px 4px">Type to search all ' + state.db.songs.length + ' songs</div>') + res.map(function(s){
+    $("pickRes").innerHTML = res.map(function(s){
       var lp = lastPlayed(s.id);
       return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
         (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
     }).join("") + (q && !res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
-    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "", key: "" }); drawSel(); drawPick(); }; });
-    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"", key:"" }); state.pick = ""; $("pickQ").value = ""; drawSel(); drawPick(); };
+    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "", key: "" }); clearPick(); drawSel(); drawPick(); }; });
+    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"", key:"" }); clearPick(); drawSel(); drawPick(); };
   }
+  function clearPick(){ state.pick = ""; var q = $("pickQ"); q.value = ""; q.parentNode.classList.remove("has"); q.focus(); }
   $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
   $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
   drawSel(); drawPick();
@@ -1450,6 +1453,15 @@ function showGuide(step){
   ov.onclick = function(e){ if(e.target === ov){ ls("guideDone", true); ov.remove(); } };
 }
 
+/* keep the page bottom clear of the bottom bar (its height changes with phone text size) */
+function fitBottom(){
+  var nav = $("tabsBottom"), bar = document.querySelector(".setnav.fixed");
+  if(nav && nav.offsetHeight) document.documentElement.style.setProperty("--navh", nav.offsetHeight + "px");
+  if(bar && bar.offsetHeight) document.documentElement.style.setProperty("--stageh", bar.offsetHeight + "px");
+}
+window.addEventListener("resize", fitBottom);
+window.addEventListener("hashchange", function(){ setTimeout(fitBottom, 50); });
+setTimeout(fitBottom, 300);
 /* ---------- start ---------- */
 var c = ls("cache2");
 if(SCRIPT_URL && c && c.data){ try{ useData(c.data, "cache", c.at); }catch(e){} }
