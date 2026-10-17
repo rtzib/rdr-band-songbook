@@ -2,7 +2,8 @@
  * Rey de Reyes Songbook - backend for the web app (file "Reader.gs" in the RDR Songbook Apps Script project).
  *
  * Everything lives in one Google Sheet that works like a database (tabs):
- *   Songs, Albums, Artists, Genres, Members, Events, SetList
+ *   Songs, Albums, Artists, Genres, Themes, Members, Events, SetList
+ * A song has one genre (the rhythm, like Soca) and any number of themes (the occasion, like Wedding), saved as "Wedding, Birthday".
  * The app reads it all at once (action=data) and writes with the band PIN.
  *
  * One-time setup:
@@ -19,15 +20,17 @@ var BAND_FOLDERS = ["04 – Rey de Reyes Band", "04 - Rey de Reyes Band"];
 var NEW_PIN = "";                                                 // only used by changePin(); leave empty
 
 var TABLES = {
-  Songs:   ["ID", "Title", "Album", "Type", "Artist", "Key", "BPM", "Time", "Genre", "Link", "Lyrics", "Created", "Updated"],
+  Songs:   ["ID", "Title", "Album", "Type", "Artist", "Key", "BPM", "Time", "Genre", "Themes", "Link", "Lyrics", "Created", "Updated"],
   Albums:  ["Name", "Year"],
   Artists: ["Name"],
   Genres:  ["Name"],
+  Themes:  ["Name"],
   Members: ["ID", "Name", "Instruments", "Active"],
   Events:  ["ID", "Title", "Type", "Date", "Time", "Location", "Notes", "Updated", "Players", "Status", "StatusNote"],
   SetList: ["EventID", "Order", "SongTitle", "SongID", "Note", "Key"]
 };
-var START_GENRES = ["Adoracion", "Balada", "Birthday", "Boda", "Cumbia", "Independence Day", "Jubilo", "Parranda", "Punta", "Reggae", "Rock", "Soca", "Waltz"];
+var START_GENRES = ["Adoracion", "Balada", "Cumbia", "Jubilo", "Parranda", "Punta", "Reggae", "Rock", "Soca", "Waltz"];
+var START_THEMES = ["Birthday", "September Celebration", "Wedding"];
 var START_ARTISTS = ["Rey de Reyes Band", "Ilasmos", "Juan Carlos Alvarado", "Marcos Witt", "Miel San Marcos", "Miguel Leal"];
 var BAND_ARTIST = "Rey de Reyes Band";
 
@@ -91,6 +94,7 @@ function setupBand() {
   START_GENRES.forEach(function (n) { if (g.indexOf(low_(n)) < 0) appendRow_(ss, "Genres", { Name: n }); });
   var ar = rows_(ss, "Artists").map(function (r) { return low_(r.Name); });
   START_ARTISTS.forEach(function (n) { if (ar.indexOf(low_(n)) < 0) appendRow_(ss, "Artists", { Name: n }); });
+  START_THEMES.forEach(function (n) { addToList_(ss, "Themes", n); });
   if (!props.getProperty("BAND_PIN")) props.setProperty("BAND_PIN", String(Math.floor(1000 + Math.random() * 9000)));
   cacheClear_();
   Logger.log("Database sheet: " + ss.getUrl());
@@ -179,15 +183,16 @@ function dataJson_(fresh) {
   var ss = sheet_();
   var songs = rows_(ss, "Songs").filter(function (r) { return r.ID && r.Title; }).map(function (r) {
     return { id: r.ID, title: r.Title, album: r.Album, type: r.Type || "Original", artist: r.Artist, key: r.Key, bpm: r.BPM, time: r.Time,
-             genre: r.Genre, link: r.Link, lyrics: r.Lyrics, updated: r.Updated };
+             genre: r.Genre, themes: themes_(r.Themes), link: r.Link, lyrics: r.Lyrics, updated: r.Updated };
   });
   var albums = rows_(ss, "Albums").filter(function (r) { return r.Name; }).map(function (r) { return { name: r.Name, year: r.Year }; });
   var artists = rows_(ss, "Artists").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; });
   var genres = rows_(ss, "Genres").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; });
+  var themes = rows_(ss, "Themes").filter(function (r) { return r.Name; }).map(function (r) { return r.Name; });
   var members = rows_(ss, "Members").filter(function (r) { return r.ID && r.Name; }).map(function (r) {
     return { id: r.ID, name: r.Name, instruments: r.Instruments, active: r.Active !== "no" };
   });
-  body = JSON.stringify({ ok: true, version: 2, read: new Date().toISOString(), songs: songs, albums: albums, artists: artists, genres: genres, members: members, events: listEvents_(ss) });
+  body = JSON.stringify({ ok: true, version: 2, read: new Date().toISOString(), songs: songs, albums: albums, artists: artists, genres: genres, themes: themes, members: members, events: listEvents_(ss) });
   cachePut_(body);
   return body;
 }
@@ -204,7 +209,7 @@ function saveSong_(s) {
   var vals = {
     Title: title, Album: clean_(s.album, 100), Type: /cover/i.test(s.type || "") ? "Cover" : "Original", Artist: clean_(s.artist, 80),
     Key: clean_(s.key, 10), BPM: clean_(s.bpm, 5).replace(/[^\d]/g, ""), Time: clean_(s.time, 6), Genre: clean_(s.genre, 40),
-    Link: clean_(s.link, 500), Lyrics: String(s.lyrics || "").replace(/\r\n?/g, "\n").slice(0, 40000), Updated: new Date().toISOString()
+    Themes: themesText_(s.themes), Link: clean_(s.link, 500), Lyrics: String(s.lyrics || "").replace(/\r\n?/g, "\n").slice(0, 40000), Updated: new Date().toISOString()
   };
   if (mine) { updateRow_(ss, "Songs", mine._row, vals); }
   else {
@@ -215,6 +220,7 @@ function saveSong_(s) {
   }
   addToList_(ss, "Artists", vals.Artist);
   addToList_(ss, "Genres", vals.Genre);
+  themes_(vals.Themes).forEach(function (t) { addToList_(ss, "Themes", t); });
   if (vals.Album && !rows_(ss, "Albums").some(function (r) { return low_(r.Name) === low_(vals.Album); })) appendRow_(ss, "Albums", { Name: vals.Album });
   return { ok: true, id: id };
 }
@@ -224,6 +230,13 @@ function deleteSong_(id) {
   table_(ss, "Songs").sh.deleteRow(r._row);
   return { ok: true };
 }
+// themes are saved in one cell as "Wedding, Birthday"
+function themes_(v) {
+  var seen = {}, out = [];
+  (Array.isArray(v) ? v : String(v || "").split(",")).forEach(function (t) { t = clean_(t, 40).replace(/,/g, ""); if (t && !seen[low_(t)]) { seen[low_(t)] = 1; out.push(t); } });
+  return out.slice(0, 12);
+}
+function themesText_(v) { return themes_(v).join(", "); }
 function addToList_(ss, name, value) {
   if (!value) return;
   if (!rows_(ss, name).some(function (r) { return low_(r.Name) === low_(value); })) appendRow_(ss, name, { Name: value });
@@ -233,7 +246,15 @@ function addToList_(ss, name, value) {
 function listOp_(d) {
   var ss = sheet_(), kind = String(d.kind || ""), op = String(d.op || "");
   var name = clean_(d.name, 100), old = clean_(d.old, 100);
-  var songCol = { Albums: "Album", Artists: "Artist", Genres: "Genre" }[kind];
+  var songCol = { Albums: "Album", Artists: "Artist", Genres: "Genre", Themes: "Themes" }[kind];
+  // a song can have many themes, so check and change them one by one
+  function uses(s) { return kind === "Themes" ? themes_(s.Themes).some(function (t) { return low_(t) === low_(old); }) : low_(s[songCol]) === low_(old); }
+  function swap(s, to) {
+    var o = {};
+    if (kind === "Themes") o.Themes = themesText_(themes_(s.Themes).map(function (t) { return low_(t) === low_(old) ? to : t; }));
+    else o[songCol] = to;
+    updateRow_(ss, "Songs", s._row, o);
+  }
   if (kind === "Members") {
     var mem = rows_(ss, "Members");
     if (op === "add") {
@@ -262,14 +283,14 @@ function listOp_(d) {
     if (!name) return { ok: false, error: "no_name" };
     if (low_(name) !== low_(old) && list.some(function (r) { return low_(r.Name) === low_(name); })) return { ok: false, error: "exists" };
     updateRow_(ss, kind, row._row, kind === "Albums" ? { Name: name, Year: d.year != null ? clean_(d.year, 4) : row.Year } : { Name: name });
-    songs.forEach(function (s) { if (low_(s[songCol]) === low_(old)) updateRow_(ss, "Songs", s._row, (function () { var o = {}; o[songCol] = name; return o; })()); });
+    songs.forEach(function (s) { if (uses(s)) swap(s, name); });
     return { ok: true };
   }
   if (op === "delete") {
-    var used = songs.filter(function (s) { return low_(s[songCol]) === low_(old); }).length;
+    var used = songs.filter(uses).length;
     if (used && !d.force) return { ok: false, error: "in_use", count: used };
     table_(ss, kind).sh.deleteRow(row._row);
-    songs.forEach(function (s) { if (low_(s[songCol]) === low_(old)) updateRow_(ss, "Songs", s._row, (function () { var o = {}; o[songCol] = ""; return o; })()); });
+    songs.forEach(function (s) { if (uses(s)) swap(s, ""); });
     return { ok: true };
   }
   return { ok: false, error: "bad_op" };
@@ -368,6 +389,24 @@ function cacheGet_() {
   } catch (e) { return null; }
 }
 function cacheClear_() { try { CacheService.getScriptCache().remove("db_n"); } catch (e) {} }
+
+/* ================= one-time: occasions out of Genres and into Themes (2026-10-16) ================= */
+// Boda (now Wedding) and Birthday become themes, Independence Day becomes "September Celebration". Safe to run again.
+function moveGenresToThemes() {
+  var ss = sheet_(), MOVE = { "boda": "Wedding", "birthday": "Birthday", "independence day": "September Celebration", "september celebration": "September Celebration" };
+  START_THEMES.forEach(function (n) { addToList_(ss, "Themes", n); });
+  var moved = 0;
+  rows_(ss, "Songs").forEach(function (s) {
+    var to = MOVE[low_(s.Genre)];
+    if (!to) return;
+    updateRow_(ss, "Songs", s._row, { Genre: "", Themes: themesText_(themes_(s.Themes).concat([to])) });
+    moved++;
+  });
+  var g = table_(ss, "Genres").sh, list = rows_(ss, "Genres");
+  for (var i = list.length - 1; i >= 0; i--) if (MOVE[low_(list[i].Name)]) g.deleteRow(list[i]._row);
+  cacheClear_();
+  Logger.log("Songs moved to themes: " + moved);
+}
 
 /* ================= one-time move from the old Google Doc ================= */
 function migrateFromDoc() {

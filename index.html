@@ -734,13 +734,14 @@ function findSong(songs, text){
 function parseDb(raw){
   var songs = (raw.songs || []).map(function(r){
     var s = { id: r.id, title: String(r.title || ""), album: r.album || "", type: /cover/i.test(r.type || "") ? "Cover" : "Original", artist: r.artist || "",
-              keyText: r.key || "", key: parseKey(r.key), bpm: parseInt(r.bpm, 10) || null, time: r.time || "", genre: r.genre || "", link: r.link || "", lyrics: String(r.lyrics || ""), updated: r.updated || "" };
+              keyText: r.key || "", key: parseKey(r.key), bpm: parseInt(r.bpm, 10) || null, time: r.time || "", genre: r.genre || "", themes: (Array.isArray(r.themes) ? r.themes : String(r.themes || "").split(",")).map(function(t){ return String(t).trim(); }).filter(Boolean),
+              link: r.link || "", lyrics: String(r.lyrics || ""), updated: r.updated || "" };
     s.group = s.album || (s.type === "Cover" ? "Covers" : "No album");
     var lines = splitLines(s.lyrics);
     s.sections = buildSections(lines);
     s.hasChords = lines.some(isChordLine);
     s.hasLyrics = s.sections.some(function(x){ return x.kind !== "inst" && x.kind !== "intro" && x.lines.some(function(l){ return l.trim() && !isChordLine(l) && !/^\(.*\)$/.test(l.trim()); }); });
-    s.search = norm(s.title + " " + s.artist + " " + s.genre + " " + s.album + " " + s.lyrics);
+    s.search = norm(s.title + " " + s.artist + " " + s.genre + " " + s.themes.join(" ") + " " + s.album + " " + s.lyrics);
     s.titleN = norm(s.title);
     return s;
   });
@@ -751,7 +752,7 @@ function parseDb(raw){
   songs.forEach(function(s){ if(s.album) add(s.album); });
   add("Covers"); add("No album");
   function abc(a, b){ return norm(a) < norm(b) ? -1 : 1; }
-  return { songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), members: raw.members || [] };
+  return { songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), themes: (raw.themes || []).slice().sort(abc), members: raw.members || [] };
 }
 /* CORE-END */
 </script>
@@ -766,7 +767,7 @@ var $ = function(id){ return document.getElementById(id); };
 
 var state = {
   db: null, source: "", loadedAt: 0, error: "", loading: false,
-  q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
+  q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], themes: f.themes || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
   chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
   saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
   ef: (function(){ var f = ls("ef") || {}; return { view: f.view || "upcoming", types: f.types || [], when: f.when || "any", sort: f.sort || "", hideCanceled: !!f.hideCanceled }; })(),
@@ -944,6 +945,7 @@ function filtered(f){
     if(f.tab === "cover" && s.type !== "Cover") return false;
     if(f.albums.length && f.albums.indexOf(s.group) < 0) return false;
     if(f.genres.length && f.genres.indexOf(norm(s.genre)) < 0) return false;
+    if(f.themes.length && !s.themes.some(function(t){ return f.themes.indexOf(norm(t)) >= 0; })) return false;
     if(f.lyrics && !s.hasLyrics) return false;
     for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false;
     return true;
@@ -963,6 +965,7 @@ function songRow(s){
   var bits = [];
   if(s.artist && s.type === "Cover") bits.push(esc(s.artist));
   if(s.genre) bits.push(esc(s.genre));
+  s.themes.forEach(function(t){ bits.push(esc(t)); });
   var tags = "";
   if(!s.hasLyrics) tags += '<span class="tag w">No lyrics</span>';
   if(s.link) tags += '<span class="tag">▶</span>';
@@ -972,14 +975,16 @@ function songRow(s){
     '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
 }
 var SORTS = { az: "A–Z", "new": "Recently changed", played: "Last played" };
-function sheetCount(f){ return f.albums.length + f.genres.length + (f.lyrics ? 1 : 0) + (f.sort !== "az" ? 1 : 0); }
+function themeNames(){ var t = {}; state.db.songs.forEach(function(s){ s.themes.forEach(function(x){ t[norm(x)] = t[norm(x)] || x; }); }); return t; }
+function sheetCount(f){ return f.albums.length + f.themes.length + f.genres.length + (f.lyrics ? 1 : 0) + (f.sort !== "az" ? 1 : 0); }
 function saveFilters(){ ls("f", state.f); }
 function renderList(banner){
   var db = state.db, f = state.f, list = sortSongs(filtered(), f.sort);
   var n = sheetCount(f);
   var tabs = [["all","All"],["saved","Saved"],["orig","Originals"],["cover","Covers"]];
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
-  var chips = [];
+  var themes = themeNames(), chips = [];
+  f.themes.forEach(function(t){ chips.push('<button class="fchip" data-rm-theme="' + esc(t) + '">' + esc(themes[t] || t) + ' <b>×</b></button>'); });
   f.albums.forEach(function(a){ chips.push('<button class="fchip" data-rm-album="' + esc(a) + '">' + esc(a) + ' <b>×</b></button>'); });
   f.genres.forEach(function(g){ chips.push('<button class="fchip" data-rm-genre="' + esc(g) + '">' + esc(genres[g] || g) + ' <b>×</b></button>'); });
   if(f.lyrics) chips.push('<button class="fchip" data-rm-lyr="1">Has lyrics <b>×</b></button>');
@@ -1008,23 +1013,25 @@ function renderList(banner){
   $("fOpen").onclick = function(){ openFilters(banner); };
   document.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ f.tab = b.getAttribute("data-tab"); saveFilters(); if(f.tab !== "saved" && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); }; });
   document.querySelectorAll("[data-rm-album]").forEach(function(b){ b.onclick = function(){ f.albums = f.albums.filter(function(x){ return x !== b.getAttribute("data-rm-album"); }); saveFilters(); renderList(banner); }; });
+  document.querySelectorAll("[data-rm-theme]").forEach(function(b){ b.onclick = function(){ f.themes = f.themes.filter(function(x){ return x !== b.getAttribute("data-rm-theme"); }); saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-genre]").forEach(function(b){ b.onclick = function(){ f.genres = f.genres.filter(function(x){ return x !== b.getAttribute("data-rm-genre"); }); saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-lyr]").forEach(function(b){ b.onclick = function(){ f.lyrics = false; saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-sort]").forEach(function(b){ b.onclick = function(){ f.sort = "az"; saveFilters(); renderList(banner); }; });
-  if($("fClearAll")) $("fClearAll").onclick = function(){ f.albums = []; f.genres = []; f.lyrics = false; f.sort = "az"; saveFilters(); renderList(banner); };
+  if($("fClearAll")) $("fClearAll").onclick = function(){ f.albums = []; f.genres = []; f.themes = []; f.lyrics = false; f.sort = "az"; saveFilters(); renderList(banner); };
   document.querySelectorAll("[data-heart]").forEach(function(b){ b.onclick = function(ev){ ev.preventDefault(); toggleSaved(b.getAttribute("data-heart")); renderList(banner); }; });
 }
 // the filter panel that slides up from the bottom
 function openFilters(banner){
   var db = state.db, d = JSON.parse(JSON.stringify(state.f));
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
-  var gkeys = Object.keys(genres).sort();
+  var gkeys = Object.keys(genres).sort(), themes = themeNames(), tkeys = Object.keys(themes).sort();
   var ov = document.createElement("div"); ov.className = "sheet-bg"; ov.id = "fsheet";
   document.body.appendChild(ov); document.body.classList.add("noscroll");
   function count(){ return sortSongs(filtered(d), d.sort).length; }
   function draw(){
     ov.innerHTML = '<div class="sheet"><div class="sheet-grab"></div><div class="sheet-head"><b>Filters</b><button class="xclose" id="fsX" aria-label="Close">×</button></div>' +
       '<div class="sheet-body">' +
+      (tkeys.length ? '<div class="sheet-h">Theme</div><div class="gchips">' + tkeys.map(function(k){ return '<button class="chip' + (d.themes.indexOf(k) >= 0 ? ' on' : '') + '" data-th="' + esc(k) + '">' + esc(themes[k]) + '</button>'; }).join("") + '</div>' : '') +
       '<div class="sheet-h">Album</div><div class="checks">' + db.groups.map(function(g){ var on = d.albums.indexOf(g) >= 0; return '<label class="check"><input type="checkbox" data-al="' + esc(g) + '"' + (on ? ' checked' : '') + '><span>' + esc(g) + '</span><em>' + db.songs.filter(function(s){ return s.group === g; }).length + '</em></label>'; }).join("") + '</div>' +
       (gkeys.length ? '<div class="sheet-h">Genre</div><div class="gchips">' + gkeys.map(function(k){ return '<button class="chip' + (d.genres.indexOf(k) >= 0 ? ' on' : '') + '" data-ge="' + esc(k) + '">' + esc(genres[k]) + '</button>'; }).join("") + '</div>' : '') +
       '<label class="switch-row"><span>Only songs with lyrics</span><input type="checkbox" id="fsLyr"' + (d.lyrics ? ' checked' : '') + '><i></i></label>' +
@@ -1032,9 +1039,10 @@ function openFilters(banner){
       '</div><div class="sheet-foot"><button class="btn" id="fsClear">Clear all</button><button class="btn primary" id="fsGo">Show ' + count() + ' songs</button></div></div>';
     ov.querySelectorAll("[data-al]").forEach(function(c){ c.onchange = function(){ var g = c.getAttribute("data-al"); d.albums = d.albums.filter(function(x){ return x !== g; }); if(c.checked) d.albums.push(g); draw(); }; });
     ov.querySelectorAll("[data-ge]").forEach(function(b){ b.onclick = function(){ var g = b.getAttribute("data-ge"), i = d.genres.indexOf(g); if(i >= 0) d.genres.splice(i, 1); else d.genres.push(g); draw(); }; });
+    ov.querySelectorAll("[data-th]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-th"), i = d.themes.indexOf(t); if(i >= 0) d.themes.splice(i, 1); else d.themes.push(t); draw(); }; });
     ov.querySelectorAll("[data-so]").forEach(function(b){ b.onclick = function(){ d.sort = b.getAttribute("data-so"); draw(); }; });
     $("fsLyr").onchange = function(){ d.lyrics = this.checked; draw(); };
-    $("fsClear").onclick = function(){ d.albums = []; d.genres = []; d.lyrics = false; d.sort = "az"; draw(); };
+    $("fsClear").onclick = function(){ d.albums = []; d.genres = []; d.themes = []; d.lyrics = false; d.sort = "az"; draw(); };
     $("fsGo").onclick = function(){ state.f = d; saveFilters(); close(); renderList(banner); };
     $("fsX").onclick = close;
   }
@@ -1131,6 +1139,7 @@ function renderSong(id, banner, ctx){
   if(s.bpm) meta.push('<span><b>' + s.bpm + '</b> BPM</span>');
   if(s.time) meta.push('<span>Time <b>' + esc(s.time) + '</b></span>');
   if(s.genre) meta.push('<span>' + esc(s.genre) + '</span>');
+  if(s.themes.length) meta.push('<span>' + s.themes.map(esc).join(", ") + '</span>');
   meta.push('<span>' + (s.type === 'Cover' && s.artist ? 'Cover of <b>' + esc(s.artist) + '</b>' : esc(s.artist || s.type)) + '</span>');
   var lp = lastPlayed(s.id);
   var tools = "";
@@ -1579,8 +1588,8 @@ function renderSongEditor(id, banner){
   var s = id ? find(id) : null, db = state.db;
   if(id && !s){ $("app").innerHTML = banner + '<div class="card empty">Song not found.</div>'; return; }
   if(!state.sdraft || state.sdraft._for !== (id || "new")){
-    state.sdraft = s ? { _for: id, id: s.id, title: s.title, album: s.album, type: s.type, artist: s.artist, key: s.keyText, bpm: s.bpm ? String(s.bpm) : "", time: s.time || "4/4", genre: s.genre, link: s.link, lyrics: s.lyrics }
-                     : { _for: "new", id: "", title: "", album: "", type: "Original", artist: "Rey de Reyes Band", key: "", bpm: "", time: "4/4", genre: "", link: "", lyrics: "" };
+    state.sdraft = s ? { _for: id, id: s.id, title: s.title, album: s.album, type: s.type, artist: s.artist, key: s.keyText, bpm: s.bpm ? String(s.bpm) : "", time: s.time || "4/4", genre: s.genre, themes: s.themes.slice(), link: s.link, lyrics: s.lyrics }
+                     : { _for: "new", id: "", title: "", album: "", type: "Original", artist: "Rey de Reyes Band", key: "", bpm: "", time: "4/4", genre: "", themes: [], link: "", lyrics: "" };
   }
   var d = state.sdraft;
   function opts(list, val, none){
@@ -1600,6 +1609,9 @@ function renderSongEditor(id, banner){
     '<label>Time<select id="sTime">' + ["4/4","3/4","2/2","6/8","2/4","12/8"].map(function(t){ return '<option' + (d.time === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label></div>' +
     '<div class="row2"><label>Genre<select id="sGenre">' + opts(db.genres, d.genre, "(choose)") + '</select></label>' +
     '<label style="grid-column:span 2">Practice link (YouTube or audio)<input id="sLink" type="url" maxlength="500" value="' + esc(d.link) + '" placeholder="https://youtube.com/..."></label></div>' +
+    '<label>Themes <span class="muted" style="font-weight:400">(pick all that fit)</span></label><div class="partbtns" id="sThemes">' +
+      (function(){ var seen = {}, all = []; db.themes.concat(d.themes).forEach(function(t){ if(!seen[norm(t)]){ seen[norm(t)] = 1; all.push(t); } });
+        return all.map(function(t){ var on = d.themes.some(function(x){ return norm(x) === norm(t); }); return '<button class="chip' + (on ? ' on' : '') + '" data-theme="' + esc(t) + '">' + esc(t) + '</button>'; }).join("") + '<button class="chip" id="sThemeNew">+ New theme</button>'; })() + '</div>' +
     '<label>Lyrics</label><div class="partbtns">' + PARTS.map(function(p){ return '<button class="chip" data-part="' + esc(p) + '">+ ' + esc(p) + '</button>'; }).join("") + '</div>' +
     '<textarea id="sLyrics" class="lyrics-in" spellcheck="false" placeholder="Intro\n[G] - [C] - [D]\n\nVerso I\nFirst line\n//These two lines\nare sung twice//\n\nCoro (x2)\n...">' + esc(d.lyrics) + '</textarea>' +
     '<div class="muted" style="font-size:12px;margin-top:6px">Part names on their own line. <b>//</b> around lines = sing twice, <b>///</b> = three times. Chords on their own line like [D] - [Bm], or above the words.</div></div>' +
@@ -1617,6 +1629,12 @@ function renderSongEditor(id, banner){
     };
   }
   pickNew("sAlbum", "album", "album"); pickNew("sArtist", "artist", "artist"); pickNew("sGenre", "genre", "genre");
+  document.querySelectorAll("[data-theme]").forEach(function(b){ b.onclick = function(){
+    var t = b.getAttribute("data-theme"), had = d.themes.some(function(x){ return norm(x) === norm(t); });
+    d.themes = had ? d.themes.filter(function(x){ return norm(x) !== norm(t); }) : d.themes.concat([t]);
+    b.classList.toggle("on", !had);
+  }; });
+  $("sThemeNew").onclick = function(){ var v = (prompt("New theme name (like Wedding or Christmas):") || "").replace(/,/g, " ").trim(); if(v){ d.themes.push(v); renderSongEditor(id, banner); } };
   $("sType").onchange = function(){ d.type = this.value; if(d.type === "Cover" && d.artist === "Rey de Reyes Band"){ d.artist = ""; renderSongEditor(id, banner); } else if(d.type === "Original" && !d.artist){ d.artist = "Rey de Reyes Band"; renderSongEditor(id, banner); } };
   document.querySelectorAll("[data-part]").forEach(function(b){ b.onclick = function(){
     var ta = $("sLyrics"), p = b.getAttribute("data-part"), at = ta.selectionStart || ta.value.length, before = ta.value.slice(0, at), after = ta.value.slice(at);
@@ -1634,7 +1652,7 @@ function renderSongEditor(id, banner){
     if(!d.title.trim()) return msg("Give the song a title.");
     if(db.songs.some(function(x){ return x.id !== d.id && x.titleN === norm(d.title); })) return msg("Another song already has that title.");
     b.disabled = true; b.textContent = "Saving...";
-    var payload = { id: d.id, title: d.title.trim(), album: d.album, type: d.type, artist: d.artist, key: d.key, bpm: d.bpm, time: d.time, genre: d.genre, link: (d.link || "").trim(), lyrics: d.lyrics };
+    var payload = { id: d.id, title: d.title.trim(), album: d.album, type: d.type, artist: d.artist, key: d.key, bpm: d.bpm, time: d.time, genre: d.genre, themes: d.themes, link: (d.link || "").trim(), lyrics: d.lyrics };
     send("savesong", state.pin, payload).then(function(r){
       if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = "#/c/" + encodeURIComponent(r.id); }); }
       b.disabled = false; b.textContent = id ? "Save changes" : "Add song";
@@ -1652,10 +1670,10 @@ function renderSongEditor(id, banner){
   };
 }
 
-/* ---------- leader tools: albums, artists, genres, members ---------- */
+/* ---------- leader tools: albums, artists, genres, themes, members ---------- */
 function renderManage(banner){
   var db = state.db;
-  function count(field, name){ return db.songs.filter(function(s){ return norm(s[field]) === norm(name); }).length; }
+  function count(field, name){ return db.songs.filter(function(s){ return field === "themes" ? s.themes.some(function(t){ return norm(t) === norm(name); }) : norm(s[field]) === norm(name); }).length; }
   function block(kind, title, items, field, extra){
     return '<div class="card block"><h2>' + title + ' <span class="muted" style="font-size:14px">(' + items.length + ')</span></h2>' +
       '<div class="addrow"><input id="add' + kind + '" placeholder="New ' + title.toLowerCase().replace(/s$/, "") + ' name">' + (extra || '') + '<button class="btn small primary" data-addk="' + kind + '">+ Add</button></div>' +
@@ -1669,7 +1687,8 @@ function renderManage(banner){
       '<button class="btn small" data-medit="' + esc(m.id) + '">Edit</button><button class="btn small danger" data-mdel="' + esc(m.id) + '">Delete</button></div>'; }).join("") + '</div>' +
     block("Albums", "Albums", db.albums, "album", '<input id="addYear" placeholder="Year" style="max-width:90px" inputmode="numeric">') +
     block("Artists", "Artists", db.artists, "artist") +
-    block("Genres", "Genres", db.genres, "genre");
+    block("Genres", "Genres", db.genres, "genre") +
+    block("Themes", "Themes", db.themes, "themes");
   $("app").innerHTML = h; scrollTop();
   function op(data, okMsg){
     $("mMsg").innerHTML = '<div class="banner warn">Saving...</div>';
@@ -1728,7 +1747,7 @@ function helpHtml(){
     '<li><b>Events</b>: each one has its set list. Tap <b>Share</b> to send it to the band on WhatsApp.</li></ul></div>';
   var mem = state.db.members || [];
   if(mem.length) h += '<div class="card block help"><h2>The band</h2><div class="players">' + mem.map(function(m){ return '<span><b>' + esc(m.name) + '</b> ' + esc(m.instruments || "") + '</span>'; }).join("") + '</div></div>';
-  h += '<div class="card block help"><h2>Band leaders</h2>' + (leader() ? '<p>You are signed in as a leader on this phone. You can add and edit songs and events, and manage albums, artists, genres and members.</p><p><a class="btn" href="#/manage">Leader tools</a> <button class="btn" id="hOut">Sign out</button></p>' :
+  h += '<div class="card block help"><h2>Band leaders</h2>' + (leader() ? '<p>You are signed in as a leader on this phone. You can add and edit songs and events, and manage albums, artists, genres, themes and members.</p><p><a class="btn" href="#/manage">Leader tools</a> <button class="btn" id="hOut">Sign out</button></p>' :
     '<p>Leaders can add and change songs, events and lists. Sign in once with the band PIN.</p><p><a class="btn" href="#/manage">Leader sign-in</a></p>') + '</div>';
   if(leader()) h += '<div class="card block miss"><h2>What\'s missing in the songbook</h2><h3>No lyrics (' + noLyr.length + ')</h3>' + li(noLyr) + '<h3>No key (' + noKey.length + ')</h3>' + li(noKey) +
     '<h3>No tempo (' + noBpm.length + ')</h3>' + li(noBpm) + '<h3>No genre (' + noGenre.length + ')</h3>' + li(noGenre) + '</div>';
