@@ -24,7 +24,7 @@ var TABLES = {
   Artists: ["Name"],
   Genres:  ["Name"],
   Members: ["ID", "Name", "Instruments", "Active"],
-  Events:  ["ID", "Title", "Type", "Date", "Time", "Location", "Notes", "Updated", "Players"],
+  Events:  ["ID", "Title", "Type", "Date", "Time", "Location", "Notes", "Updated", "Players", "Status", "StatusNote"],
   SetList: ["EventID", "Order", "SongTitle", "SongID", "Note", "Key"]
 };
 var START_GENRES = ["Adoracion", "Balada", "Birthday", "Boda", "Cumbia", "Independence Day", "Jubilo", "Parranda", "Punta", "Reggae", "Rock", "Soca", "Waltz"];
@@ -287,6 +287,7 @@ function listEvents_(ss) {
     var players = [];
     try { players = r.Players ? JSON.parse(r.Players) : []; } catch (e) { players = []; }
     return { id: r.ID, title: r.Title, type: r.Type, date: r.Date, time: r.Time, location: r.Location, notes: r.Notes, updated: r.Updated, players: players,
+             status: /cancel/i.test(r.Status || "") ? "canceled" : "", statusNote: r.StatusNote || "",
              songs: (byEvent[r.ID] || []).sort(function (a, b) { return a.order - b.order; }).map(function (s) { return { id: s.id, title: s.title, note: s.note, key: s.key }; }) };
   });
 }
@@ -301,7 +302,8 @@ function saveEvent_(e) {
   var ss = sheet_();
   var id = clean_(e.id, 20) || Utilities.getUuid().replace(/-/g, "").slice(0, 10);
   var vals = { ID: id, Title: title, Type: clean_(e.type, 30), Date: date, Time: time, Location: clean_(e.location, 150), Notes: clean_(e.notes, 1000),
-               Updated: new Date().toISOString(), Players: JSON.stringify(players) };
+               Updated: new Date().toISOString(), Players: JSON.stringify(players),
+               Status: e.status === "canceled" ? "Canceled" : "", StatusNote: e.status === "canceled" ? clean_(e.statusNote, 200) : "" };
   var mine = rows_(ss, "Events").filter(function (r) { return r.ID === id; })[0];
   if (mine) updateRow_(ss, "Events", mine._row, vals); else appendRow_(ss, "Events", vals);
   writeSetList_(ss, id, songs);

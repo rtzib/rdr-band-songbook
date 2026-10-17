@@ -238,6 +238,15 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .pick-row:last-child{border-bottom:0}
 .pick-row .s{font-size:12px;color:var(--muted)}
 
+/* canceled events */
+.tag.x{background:var(--t-pink);color:var(--bad)}
+.ev-row.canceled .t{text-decoration:line-through;text-decoration-color:var(--bad)}
+.ev-row.canceled .t .tag{text-decoration:none;display:inline-block}
+.ev-row.canceled{opacity:.75}
+.struck{text-decoration:line-through;text-decoration-color:var(--bad);opacity:.8}
+.cancel-box{background:var(--t-pink);color:var(--bad);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:15px}
+.cancel-box div{color:var(--ink);margin-top:4px}
+.ev-admin{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 /* floating + button */
 .fab{position:fixed;right:20px;bottom:24px;z-index:35;width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25);text-decoration:none}
 .fab svg{width:26px;height:26px}
@@ -760,7 +769,7 @@ var state = {
   q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
   chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
   saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
-  ef: (function(){ var f = ls("ef") || {}; return { view: f.view || "upcoming", types: f.types || [], when: f.when || "any", sort: f.sort || "" }; })(),
+  ef: (function(){ var f = ls("ef") || {}; return { view: f.view || "upcoming", types: f.types || [], when: f.when || "any", sort: f.sort || "", hideCanceled: !!f.hideCanceled }; })(),
   events: null, evQ: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
 };
 function leader(){ return !!state.pin; }
@@ -1096,7 +1105,7 @@ function sectionsHtml(sections, n, flats, showChords){
 function semis(fromKey, toText){ var to = parseKey(toText); if(!fromKey || !to) return 0; var d = (NOTE_IDX[to.root] - NOTE_IDX[fromKey.root] + 12) % 12; return d > 6 ? d - 12 : d; }
 function lastPlayed(id){
   var today = ymd(new Date()), best = null;
-  (state.events || []).forEach(function(e){ if(e.date >= today) return; (e.songs || []).forEach(function(it){ var s = songFor(it); if(s && s.id === id && (!best || e.date > best.date)) best = e; }); });
+  (state.events || []).forEach(function(e){ if(e.date >= today || isCanceled(e)) return; (e.songs || []).forEach(function(it){ var s = songFor(it); if(s && s.id === id && (!best || e.date > best.date)) best = e; }); });
   return best;
 }
 function ago(dateStr){
@@ -1252,15 +1261,17 @@ function splitEvents(){
   return { up: all.filter(function(e){ return e.date >= today; }).sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; }),
            past: all.filter(function(e){ return e.date < today; }).sort(function(a,b){ return evKey(a) > evKey(b) ? -1 : 1; }) };
 }
+function isCanceled(e){ return e && e.status === "canceled"; }
 function findEvent(id){ var l = state.events || []; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
 function songFor(item){ if(!state.db) return null; return (item.id && find(item.id)) || findSong(state.db.songs, item.title); }
 function dateBox(e){ var d = evDate(e); return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>'; }
 function evRow(e){
   var n = (e.songs || []).length;
-  return '<a class="card ev-row" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) + '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + '</div><div class="s">' +
+  return '<a class="card ev-row' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) + '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div><div class="s">' +
     (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span> ' : '') + esc(fmtDate(e)) + (e.location ? ' · ' + esc(e.location) : '') + ' · ' + n + (n === 1 ? ' song' : ' songs') + '</div></div><span class="chev">›</span></a>';
 }
 function shareText(e){
+  if(isCanceled(e)) return ["*CANCELED: " + e.title + "*", fmtDate(e, true)].concat(e.statusNote ? ["Reason: " + e.statusNote] : []).concat(["", "This event will not happen. Please don't come for this one."]).join("\n");
   var lines = ["*" + e.title + "*", fmtDate(e, true)];
   if(e.location) lines.push(e.location);
   if(e.notes) lines.push(e.notes);
@@ -1282,7 +1293,7 @@ var ICON = {"bolt": "<path d=\"M13 2 4 14h7l-1 8 9-12h-7z\"/>", "music": "<path 
 function ico(n, cls){ return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + ICON[n] + '</svg>'; }
 /* ---------- home ---------- */
 function renderHome(banner){
-  var sp = splitEvents(), next = sp.up[0], db = state.db, today = ymd(new Date());
+  var sp = splitEvents(), live = sp.up.filter(function(e){ return !isCanceled(e); }), next = live[0], db = state.db, today = ymd(new Date());
   var tmw = new Date(); tmw.setDate(tmw.getDate() + 1);
   var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length;
   var h = banner;
@@ -1306,13 +1317,13 @@ function renderHome(banner){
     (leader() ? q("#/new", "plus", "New<br>event") + q("#/newsong", "doc", "New<br>song") + q("#/songs", "music", "All<br>songs") + q("#/manage", "tools", "Leader<br>tools")
               : q("#/songs", "music", "All<br>songs") + q("#/events", "cal", "All<br>events") + q("#/songs?saved", "heart", "Saved<br>songs") + q("#/help", "help", "How to<br>use")) + '</div><div class="band"></div>';
   var days = [], byDay = {};
-  sp.up.forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
+  live.forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
   for(var i=0;i<14;i++){ var d = new Date(); d.setDate(d.getDate() + i); days.push(d); }
   h += '<div class="sec-title">' + ico("cal", "ic sm") + 'Next two weeks</div><div class="week"><div class="week-row">' + days.map(function(d, i){
     var k = ymd(d), evs = byDay[k] || [], href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : (leader() ? "#/new/" + k : "");
     return '<' + (href ? 'a href="' + href + '"' : 'span') + ' class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></' + (href ? 'a' : 'span') + '>';
   }).join("") + '</div></div><div class="band"></div>';
-  h += '<div class="sec-title">' + ico("pulse", "ic sm") + 'Coming up</div>' + (sp.up.length > 1 ? '<div class="songs">' + sp.up.slice(1, 6).map(evRow).join("") + '</div>' : '<div class="card empty">' + (sp.up.length ? 'Nothing else planned after that.' : 'Nothing planned yet.') + '</div>');
+  h += '<div class="sec-title">' + ico("pulse", "ic sm") + 'Coming up</div>' + (function(){ var rest = sp.up.filter(function(e){ return e !== next; }).slice(0, 5); return rest.length ? '<div class="songs">' + rest.map(evRow).join("") + '</div>' : '<div class="card empty">' + (next ? 'Nothing else planned after that.' : 'Nothing planned yet.') + '</div>'; })();
   h += '<div class="foot">' + (leader() ? '<a href="#/manage">Leader tools</a> · <a href="javascript:void 0" id="soBtn">Leader sign out</a>' : '<a href="#/manage">Leader sign-in</a>') + ' · <a href="#/help">Help</a></div>';
   $("app").innerHTML = h;
   if($("instBtn")) $("instBtn").onclick = function(){ showGuide(0); };
@@ -1352,6 +1363,7 @@ function evFiltered(f){
     if(f.view === "upcoming" && e.date < today) return false;
     if(f.view === "past" && e.date >= today) return false;
     if(f.types.length && f.types.indexOf(e.type || "Other") < 0) return false;
+    if(f.hideCanceled && isCanceled(e)) return false;
     if(f.when === "month" && (e.date < mStart || e.date > mEnd)) return false;
     if(f.when === "next90" && (e.date < today || e.date > ymd(n90))) return false;
     if(f.when === "year" && (e.date < yStart || e.date > yEnd)) return false;
@@ -1361,7 +1373,7 @@ function evFiltered(f){
   var sort = f.sort || (f.view === "upcoming" ? "soon" : "late");
   return list.sort(function(a,b){ var x = evKey(a), y = evKey(b); return sort === "soon" ? (x < y ? -1 : x > y ? 1 : 0) : (x > y ? -1 : x < y ? 1 : 0); });
 }
-function evSheetCount(f){ return f.types.length + (f.when !== "any" ? 1 : 0) + (f.sort ? 1 : 0); }
+function evSheetCount(f){ return f.types.length + (f.when !== "any" ? 1 : 0) + (f.sort ? 1 : 0) + (f.hideCanceled ? 1 : 0); }
 function renderEvents(banner){
   var f = state.ef, list = evFiltered(f), n = evSheetCount(f);
   var views = [["upcoming","Upcoming"],["past","Past"],["all","All"]];
@@ -1369,6 +1381,7 @@ function renderEvents(banner){
   f.types.forEach(function(t){ chips.push('<button class="fchip" data-rm-type="' + esc(t) + '">' + esc(t) + ' <b>×</b></button>'); });
   if(f.when !== "any") chips.push('<button class="fchip" data-rm-when="1">' + WHENS[f.when] + ' <b>×</b></button>');
   if(f.sort) chips.push('<button class="fchip" data-rm-esort="1">' + ESORTS[f.sort] + ' <b>×</b></button>');
+  if(f.hideCanceled) chips.push('<button class="fchip" data-rm-canc="1">Hiding canceled <b>×</b></button>');
   if(chips.length > 1) chips.push('<button class="fchip clear" id="efClearAll">Clear all</button>');
   var h = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Events</h2></div>' +
     '<div class="search has-filter' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
@@ -1388,7 +1401,8 @@ function renderEvents(banner){
   document.querySelectorAll("[data-rm-type]").forEach(function(b){ b.onclick = function(){ f.types = f.types.filter(function(x){ return x !== b.getAttribute("data-rm-type"); }); save(); }; });
   document.querySelectorAll("[data-rm-when]").forEach(function(b){ b.onclick = function(){ f.when = "any"; save(); }; });
   document.querySelectorAll("[data-rm-esort]").forEach(function(b){ b.onclick = function(){ f.sort = ""; save(); }; });
-  if($("efClearAll")) $("efClearAll").onclick = function(){ f.types = []; f.when = "any"; f.sort = ""; save(); };
+  document.querySelectorAll("[data-rm-canc]").forEach(function(b){ b.onclick = function(){ f.hideCanceled = false; save(); }; });
+  if($("efClearAll")) $("efClearAll").onclick = function(){ f.types = []; f.when = "any"; f.sort = ""; f.hideCanceled = false; save(); };
 }
 function openEventFilters(banner){
   var d = JSON.parse(JSON.stringify(state.ef));
@@ -1401,11 +1415,13 @@ function openEventFilters(banner){
       '<div class="sheet-h">When</div><div class="seg">' + Object.keys(WHENS).map(function(k){ return '<button class="' + (d.when === k ? 'on' : '') + '" data-wh="' + k + '">' + WHENS[k] + '</button>'; }).join("") + '</div>' +
       '<div class="sheet-h">Sort by date</div><div class="seg"><button class="' + (!d.sort ? 'on' : '') + '" data-es="">Automatic</button>' + Object.keys(ESORTS).map(function(k){ return '<button class="' + (d.sort === k ? 'on' : '') + '" data-es="' + k + '">' + ESORTS[k] + '</button>'; }).join("") + '</div>' +
       '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: upcoming events soonest first, past events most recent first.</div>' +
+      '<label class="switch-row"><span>Hide canceled events</span><input type="checkbox" id="efHide"' + (d.hideCanceled ? ' checked' : '') + '><i></i></label>' +
       '</div><div class="sheet-foot"><button class="btn" id="efClear">Clear all</button><button class="btn primary" id="efGo">Show ' + evFiltered(d).length + ' events</button></div></div>';
     ov.querySelectorAll("[data-ty]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-ty"), i = d.types.indexOf(t); if(i >= 0) d.types.splice(i, 1); else d.types.push(t); draw(); }; });
     ov.querySelectorAll("[data-wh]").forEach(function(b){ b.onclick = function(){ d.when = b.getAttribute("data-wh"); draw(); }; });
     ov.querySelectorAll("[data-es]").forEach(function(b){ b.onclick = function(){ d.sort = b.getAttribute("data-es"); draw(); }; });
-    $("efClear").onclick = function(){ d.types = []; d.when = "any"; d.sort = ""; draw(); };
+    $("efHide").onchange = function(){ d.hideCanceled = this.checked; draw(); };
+    $("efClear").onclick = function(){ d.types = []; d.when = "any"; d.sort = ""; d.hideCanceled = false; draw(); };
     $("efGo").onclick = function(){ state.ef = d; ls("ef", d); close(); renderEvents(banner); };
     $("efX").onclick = close;
   }
@@ -1424,11 +1440,13 @@ function renderEvent(id, banner){
     '<div class="backrow"><a class="ibtn" href="#/events" style="text-decoration:none">‹ Events</a><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' +
       '<button class="ibtn" id="evShare">Share</button>' +
       (leader() ? '<button class="ibtn" id="evDup">Copy</button><a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '/edit" style="text-decoration:none">Edit</a>' : '') + '</div></div>' +
+    (isCanceled(e) ? '<div class="cancel-box"><b>This event was canceled.</b>' + (e.statusNote ? '<div>' + esc(e.statusNote) + '</div>' : '') + '</div>' : '') +
     (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span>' : '') +
-    '<h1 style="margin-top:8px">' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span>' +
+    '<h1 style="margin-top:8px"' + (isCanceled(e) ? ' class="struck"' : '') + '>' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span>' +
     (e.location ? '<a class="loc" href="' + esc(MAP) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' + esc(e.location) + '</a>' : '') + '<span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
     (e.notes ? '<div class="ev-notes">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>' : '') +
-    (items.length ? '<button class="btn primary big" style="margin-top:14px" id="evStart">▶ Start rehearsal</button>' : '') + '</div>';
+    (items.length && !isCanceled(e) ? '<button class="btn primary big" style="margin-top:14px" id="evStart">▶ Start rehearsal</button>' : '') +
+    (leader() ? '<div class="ev-admin">' + (isCanceled(e) ? '<button class="btn" id="evUncancel">Undo cancel</button><button class="btn primary" id="evTell">Tell the band</button>' : '<button class="btn danger" id="evCancel">Cancel event</button>') + '</div>' : '') + '</div>';
   h += '<div class="sec-title">Set list</div>';
   if(!items.length) h += '<div class="card empty">No songs yet.' + (leader() ? ' Tap Edit to add the set list.' : '') + '</div>';
   else h += '<div class="songs">' + items.map(function(it, i){
@@ -1441,10 +1459,26 @@ function renderEvent(id, banner){
   }).join("") + '</div>';
   $("app").innerHTML = h; scrollTop();
   $("evShare").onclick = function(){ shareEvent(e); };
+  function setStatus(status, note, btn){
+    btn.disabled = true; btn.textContent = "Saving...";
+    var payload = JSON.parse(JSON.stringify(e)); payload.status = status; payload.statusNote = note || "";
+    send("save", state.pin, payload).then(function(r){
+      if(r && r.ok) return load(true).then(function(){ if(status === "canceled" && confirm("Event canceled. Send the band a message about it now?")) shareEvent(findEvent(e.id) || payload); });
+      if(r && r.error === "wrong_pin") return wrongPin();
+      alert("Could not save (" + ((r && r.error) || "unknown") + ")."); renderEvent(id, banner);
+    }).catch(function(){ alert("No internet. Try again."); renderEvent(id, banner); });
+  }
+  if($("evCancel")) $("evCancel").onclick = function(){
+    var why = prompt('Cancel "' + e.title + '"? You can type a reason for the band (optional):', "");
+    if(why === null) return;
+    setStatus("canceled", why.trim(), this);
+  };
+  if($("evUncancel")) $("evUncancel").onclick = function(){ if(confirm("Put this event back on?")) setStatus("", "", this); };
+  if($("evTell")) $("evTell").onclick = function(){ shareEvent(e); };
   if($("evStart")) $("evStart").onclick = function(){ startStage(e); };
   if($("evDup")) $("evDup").onclick = function(){
     var c = JSON.parse(JSON.stringify(e)), d = evDate(e) || new Date();
-    d.setDate(d.getDate() + 7); c.id = ""; c.date = ymd(d);
+    d.setDate(d.getDate() + 7); c.id = ""; c.date = ymd(d); c.status = ""; c.statusNote = "";
     state.draft = c; state.draftKey = "new"; state.pick = "";
     location.hash = "#/new";
   };
@@ -1519,7 +1553,7 @@ function renderEditor(id, newDate, banner){
     if(!d.title.trim()) return msg("Give the event a name.");
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.");
     b.disabled = true; b.textContent = "Saving...";
-    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: [],
+    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: [], status: d.status || "", statusNote: d.statusNote || "",
       songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
     send("save", state.pin, payload).then(function(r){
       if(r && r.ok){ state.draft = null; state.draftKey = ""; return load(true).then(function(){ location.hash = "#/e/" + encodeURIComponent(r.id); }); }
