@@ -405,6 +405,46 @@ nav.tabs a.on{background:none;color:var(--accent);box-shadow:inset 0 -3px 0 var(
 .block{background:var(--card)}
 .mrow{border-top-color:var(--line)}
 .heart{color:var(--muted)}
+
+/* songs tab: search + filter button, one row of views, chips, bottom sheet */
+.search.has-filter input{padding-right:84px}
+.search.has-filter .x{right:46px}
+.fbtn{position:absolute;right:6px;top:6px;width:36px;height:34px;border:0;border-radius:10px;background:var(--bg);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.fbtn svg{width:20px;height:20px}
+.fbtn.on{color:var(--accent)}
+.fbtn i{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-size:11px;font-style:normal;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;gap:2px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;height:36px;font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap;padding:0 6px}
+.seg button.on{background:var(--bg);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.fchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.fchip{border:0;background:var(--t-blue);color:var(--accent);border-radius:999px;height:30px;padding:0 12px;font-size:13px;font-weight:500}
+.fchip b{margin-left:4px}
+.fchip.clear{background:transparent;color:var(--muted)}
+body.noscroll{overflow:hidden}
+.sheet-bg{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:86vh;border-radius:22px 22px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+@media (min-width:641px){ .sheet-bg{align-items:center} .sheet{border-radius:22px} }
+.sheet-grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:10px auto 0}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 4px;font-size:18px}
+.sheet-body{overflow-y:auto;padding:4px 18px 10px}
+.sheet-h{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.checks{background:var(--card);border-radius:14px;overflow:hidden}
+.check{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15px}
+.check:last-child{border-bottom:0}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+.check span{flex:1}
+.check em{font-style:normal;color:var(--muted);font-size:13px}
+.gchips{display:flex;flex-wrap:wrap;gap:8px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:14px;padding:14px;margin-top:16px;font-size:15px;cursor:pointer}
+.switch-row input{display:none}
+.switch-row i{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;transition:background .15s}
+.switch-row i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.switch-row input:checked + i{background:var(--accent)}
+.switch-row input:checked + i::after{left:21px}
+.sheet .seg button{font-size:13px}
+.sheet-foot{display:flex;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--line)}
+.sheet-foot .btn{flex:1}
+.sheet-foot .btn.primary{flex:2}
 </style>
 </head>
 <body>
@@ -683,7 +723,7 @@ function findSong(songs, text){
 function parseDb(raw){
   var songs = (raw.songs || []).map(function(r){
     var s = { id: r.id, title: String(r.title || ""), album: r.album || "", type: /cover/i.test(r.type || "") ? "Cover" : "Original", artist: r.artist || "",
-              keyText: r.key || "", key: parseKey(r.key), bpm: parseInt(r.bpm, 10) || null, time: r.time || "", genre: r.genre || "", link: r.link || "", lyrics: String(r.lyrics || "") };
+              keyText: r.key || "", key: parseKey(r.key), bpm: parseInt(r.bpm, 10) || null, time: r.time || "", genre: r.genre || "", link: r.link || "", lyrics: String(r.lyrics || ""), updated: r.updated || "" };
     s.group = s.album || (s.type === "Cover" ? "Covers" : "No album");
     var lines = splitLines(s.lyrics);
     s.sections = buildSections(lines);
@@ -715,7 +755,7 @@ var $ = function(id){ return document.getElementById(id); };
 
 var state = {
   db: null, source: "", loadedAt: 0, error: "", loading: false,
-  q: ls("q") || "", group: ls("group") || "", type: ls("type") || "", genre: ls("genre") || "", onlyLyrics: !!ls("onlyLyrics"), onlySaved: false,
+  q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
   chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
   saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
   events: null, evQ: "", evType: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
@@ -800,7 +840,7 @@ function route(){
   if((m = h.match(/^c\/([^\/]+)\/edit$/))){ view = "songedit"; arg = decodeURIComponent(m[1]); }
   else if(/^c\//.test(h)){ view = "song"; arg = decodeURIComponent(h.slice(2)); }
   else if(h === "newsong"){ view = "songedit"; arg = ""; }
-  else if(/^songs/.test(h)){ view = "songs"; if(/\?saved/.test(h)) state.onlySaved = true; }
+  else if(/^songs/.test(h)){ view = "songs"; if(/\?saved/.test(h)) state.f.tab = "saved"; }
   else if(h === "events") view = "events";
   else if((m = h.match(/^e\/([^\/]+)\/s\/(\d+)$/))){ view = "evsong"; arg = decodeURIComponent(m[1]); arg2 = +m[2]; }
   else if((m = h.match(/^e\/([^\/]+)\/edit$/))){ view = "edit"; arg = decodeURIComponent(m[1]); }
@@ -883,19 +923,29 @@ function signOut(){ state.pin = ""; ls("pin", ""); route(); }
 function wrongPin(){ state.pin = ""; ls("pin", ""); alert("The band PIN changed or is wrong. Please sign in again."); route(); }
 
 /* ---------- songs list ---------- */
-function filtered(){
+function filtered(f){
+  f = f || state.f;
   var db = state.db, q = norm(state.q), words = q ? q.split(" ") : [];
   return db.songs.filter(function(s){
-    if(state.group && s.group !== state.group) return false;
-    if(state.type && s.type !== state.type) return false;
-    if(state.genre && norm(s.genre) !== state.genre) return false;
-    if(state.onlyLyrics && !s.hasLyrics) return false;
-    if(state.onlySaved && !state.saved[s.id]) return false;
+    if(f.tab === "saved" && !state.saved[s.id]) return false;
+    if(f.tab === "orig" && s.type !== "Original") return false;
+    if(f.tab === "cover" && s.type !== "Cover") return false;
+    if(f.albums.length && f.albums.indexOf(s.group) < 0) return false;
+    if(f.genres.length && f.genres.indexOf(norm(s.genre)) < 0) return false;
+    if(f.lyrics && !s.hasLyrics) return false;
     for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false;
     return true;
   });
 }
 function byTitle(a,b){ return a.titleN < b.titleN ? -1 : a.titleN > b.titleN ? 1 : 0; }
+function sortSongs(list, how){
+  if(how === "new") return list.slice().sort(function(a,b){ return (b.updated || "") < (a.updated || "") ? -1 : (b.updated || "") > (a.updated || "") ? 1 : byTitle(a,b); });
+  if(how === "played"){
+    var lp = {}; list.forEach(function(s){ var e = lastPlayed(s.id); lp[s.id] = e ? e.date : ""; });
+    return list.slice().sort(function(a,b){ return lp[b.id] < lp[a.id] ? -1 : lp[b.id] > lp[a.id] ? 1 : byTitle(a,b); });
+  }
+  return list.slice().sort(byTitle);
+}
 function keyLabel(k){ return k ? keyName(k, 0).replace(/m$/, "") + (k.minor ? " Minor" : " Major") : ""; }
 function songRow(s){
   var bits = [];
@@ -909,28 +959,31 @@ function songRow(s){
     '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div><div class="pills">' + pills + '</div></a>' +
     '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
 }
+var SORTS = { az: "A–Z", "new": "Recently changed", played: "Last played" };
+function sheetCount(f){ return f.albums.length + f.genres.length + (f.lyrics ? 1 : 0) + (f.sort !== "az" ? 1 : 0); }
+function saveFilters(){ ls("f", state.f); }
 function renderList(banner){
-  var db = state.db, list = filtered();
+  var db = state.db, f = state.f, list = sortSongs(filtered(), f.sort);
+  var n = sheetCount(f);
+  var tabs = [["all","All"],["saved","Saved"],["orig","Originals"],["cover","Covers"]];
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
-  var gkeys = Object.keys(genres).sort();
-  var nFilters = (state.group?1:0) + (state.type?1:0) + (state.genre?1:0) + (state.onlyLyrics?1:0) + (state.onlySaved?1:0) + (state.q?1:0);
-  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2>' + '</div>' +
-    '<div class="search' + (state.q ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-    '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button></div>' +
-    '<div class="filters">' +
-      '<button class="chip' + (state.onlySaved ? ' on' : '') + '" id="fSaved">♥ Saved</button>' +
-      (db.groups.length > 1 ? '<select id="fGroup"><option value="">All albums</option>' + db.groups.map(function(g){ return '<option' + (g === state.group ? ' selected' : '') + '>' + esc(g) + '</option>'; }).join("") + '</select>' : '') +
-      '<button class="chip' + (state.type === "Original" ? ' on' : '') + '" data-type="Original">Originals</button>' +
-      '<button class="chip' + (state.type === "Cover" ? ' on' : '') + '" data-type="Cover">Covers</button>' +
-      (gkeys.length ? '<select id="fGenre"><option value="">All genres</option>' + gkeys.map(function(k){ return '<option value="' + esc(k) + '"' + (k === state.genre ? ' selected' : '') + '>' + esc(genres[k]) + '</option>'; }).join("") + '</select>' : '') +
-      '<button class="chip' + (state.onlyLyrics ? ' on' : '') + '" id="fLyr">Has lyrics</button>' +
-      (nFilters ? '<button class="chip clear" id="fClear">Clear (' + nFilters + ')</button>' : '') +
-    '</div>';
+  var chips = [];
+  f.albums.forEach(function(a){ chips.push('<button class="fchip" data-rm-album="' + esc(a) + '">' + esc(a) + ' <b>×</b></button>'); });
+  f.genres.forEach(function(g){ chips.push('<button class="fchip" data-rm-genre="' + esc(g) + '">' + esc(genres[g] || g) + ' <b>×</b></button>'); });
+  if(f.lyrics) chips.push('<button class="fchip" data-rm-lyr="1">Has lyrics <b>×</b></button>');
+  if(f.sort !== "az") chips.push('<button class="fchip" data-rm-sort="1">Sort: ' + SORTS[f.sort] + ' <b>×</b></button>');
+  if(chips.length > 1) chips.push('<button class="fchip clear" id="fClearAll">Clear all</button>');
+  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2></div>' +
+    '<div class="search has-filter' + (state.q ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+    '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button>' +
+    '<button class="fbtn' + (n ? ' on' : '') + '" id="fOpen" aria-label="Filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>' + (n ? '<i>' + n + '</i>' : '') + '</button></div>' +
+    '<div class="seg">' + tabs.map(function(t){ return '<button class="' + (f.tab === t[0] ? 'on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join("") + '</div>' +
+    (chips.length ? '<div class="fchips">' + chips.join("") + '</div>' : '');
   var order = [];
-  if(!list.length) html += '<div class="card empty">No songs match.</div>';
-  else if(state.q || state.group || state.onlySaved){ var l2 = list.slice().sort(byTitle); order = l2; html += '<div class="songs">' + l2.map(songRow).join("") + '</div>'; }
+  if(!list.length) html += '<div class="card empty">' + (f.tab === "saved" && !n && !state.q ? 'No saved songs yet. Tap ♡ on a song to save it.' : 'No songs match.') + '</div>';
+  else if(state.q || f.tab === "saved" || f.sort !== "az" || f.albums.length === 1){ order = list; html += '<div class="songs">' + list.map(songRow).join("") + '</div>'; }
   else db.groups.forEach(function(g){
-    var gs = list.filter(function(s){ return s.group === g; }).sort(byTitle);
+    var gs = list.filter(function(s){ return s.group === g; });
     if(!gs.length) return;
     order = order.concat(gs);
     html += '<div class="group-h">' + esc(g) + ' <span style="font-weight:600">(' + gs.length + ')</span></div><div class="songs">' + gs.map(songRow).join("") + '</div>';
@@ -940,13 +993,42 @@ function renderList(banner){
   var q = $("q");
   q.oninput = function(){ state.q = q.value; ls("q", state.q); var pos = q.selectionStart; renderList(banner); var q2 = $("q"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){} };
   $("qx").onclick = function(){ state.q = ""; ls("q",""); renderList(banner); };
-  if($("fGroup")) $("fGroup").onchange = function(){ state.group = this.value; ls("group", state.group); renderList(banner); };
-  if($("fGenre")) $("fGenre").onchange = function(){ state.genre = this.value; ls("genre", state.genre); renderList(banner); };
-  document.querySelectorAll("[data-type]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-type"); state.type = state.type === t ? "" : t; ls("type", state.type); renderList(banner); }; });
-  $("fSaved").onclick = function(){ state.onlySaved = !state.onlySaved; if(!state.onlySaved && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); };
-  $("fLyr").onclick = function(){ state.onlyLyrics = !state.onlyLyrics; ls("onlyLyrics", state.onlyLyrics); renderList(banner); };
-  if($("fClear")) $("fClear").onclick = function(){ state.q = state.group = state.type = state.genre = ""; state.onlyLyrics = state.onlySaved = false; ["q","group","type","genre"].forEach(function(k){ ls(k,""); }); ls("onlyLyrics", false); if(/\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); };
+  $("fOpen").onclick = function(){ openFilters(banner); };
+  document.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ f.tab = b.getAttribute("data-tab"); saveFilters(); if(f.tab !== "saved" && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); }; });
+  document.querySelectorAll("[data-rm-album]").forEach(function(b){ b.onclick = function(){ f.albums = f.albums.filter(function(x){ return x !== b.getAttribute("data-rm-album"); }); saveFilters(); renderList(banner); }; });
+  document.querySelectorAll("[data-rm-genre]").forEach(function(b){ b.onclick = function(){ f.genres = f.genres.filter(function(x){ return x !== b.getAttribute("data-rm-genre"); }); saveFilters(); renderList(banner); }; });
+  document.querySelectorAll("[data-rm-lyr]").forEach(function(b){ b.onclick = function(){ f.lyrics = false; saveFilters(); renderList(banner); }; });
+  document.querySelectorAll("[data-rm-sort]").forEach(function(b){ b.onclick = function(){ f.sort = "az"; saveFilters(); renderList(banner); }; });
+  if($("fClearAll")) $("fClearAll").onclick = function(){ f.albums = []; f.genres = []; f.lyrics = false; f.sort = "az"; saveFilters(); renderList(banner); };
   document.querySelectorAll("[data-heart]").forEach(function(b){ b.onclick = function(ev){ ev.preventDefault(); toggleSaved(b.getAttribute("data-heart")); renderList(banner); }; });
+}
+// the filter panel that slides up from the bottom
+function openFilters(banner){
+  var db = state.db, d = JSON.parse(JSON.stringify(state.f));
+  var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
+  var gkeys = Object.keys(genres).sort();
+  var ov = document.createElement("div"); ov.className = "sheet-bg"; ov.id = "fsheet";
+  document.body.appendChild(ov); document.body.classList.add("noscroll");
+  function count(){ return sortSongs(filtered(d), d.sort).length; }
+  function draw(){
+    ov.innerHTML = '<div class="sheet"><div class="sheet-grab"></div><div class="sheet-head"><b>Filters</b><button class="xclose" id="fsX" aria-label="Close">×</button></div>' +
+      '<div class="sheet-body">' +
+      '<div class="sheet-h">Album</div><div class="checks">' + db.groups.map(function(g){ var on = d.albums.indexOf(g) >= 0; return '<label class="check"><input type="checkbox" data-al="' + esc(g) + '"' + (on ? ' checked' : '') + '><span>' + esc(g) + '</span><em>' + db.songs.filter(function(s){ return s.group === g; }).length + '</em></label>'; }).join("") + '</div>' +
+      (gkeys.length ? '<div class="sheet-h">Genre</div><div class="gchips">' + gkeys.map(function(k){ return '<button class="chip' + (d.genres.indexOf(k) >= 0 ? ' on' : '') + '" data-ge="' + esc(k) + '">' + esc(genres[k]) + '</button>'; }).join("") + '</div>' : '') +
+      '<label class="switch-row"><span>Only songs with lyrics</span><input type="checkbox" id="fsLyr"' + (d.lyrics ? ' checked' : '') + '><i></i></label>' +
+      '<div class="sheet-h">Sort by</div><div class="seg">' + Object.keys(SORTS).map(function(k){ return '<button class="' + (d.sort === k ? 'on' : '') + '" data-so="' + k + '">' + SORTS[k] + '</button>'; }).join("") + '</div>' +
+      '</div><div class="sheet-foot"><button class="btn" id="fsClear">Clear all</button><button class="btn primary" id="fsGo">Show ' + count() + ' songs</button></div></div>';
+    ov.querySelectorAll("[data-al]").forEach(function(c){ c.onchange = function(){ var g = c.getAttribute("data-al"); d.albums = d.albums.filter(function(x){ return x !== g; }); if(c.checked) d.albums.push(g); draw(); }; });
+    ov.querySelectorAll("[data-ge]").forEach(function(b){ b.onclick = function(){ var g = b.getAttribute("data-ge"), i = d.genres.indexOf(g); if(i >= 0) d.genres.splice(i, 1); else d.genres.push(g); draw(); }; });
+    ov.querySelectorAll("[data-so]").forEach(function(b){ b.onclick = function(){ d.sort = b.getAttribute("data-so"); draw(); }; });
+    $("fsLyr").onchange = function(){ d.lyrics = this.checked; draw(); };
+    $("fsClear").onclick = function(){ d.albums = []; d.genres = []; d.lyrics = false; d.sort = "az"; draw(); };
+    $("fsGo").onclick = function(){ state.f = d; saveFilters(); close(); renderList(banner); };
+    $("fsX").onclick = close;
+  }
+  function close(){ ov.remove(); document.body.classList.remove("noscroll"); }
+  ov.onclick = function(e){ if(e.target === ov) close(); };
+  draw();
 }
 function toggleSaved(id){ if(state.saved[id]) delete state.saved[id]; else state.saved[id] = 1; ls("saved", state.saved); }
 
