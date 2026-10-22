@@ -532,6 +532,16 @@ html,body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,
 .bluecard .cd-box{background:rgba(255,255,255,.14);color:#fff}
 .bluecard .cd-box span{color:#fff;opacity:.8}
 .bluecard .cd-now{background:rgba(255,255,255,.18);color:#fff}
+/* countdown on the right of the event name */
+.bc-top{display:flex;align-items:flex-start;gap:12px}
+.bc-info{flex:1;min-width:0}
+.countdown.side{margin-top:0;flex:0 0 auto;text-align:right}
+.countdown.side .cd-k{font-size:10px;letter-spacing:.04em;margin-bottom:5px;max-width:136px;margin-left:auto;line-height:1.25}
+.countdown.side .cd-row{gap:5px;justify-content:flex-end}
+.countdown.side .cd-box{flex:0 0 auto;width:42px;max-width:none;padding:5px 2px;border-radius:10px}
+.countdown.side .cd-box b{font-size:18px}
+.countdown.side .cd-box span{font-size:10px}
+.countdown.side .cd-now{padding:5px 12px;font-size:14px}
 /* home dashboard */
 .dash2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .dash2 .dash-side{display:grid;gap:12px;grid-template-columns:1fr}
@@ -1647,9 +1657,9 @@ function nextCard(next, emptyText){
   if(!next) return '<div class="bluecard"><div class="bc-t">No upcoming event</div><div class="bc-s">' + (emptyText || "There are no events planned yet.") + '</div>' +
     (leader() ? '<div class="bc-btns"><a class="wbtn" href="#/new">' + ico("add", "ic sm") + 'Create Event</a></div>' : '') + '</div>';
   var n = (next.songs || []).length;
-  return '<div class="bluecard"><div class="bc-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><a class="bc-t" href="#/e/' + encodeURIComponent(next.id) + '">' + esc(next.title) + '</a>' +
-    '<div class="bc-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="bc-s">' + esc(next.location) + '</div>' : '') +
-    '<div class="countdown" id="cd"></div>' +
+  return '<div class="bluecard"><div class="bc-top"><div class="bc-info"><div class="bc-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><a class="bc-t" href="#/e/' + encodeURIComponent(next.id) + '">' + esc(next.title) + '</a>' +
+    '<div class="bc-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="bc-s">' + esc(next.location) + '</div>' : '') + '</div>' +
+    '<div class="countdown side" id="cd"></div></div>' +
     '<div class="bc-btns">' + (n ? '<button class="wbtn" id="heroStart">▶ Start</button>' : '') + '<a class="wbtn ghost" href="#/e/' + encodeURIComponent(next.id) + '">Set list (' + n + ')</a></div></div>';
 }
 function initials(name){ var p = String(name || "").trim().split(/\s+/); return ((p[0] || "")[0] || "").toUpperCase() + ((p.length > 1 ? p[p.length-1][0] : (p[0] || "")[1]) || "").toUpperCase(); }
@@ -1794,7 +1804,8 @@ function startCountdown(e){
     var ms = start - new Date();
     if(ms <= 0){ el.innerHTML = '<div class="cd-now">' + (e.time ? 'Happening now' : 'Today') + '</div>'; return; }
     var mins = Math.floor(ms / 60000), d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
-    function box(n, word){ return '<div class="cd-box"><b>' + n + '</b><span>' + word + (n === 1 ? '' : 's') + '</span></div>'; }
+    var side = el.classList.contains("side"), short = { day: "day", hour: "hr", minute: "min" };
+    function box(n, word){ var w = side ? short[word] : word; return '<div class="cd-box"><b>' + n + '</b><span>' + w + (n === 1 ? '' : 's') + '</span></div>'; }
     el.innerHTML = '<div class="cd-k">Time left to practice</div><div class="cd-row">' + box(d, "day") + box(h, "hour") + box(m, "minute") + '</div>';
   }
   tick();
