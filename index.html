@@ -551,6 +551,22 @@ html,body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,
 .datecard .day{padding:6px 0}
 .datecard .day span{font-size:13px}
 .datecard .day.today{background:var(--soft);color:var(--ink)}
+.dc-h{display:block;text-decoration:none;color:var(--ink)}
+/* band schedule */
+.cal{padding:20px 18px 18px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;padding:0 6px 16px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.cal-h b{font-size:20px;font-weight:500}
+.cal-h span{display:flex;gap:6px}
+.cal-nav{width:38px;height:38px;border-radius:50%;border:0;background:var(--soft);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:6px;text-align:center}
+.cal-wd span{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 0 8px}
+.cday{position:relative;border:0;background:none;color:var(--ink);height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0}
+.cday b{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:500;border:1.5px solid transparent}
+.cday i{position:absolute;bottom:1px;width:6px;height:6px;border-radius:50%;background:transparent}
+.cday.has i{background:var(--accent)}
+.cday.canc i{background:var(--bad)}
+.cday.today b{border-color:var(--muted)}
+.cday.sel b{background:var(--accent);color:#fff;border-color:var(--accent)}
 .savedcard{display:flex;flex-direction:column;padding:18px 18px 16px;text-decoration:none;color:var(--ink)}
 .sc-h{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:500}
 .sc-h .ic{width:26px;height:26px;color:#f0566a}
@@ -998,8 +1014,9 @@ function route(){
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
   else if(h === "manage") view = "manage";
   else if(h === "settings") view = "settings";
+  else if((m = h.match(/^schedule(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "schedule"; arg = m[1] || ""; }
   else if(/^help/.test(h)) view = "help";
-  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
   if(view !== "evsong" && state.stage) endStage(true);
@@ -1036,6 +1053,7 @@ function route(){
   else if(view === "edit") renderEditor(arg, arg2, banner);
   else if(view === "manage") renderManage(banner);
   else if(view === "settings"){ renderSettings(banner); scrollTop(); }
+  else if(view === "schedule"){ if(arg) state.schedSel = arg; renderSchedule(banner); scrollTop(); }
   else if(view === "help"){ app.innerHTML = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Help Center</h2></div>' + helpHtml(); bindHelp(); scrollTop(); }
   else { renderHome(banner); scrollTop(); }
   if(!ls("guideDone") && view === "home" && !state.guideShown){ state.guideShown = true; showGuide(0); }
@@ -1496,9 +1514,9 @@ function renderHome(banner){
     '<a class="card teamcard" href="#/settings"><span class="pilltag">Current Team</span><div class="team-n">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + '</div>' +
       '<div class="team-foot"><div class="team-s">' + db.songs.length + (db.songs.length === 1 ? ' song' : ' songs') + '</div>' + (mem.length ? avatars(mem, 4) : '') + '</div></a>' +
     '<div class="dash-side">' +
-      '<div class="card datecard"><div class="dc-h">' + now.toLocaleDateString("en-US", { weekday:"short" }) + ' <b>' + now.getDate() + '</b></div><div class="week-row">' + days.map(function(d, i){
-        var k = ymd(d), evs = byDay[k] || [], href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : (leader() ? "#/new/" + k : "");
-        return '<' + (href ? 'a href="' + href + '"' : 'span') + ' class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></' + (href ? 'a' : 'span') + '>';
+      '<div class="card datecard"><a class="dc-h" href="#/schedule">' + now.toLocaleDateString("en-US", { weekday:"short" }) + ' <b>' + now.getDate() + '</b></a><div class="week-row">' + days.map(function(d, i){
+        var k = ymd(d), evs = byDay[k] || [];
+        return '<a href="#/schedule/' + k + '" class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></a>';
       }).join("") + '</div></div>' +
       '<a class="card savedcard" href="#/songs?saved"><div class="sc-h">' + ico("heart", "ic heart-ic") + 'Saved Songs</div><div class="sc-row"><span class="sc-v">' + savedN + '</span><span class="sc-go">' + ico("right", "ic sm") + '</span></div></a>' +
     '</div></div>';
@@ -1513,6 +1531,51 @@ function renderHome(banner){
   if($("instBtn")) $("instBtn").onclick = function(){ showGuide(0); };
   if($("instHide")) $("instHide").onclick = function(){ ls("installHidden", true); renderHome(banner); };
   if($("remBtn")) $("remBtn").onclick = function(){ shareEvent(next); };
+}
+
+/* ---------- band schedule: month calendar + that day's events ---------- */
+function renderSchedule(banner){
+  var today = ymd(new Date()), sel = state.schedSel || today;
+  var p = sel.split("-"), selD = new Date(+p[0], +p[1]-1, +p[2]);
+  var mo = state.schedMonth && state.schedMonth.slice(0, 7) === sel.slice(0, 7) || state.schedMonthFree ? state.schedMonth : sel.slice(0, 7) + "-01";
+  state.schedMonth = mo; state.schedMonthFree = false;
+  var mp = mo.split("-"), first = new Date(+mp[0], +mp[1]-1, 1), daysIn = new Date(+mp[0], +mp[1], 0).getDate();
+  var byDay = {};
+  (state.events || []).forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
+  var lead = (first.getDay() + 6) % 7, cells = "";
+  for(var i=0;i<lead;i++) cells += '<span></span>';
+  for(var d=1; d<=daysIn; d++){
+    var k = ymd(new Date(first.getFullYear(), first.getMonth(), d)), evs = byDay[k] || [], live = evs.filter(function(e){ return !isCanceled(e); });
+    cells += '<button class="cday' + (k === today ? ' today' : '') + (k === sel ? ' sel' : '') + (evs.length ? ' has' : '') + (evs.length && !live.length ? ' canc' : '') + '" data-day="' + k + '"><b>' + d + '</b><i></i></button>';
+  }
+  var dayEvs = (byDay[sel] || []).slice().sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; });
+  var h = banner + '<div class="pagehead" style="justify-content:flex-start;gap:14px"><a class="rbtn" href="#/" aria-label="Back to Home">' + ico("back") + '</a><h2 style="font-size:22px">Band Schedule</h2></div>' +
+    '<div class="card cal"><div class="cal-h"><b>' + first.toLocaleDateString("en-US", { month:"long", year:"numeric" }) + '</b><span><button class="cal-nav" id="calPrev" aria-label="Previous month">' + ico("back", "ic sm") + '</button><button class="cal-nav" id="calNext" aria-label="Next month">' + ico("right", "ic sm") + '</button></span></div>' +
+    '<div class="cal-grid cal-wd">' + ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(function(w){ return '<span>' + w + '</span>'; }).join("") + '</div>' +
+    '<div class="cal-grid">' + cells + '</div>' +
+    (mo.slice(0, 7) !== today.slice(0, 7) || sel !== today ? '<button class="linkbtn" id="calToday" style="margin:6px auto 0;display:flex">Today</button>' : '') + '</div>';
+  h += '<div class="sec-h2" style="font-size:20px">' + selD.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" }) + '</div>';
+  if(dayEvs.length) h += '<div class="songs">' + dayEvs.map(homeEvRow).join("") + '</div>';
+  else h += '<div class="card empty" style="padding:20px">Nothing planned for the band this day.</div>';
+  if(leader()){
+    var tpl = '<div class="sec-h2" style="font-size:15px;color:var(--muted);margin-top:22px">Quick event on this date</div><div class="glist">';
+    [["Service","19:00"],["Rehearsal","19:00"],["Wedding","15:00"],["Other",""]].forEach(function(t){
+      tpl += '<button class="grow qev" data-qt="' + t[0] + '" data-qtime="' + t[1] + '"><span class="gl">New ' + (t[0] === "Other" ? 'event' : t[0].toLowerCase()) + '</span>' + (t[1] ? '<span class="gr">' + fmtTime(t[1]) + '</span>' : '') + '<span class="gchev">' + ico("right", "ic sm") + '</span></button>';
+    });
+    h += tpl + '</div>';
+  }
+  $("app").innerHTML = h;
+  document.querySelectorAll("[data-day]").forEach(function(b){ b.onclick = function(){ state.schedSel = b.getAttribute("data-day"); history.replaceState(null, "", "#/schedule/" + state.schedSel); renderSchedule(banner); }; });
+  function shift(n){ var x = new Date(first.getFullYear(), first.getMonth() + n, 1); state.schedMonth = ymd(x); state.schedMonthFree = true; renderSchedule(banner); }
+  $("calPrev").onclick = function(){ shift(-1); };
+  $("calNext").onclick = function(){ shift(1); };
+  if($("calToday")) $("calToday").onclick = function(){ state.schedSel = today; state.schedMonth = ""; history.replaceState(null, "", "#/schedule"); renderSchedule(banner); };
+  document.querySelectorAll("[data-qt]").forEach(function(b){ b.onclick = function(){
+    var type = b.getAttribute("data-qt");
+    state.draft = { id:"", title: type === "Other" ? "" : type, type: type, date: sel, time: b.getAttribute("data-qtime"), location:"", notes:"", songs:[], players:[] };
+    state.draftKey = "new" + sel; state.pick = "";
+    location.hash = "#/new/" + sel;
+  }; });
 }
 
 /* ---------- countdown to the next event ---------- */
