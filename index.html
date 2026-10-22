@@ -610,6 +610,10 @@ html:not(.dark) .tog.on i{background:#fff}
 .step button{border:0;background:var(--soft);border-radius:10px;height:36px;min-width:44px;font-weight:600}
 .step b{min-width:24px;text-align:center;font-weight:600}
 .glist + .sec-h2,.teamrow + .glist{margin-top:26px}
+a.teamrow{text-decoration:none;color:var(--ink)}
+.grow.info .gl{display:flex;flex-direction:column;gap:2px}
+.grow.info .ik{font-size:13px;color:var(--muted)}
+.grow.info .iv{font-weight:500}
 .sheet .glist{background:var(--card)}
 
 /* event page, event form, set list page */
@@ -1206,9 +1210,10 @@ function route(){
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
   else if(h === "manage") view = "manage";
   else if(h === "settings") view = "settings";
+  else if(h === "team") view = "team";
   else if((m = h.match(/^schedule(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "schedule"; arg = m[1] || ""; }
   else if(/^help/.test(h)) view = "help";
-  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", setlist:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", setlist:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", team:"settings", help:"settings", manage:"settings" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
   if(view !== "evsong" && state.stage) endStage(true);
@@ -1247,6 +1252,7 @@ function route(){
   else if(view === "edit") renderEditor(arg, arg2, banner);
   else if(view === "manage") renderManage(banner);
   else if(view === "settings"){ renderSettings(banner); scrollTop(); }
+  else if(view === "team"){ renderTeam(banner); scrollTop(); }
   else if(view === "schedule"){ if(arg) state.schedSel = arg; renderSchedule(banner); scrollTop(); }
   else if(view === "help"){ app.innerHTML = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Help Center</h2></div>' + helpHtml(); bindHelp(); scrollTop(); }
   else { renderHome(banner); scrollTop(); }
@@ -1709,7 +1715,7 @@ function renderHome(banner){
   for(var i=0;i<14;i++){ var d = new Date(); d.setDate(d.getDate() + i); days.push(d); }
   var now = new Date();
   h += '<div class="dash2">' +
-    '<a class="card teamcard" href="#/settings"><span class="pilltag">Current Team</span><div class="team-n">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + '</div>' +
+    '<a class="card teamcard" href="#/team"><span class="pilltag">Current Team</span><div class="team-n">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + '</div>' +
       '<div class="team-foot"><div class="team-s">' + db.songs.length + (db.songs.length === 1 ? ' song' : ' songs') + '</div>' + (mem.length ? avatars(mem, 4) : '') + '</div></a>' +
     '<div class="dash-side">' +
       '<div class="card datecard"><a class="dc-h" href="#/schedule">' + now.toLocaleDateString("en-US", { weekday:"short" }) + ' <b>' + now.getDate() + '</b></a><div class="week-row">' + days.map(function(d, i){
@@ -2245,9 +2251,8 @@ function renderSettings(banner){
     return '<button class="grow' + (o.cls ? ' ' + o.cls : '') + '" id="' + o.id + '"' + (o.toggle != null ? ' role="switch" aria-checked="' + !!o.toggle + '"' : '') + '>' + inner + '</button>';
   }
   var h = banner + '<div class="pagehead"><h2>Settings</h2></div>';
-  h += '<div class="sec-row"><span class="sec-h2" style="margin:0">Team</span>' + (mem.length ? '<button class="linkbtn" id="stTeam">' + (state.showTeam ? 'Hide' : 'Members') + ico(state.showTeam ? "down" : "right", "ic xs") + '</button>' : '') + '</div>' +
-    '<div class="card teamrow"><div style="flex:1;min-width:0"><div class="team-n" style="margin:0">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + ' · ' + db.songs.length + ' songs</div></div>' + (mem.length ? avatars(mem, 3) : '') + '</div>';
-  if(state.showTeam && mem.length) h += '<div class="glist" style="margin-top:10px">' + mem.map(function(m){ return '<div class="grow"><span class="av">' + esc(initials(m.name)) + '</span><span class="gl">' + esc(m.name) + '</span><span class="gr">' + esc(m.instruments || "") + '</span></div>'; }).join("") + '</div>';
+  h += '<div class="sec-h2" style="margin-top:0">Team</div>' +
+    '<a class="card teamrow" href="#/team"><div style="flex:1;min-width:0"><div class="team-n" style="margin:0">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + ' · ' + db.songs.length + ' songs</div></div>' + (mem.length ? avatars(mem, 3) : '') + '<span class="gchev">' + ico("right", "ic sm") + '</span></a>';
   h += '<div class="glist" style="margin-top:14px">' +
     row({ href: "#/manage", icon: "crown", label: leader() ? "Leader tools" : "Leader sign-in", right: leader() ? "LEADER" : "MEMBER" }) +
     row({ id: "stInvite", icon: "gift", label: "Invite the band" }) + '</div>';
@@ -2266,7 +2271,6 @@ function renderSettings(banner){
   h += '<div class="foot">Rey de Reyes Songbook</div>';
   $("app").innerHTML = h;
   function again(){ renderSettings(banner); }
-  if($("stTeam")) $("stTeam").onclick = function(){ state.showTeam = !state.showTeam; again(); };
   $("stInvite").onclick = inviteBand;
   $("stDark").onclick = function(){ setTheme(dark ? "light" : "dark"); again(); };
   $("stChords").onclick = function(){ state.chords = !state.chords; ls("chords", state.chords); again(); };
@@ -2287,6 +2291,27 @@ function renderSettings(banner){
     ], function(){});
   };
   if($("stOut")) $("stOut").onclick = function(){ if(confirm("Sign out as leader on this phone?")) signOut(); };
+}
+
+/* ---------- team page: band info + members ---------- */
+var BAND_INFO = [
+  { icon: "music", label: "Official name", value: "Ministerio de Alabanza Rey de Reyes" },
+  { icon: "pin", label: "Location", value: "San Antonio, Cayo, Belize" },
+  { icon: "book", label: "Church or mission", value: "Rey de Reyes Evangelical Church" },
+  { icon: "cal", label: "Year established", value: "1987" }
+];
+function renderTeam(banner){
+  var mem = (state.db.members || []).slice().sort(function(a, b){ return String(a.name).localeCompare(String(b.name)); });
+  var h = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">RDR Band</h2></div>';
+  h += '<div class="sec-h2" style="margin-top:0">About the band</div><div class="glist">' + BAND_INFO.map(function(r){
+    return '<div class="grow info"><span class="gi">' + ico(r.icon) + '</span><span class="gl"><span class="ik">' + esc(r.label) + '</span><span class="iv">' + esc(r.value) + '</span></span></div>';
+  }).join("") + '</div>';
+  h += '<div class="sec-h2">Members <span class="muted" style="font-weight:400">(' + mem.length + ')</span></div>';
+  h += mem.length ? '<div class="glist">' + mem.map(function(m){ return '<div class="grow"><span class="av">' + esc(initials(m.name)) + '</span><span class="gl">' + esc(m.name) + '</span><span class="gr">' + esc(m.instruments || "") + '</span></div>'; }).join("") + '</div>'
+    : '<div class="card empty">No members saved yet.' + (leader() ? ' Add them in <a href="#/manage">Leader tools</a>.' : '') + '</div>';
+  if(leader()) h += '<div class="glist" style="margin-top:14px"><a class="grow" href="#/manage"><span class="gi">' + ico("users") + '</span><span class="gl">Edit members</span><span class="gchev">' + ico("right", "ic sm") + '</span></a></div>';
+  h += '<div class="foot">Rey de Reyes Songbook</div>';
+  $("app").innerHTML = h;
 }
 
 /* ---------- help ---------- */
