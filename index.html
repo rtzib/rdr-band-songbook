@@ -957,6 +957,24 @@ body.rsview main{padding-bottom:110px}
 .kp-row.acc button{font-size:24px}
 .kp-row button.on{background:var(--accent);color:#fff}
 .kp-row button:disabled{opacity:.3}
+
+/* song editor: Details / Content / Preview tabs */
+.stabs{position:sticky;top:0;z-index:6;margin:0 0 4px;box-shadow:0 0 0 6px var(--bg)}
+.stabs button{height:38px;font-size:14.5px}
+.sform select{display:block;width:100%;margin-top:7px;height:48px;border:0;border-radius:14px;background:var(--card);padding:0 12px;font-size:16px;color:var(--ink)}
+.sform .frow3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px}
+.sform .frow{gap:10px}
+.sform .gchips .chip{height:34px}
+.sform .chip.on{background:var(--accent);color:#fff}
+.partbar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:12px -12px 10px;padding:0 12px}
+.partbar::-webkit-scrollbar{display:none}
+.partbar .chip{flex:0 0 auto;height:34px;font-size:13.5px;background:var(--card)}
+.sform textarea.lyrics-in{height:calc(100vh - 360px);min-height:240px;margin-top:0;padding:14px;border-radius:14px;font-family:var(--mono);font-size:15px;line-height:1.5;white-space:pre;overflow-x:auto;resize:vertical}
+.prevhead{padding:14px 16px;margin-top:12px}
+.prevhead .t{font-size:19px;font-weight:600}
+.prevhead .s{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:13.5px}
+.prevhead .sub{color:var(--muted)}
+[data-panel="preview"] .sections{margin-top:10px}
 </style>
 </head>
 <body>
@@ -2622,6 +2640,7 @@ function renderSongEditor(id, banner){
   var s = id ? find(id) : null, db = state.db;
   if(id && !s){ $("app").innerHTML = banner + '<div class="card empty">Song not found.</div>'; return; }
   if(!state.sdraft || state.sdraft._for !== (id || "new")){
+    state.sTab = "details";
     state.sdraft = s ? { _for: id, id: s.id, title: s.title, album: s.album, type: s.type, artist: s.artist, key: s.keyText, bpm: s.bpm ? String(s.bpm) : "", time: s.time || "4/4", genre: s.genre, themes: s.themes.slice(), link: s.link, lyrics: s.lyrics }
                      : { _for: "new", id: "", title: "", album: "", type: "Original", artist: "Rey de Reyes Band", key: "", bpm: "", time: "4/4", genre: "", themes: [], link: "", lyrics: "" };
   }
@@ -2632,25 +2651,37 @@ function renderSongEditor(id, banner){
     return o + '<option value="__new">+ Add new...</option>';
   }
   var keyOpts = '<option value="">(not sure yet)</option>' + KEYS.map(function(k){ return '<option' + (d.key === k ? ' selected' : '') + '>' + k + '</option>'; }).join("") + KEYS.map(function(k){ return '<option' + (d.key === k + "m" ? ' selected' : '') + '>' + k + 'm</option>'; }).join("");
-  var h = banner + '<div class="card song-head editor">' +
-    '<div class="backrow"><a class="ibtn" href="' + (state.returnTo || (id ? '#/c/' + encodeURIComponent(id) : '#/songs')) + '" style="text-decoration:none">‹ ' + (state.returnTo ? 'Back' : 'Cancel') + '</a><span class="muted" style="font-size:13px">' + (id ? 'Edit song' : 'New song') + '</span></div>' +
-    '<label>Song title<input id="sTitle" maxlength="100" value="' + esc(d.title) + '"></label>' +
-    '<div class="row2"><label>Album<select id="sAlbum">' + opts(db.albums.map(function(a){ return a.name; }), d.album, "(no album)") + '</select></label>' +
-    '<label>Type<select id="sType"><option' + (d.type === "Original" ? ' selected' : '') + '>Original</option><option' + (d.type === "Cover" ? ' selected' : '') + '>Cover</option></select></label>' +
-    '<label>Artist<select id="sArtist">' + opts(db.artists, d.artist, "(choose)") + '</select></label></div>' +
-    '<div class="row2"><label>Key<select id="sKey">' + keyOpts + '</select></label>' +
-    '<label>Tempo (BPM)<input id="sBpm" type="number" inputmode="numeric" min="30" max="250" value="' + esc(d.bpm) + '" placeholder="e.g. 100"></label>' +
-    '<label>Time<select id="sTime">' + ["4/4","3/4","2/2","6/8","2/4","12/8"].map(function(t){ return '<option' + (d.time === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label></div>' +
-    '<div class="row2"><label>Genre<select id="sGenre">' + opts(db.genres, d.genre, "(choose)") + '</select></label>' +
-    '<label style="grid-column:span 2">Practice link (YouTube or audio)<input id="sLink" type="url" maxlength="500" value="' + esc(d.link) + '" placeholder="https://youtube.com/..."></label></div>' +
-    '<label>Themes <span class="muted" style="font-weight:400">(pick all that fit)</span></label><div class="partbtns" id="sThemes">' +
-      (function(){ var seen = {}, all = []; db.themes.concat(d.themes).forEach(function(t){ if(!seen[norm(t)]){ seen[norm(t)] = 1; all.push(t); } });
-        return all.map(function(t){ var on = d.themes.some(function(x){ return norm(x) === norm(t); }); return '<button class="chip' + (on ? ' on' : '') + '" data-theme="' + esc(t) + '">' + esc(t) + '</button>'; }).join("") + '<button class="chip" id="sThemeNew">+ New theme</button>'; })() + '</div>' +
-    '<label>Lyrics</label><div class="partbtns">' + PARTS.map(function(p){ return '<button class="chip" data-part="' + esc(p) + '">+ ' + esc(p) + '</button>'; }).join("") + '</div>' +
-    '<textarea id="sLyrics" class="lyrics-in" spellcheck="false" placeholder="Intro\n[G] - [C] - [D]\n\nVerso I\nFirst line\n//These two lines\nare sung twice//\n\nCoro (x2)\n...">' + esc(d.lyrics) + '</textarea>' +
-    '<div class="muted" style="font-size:12px;margin-top:6px">Part names on their own line. <b>//</b> around lines = sing twice, <b>///</b> = three times. Chords on their own line like [D] - [Bm], or above the words.</div></div>' +
-    '<div class="sec-title">Preview</div><div id="sPrev"></div>' +
-    '<div class="card song-head" style="margin-top:10px"><div id="sMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="sSave">' + (id ? 'Save changes' : 'Add song') + '</button>' + (id ? '<button class="btn danger" id="sDel">Delete song</button>' : '') + '</div></div>';
+  var tab = state.sTab || "details", back = state.returnTo || (id ? '#/c/' + encodeURIComponent(id) : '#/songs');
+  var TABS = [["details", "Details"], ["content", "Content"], ["preview", "Preview"]];
+  var h = banner + subHead(back, id ? "Edit Song" : "New Song") +
+    '<div class="seg stabs" role="tablist">' + TABS.map(function(t){ return '<button role="tab" class="' + (tab === t[0] ? 'on' : '') + '" data-stab="' + t[0] + '" aria-selected="' + (tab === t[0]) + '">' + t[1] + '</button>'; }).join("") + '</div>' +
+    '<div class="form sform">' +
+    // ----- Details -----
+    '<div data-panel="details"' + (tab === "details" ? '' : ' hidden') + '>' +
+      '<label class="fl">Title <i>*</i><input id="sTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="Song title"></label>' +
+      '<div class="frow"><label class="fl">Type<select id="sType"><option' + (d.type === "Original" ? ' selected' : '') + '>Original</option><option' + (d.type === "Cover" ? ' selected' : '') + '>Cover</option></select></label>' +
+        '<label class="fl">Artist<select id="sArtist">' + opts(db.artists, d.artist, "(choose)") + '</select></label></div>' +
+      '<div class="frow"><label class="fl">Album<select id="sAlbum">' + opts(db.albums.map(function(a){ return a.name; }), d.album, "(no album)") + '</select></label>' +
+        '<label class="fl">Genre<select id="sGenre">' + opts(db.genres, d.genre, "(choose)") + '</select></label></div>' +
+      '<div class="frow3"><label class="fl">Key<select id="sKey">' + keyOpts + '</select></label>' +
+        '<label class="fl">BPM<input id="sBpm" type="number" inputmode="numeric" min="30" max="250" value="' + esc(d.bpm) + '" placeholder="100"></label>' +
+        '<label class="fl">Time<select id="sTime">' + ["4/4","3/4","2/2","6/8","2/4","12/8"].map(function(t){ return '<option' + (d.time === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label></div>' +
+      '<div class="fl">Themes <span class="muted" style="font-weight:400;font-size:13px">(pick all that fit)</span></div><div class="gchips" id="sThemes">' +
+        (function(){ var seen = {}, all = []; db.themes.concat(d.themes).forEach(function(t){ if(!seen[norm(t)]){ seen[norm(t)] = 1; all.push(t); } });
+          return all.map(function(t){ var on = d.themes.some(function(x){ return norm(x) === norm(t); }); return '<button class="chip' + (on ? ' on' : '') + '" data-theme="' + esc(t) + '">' + esc(t) + '</button>'; }).join("") + '<button class="chip" id="sThemeNew">+ New theme</button>'; })() + '</div>' +
+      '<label class="fl">Practice link <span class="muted" style="font-weight:400;font-size:13px">(YouTube or audio)</span><input id="sLink" type="url" maxlength="500" value="' + esc(d.link) + '" placeholder="https://youtube.com/..."></label>' +
+      (id ? '<div class="glist" style="margin-top:18px"><button class="grow danger" id="sDel"><span class="gi">' + ico("x") + '</span><span class="gl">Delete song</span></button></div>' : '') +
+    '</div>' +
+    // ----- Content -----
+    '<div data-panel="content"' + (tab === "content" ? '' : ' hidden') + '>' +
+      '<div class="partbar">' + PARTS.map(function(p){ return '<button class="chip" data-part="' + esc(p) + '">+ ' + esc(p) + '</button>'; }).join("") + '</div>' +
+      '<textarea id="sLyrics" class="lyrics-in" spellcheck="false" autocapitalize="sentences" placeholder="Intro\n[G] - [C] - [D]\n\nVerso I\nFirst line\n//These two lines\nare sung twice//\n\nCoro (x2)\n...">' + esc(d.lyrics) + '</textarea>' +
+      '<div class="muted" style="font-size:12.5px;margin:8px 2px 0;line-height:1.45">Part names on their own line. <b>//</b> around lines = sing twice, <b>///</b> = three times. Chords on their own line like [D] - [Bm], or above the words.</div>' +
+    '</div>' +
+    // ----- Preview -----
+    '<div data-panel="preview"' + (tab === "preview" ? '' : ' hidden') + '><div id="sPrevHead"></div><div id="sPrev"></div></div>' +
+    '<div id="sMsg" style="margin-top:12px"></div>' +
+    '</div><div class="savebar"><button class="btn primary big" id="sSave">' + (id ? 'Save changes' : 'Add song') + '</button></div>';
   $("app").innerHTML = h;
   function bind(i, k){ $(i).oninput = $(i).onchange = function(){ d[k] = this.value; if(k === "lyrics" || k === "key") drawPrev(); }; }
   bind("sTitle","title"); bind("sKey","key"); bind("sBpm","bpm"); bind("sTime","time"); bind("sLink","link"); bind("sLyrics","lyrics");
@@ -2675,20 +2706,30 @@ function renderSongEditor(id, banner){
     var ins = (before && !/\n\n$/.test(before) ? (/\n$/.test(before) ? "\n" : "\n\n") : "") + p + "\n";
     ta.value = before + ins + after; d.lyrics = ta.value; ta.focus(); var pos = (before + ins).length; ta.setSelectionRange(pos, pos); drawPrev();
   }; });
+  function msg(t){ $("sMsg").innerHTML = t ? '<div class="banner bad" style="margin:0">' + t + '</div>' : ''; }
   function drawPrev(){
     var secs = buildSections(splitLines(d.lyrics)), k = parseKey(d.key);
-    $("sPrev").innerHTML = d.lyrics.trim() ? sectionsHtml(secs, 0, k ? useFlats(k, 0) : false, true) : '<div class="card empty" style="padding:16px">Type the lyrics above to see how the band will see them.</div>';
+    var chips = [k ? keyName(k, 0) : (d.key || ""), d.bpm ? d.bpm + " bpm" : "", d.time || ""].filter(Boolean);
+    $("sPrevHead").innerHTML = '<div class="card prevhead"><div class="t">' + esc(d.title || "Untitled song") + '</div><div class="s">' + (d.artist ? '<span class="sub">' + esc(d.artist) + '</span>' : '') + chips.map(function(c){ return '<span class="kchip">' + esc(c) + '</span>'; }).join("") + '</div></div>';
+    $("sPrev").innerHTML = d.lyrics.trim() ? sectionsHtml(secs, 0, k ? useFlats(k, 0) : false, true) : '<div class="card empty" style="padding:16px">No lyrics yet. Write them in the Content tab.</div>';
   }
+  function showTab(t){
+    state.sTab = t;
+    document.querySelectorAll("[data-stab]").forEach(function(b){ var on = b.getAttribute("data-stab") === t; b.classList.toggle("on", on); b.setAttribute("aria-selected", on); });
+    document.querySelectorAll("[data-panel]").forEach(function(p){ p.hidden = p.getAttribute("data-panel") !== t; });
+    if(t === "preview") drawPrev();
+    msg(""); window.scrollTo(0, 0);
+  }
+  document.querySelectorAll("[data-stab]").forEach(function(b){ b.onclick = function(){ showTab(b.getAttribute("data-stab")); }; });
   drawPrev();
-  function msg(t){ $("sMsg").innerHTML = t ? '<div class="banner bad" style="margin:0 0 10px">' + t + '</div>' : ''; }
   $("sSave").onclick = function(){
     var b = this;
-    if(!d.title.trim()) return msg("Give the song a title.");
-    if(db.songs.some(function(x){ return x.id !== d.id && x.titleN === norm(d.title); })) return msg("Another song already has that title.");
+    if(!d.title.trim()){ showTab("details"); $("sTitle").focus(); return msg("Give the song a title."); }
+    if(db.songs.some(function(x){ return x.id !== d.id && x.titleN === norm(d.title); })){ showTab("details"); return msg("Another song already has that title."); }
     b.disabled = true; b.textContent = "Saving...";
     var payload = { id: d.id, title: d.title.trim(), album: d.album, type: d.type, artist: d.artist, key: d.key, bpm: d.bpm, time: d.time, genre: d.genre, themes: d.themes, link: (d.link || "").trim(), lyrics: d.lyrics };
     send("savesong", state.pin, payload).then(function(r){
-      if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = state.returnTo || ("#/c/" + encodeURIComponent(r.id)); }); }
+      if(r && r.ok){ state.sdraft = null; state.sTab = ""; return load(true).then(function(){ location.hash = state.returnTo || ("#/c/" + encodeURIComponent(r.id)); }); }
       b.disabled = false; b.textContent = id ? "Save changes" : "Add song";
       if(r && r.error === "wrong_pin") return wrongPin();
       msg(r && r.error === "exists" ? "Another song already has that title." : "Could not save (" + esc((r && r.error) || "unknown") + ").");

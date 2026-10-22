@@ -38,7 +38,7 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 - **Event types:** leaders add, rename and delete them in Leader tools. Renaming updates every event using it; deleting one that events use asks first and leaves those events with no type.
 - **Rehearsal / event mode** (Start Event): full screen, screen stays on, swipe left/right or the big buttons to move between songs, plays each song in the key set for the event. The top bar says Rehearsal for Rehearsal-type events and Live for everything else.
 - **First-run guide** (English / Spanish): install the app, open the next event, swipe song by song. Help has it again.
-- **Song editor:** title, album, type, artist, key, BPM, time, genre, themes, practice link, lyrics with part buttons and a live preview. "+ Add new..." in the album/artist/genre lists adds a new one.
+- **Song editor** (new or edit song), in three tabs: **Details** (title, type, artist, album, genre, key, BPM, time, themes, practice link, delete), **Content** (lyrics with part buttons), **Preview** (how the band will see it). **Save** is at the bottom of every tab. "+ Add new..." in the album/artist/genre lists adds a new one.
 
 ## Genre vs theme
 
