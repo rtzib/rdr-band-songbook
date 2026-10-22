@@ -509,6 +509,11 @@ html,body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,
 .ev-row .t{font-weight:600}
 .ev-row .s{font-size:15px;font-weight:500;margin-top:6px}
 .ev-row .when{display:flex;align-items:center;gap:6px}
+.home-ev{padding:20px 22px 22px}
+.he-k{font-size:15px;font-weight:500;color:var(--muted);margin-bottom:6px}
+.home-ev .t{font-size:20px;font-weight:700}
+.home-ev .when{font-size:16px;margin-top:8px}
+.home-ev .ic.xs{width:20px;height:20px}
 .avatar{flex:0 0 52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:16px;line-height:1}
 .avatar small{font-size:9px;font-weight:600;opacity:.8;margin-top:2px}
 .sec-h2{font-size:17px;font-weight:500;color:var(--ink);margin:26px 2px 14px}
@@ -1413,7 +1418,13 @@ function evRow(e){
     (e.type ? '<div class="s"><span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span></div>' : '') + '</div>' +
     '<span class="avatar" title="' + n + (n === 1 ? ' song' : ' songs') + '">' + n + '<small>' + (n === 1 ? 'song' : 'songs') + '</small></span></a>';
 }
-// the big blue card for the next event (Home and Events)
+// plain upcoming card on Home: team, title, date
+function homeEvRow(e){
+  return '<a class="card ev-row home-ev' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '"><div style="min-width:0;flex:1"><div class="he-k">RDR Band' + (e.type ? ' · ' + esc(e.type) : '') + '</div>' +
+    '<div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div>' +
+    '<div class="s when">' + ico("calsm", "ic xs") + esc(shortWhen(e)) + '</div></div></a>';
+}
+// the big blue card for the next event (Events tab)
 function nextCard(next, emptyText){
   if(!next) return '<div class="bluecard"><div class="bc-t">No upcoming event</div><div class="bc-s">' + (emptyText || "There are no events planned yet.") + '</div>' +
     (leader() ? '<div class="bc-btns"><a class="wbtn" href="#/new">' + ico("add", "ic sm") + 'Create Event</a></div>' : '') + '</div>';
@@ -1492,10 +1503,8 @@ function renderHome(banner){
       '<a class="card savedcard" href="#/songs?saved"><div class="sc-h">' + ico("heart", "ic heart-ic") + 'Saved Songs</div><div class="sc-row"><span class="sc-v">' + savedN + '</span><span class="sc-go">' + ico("right", "ic sm") + '</span></div></a>' +
     '</div></div>';
   h += '<div class="sec-h2">Upcoming</div>';
-  if(next){
-    h += nextCard(next);
-    var rest = sp.up.filter(function(e){ return e !== next; }).slice(0, 5);
-    if(rest.length) h += '<div class="songs" style="margin-top:10px">' + rest.map(evRow).join("") + '</div>';
+  if(sp.up.length){
+    h += '<div class="songs">' + sp.up.slice(0, 6).map(homeEvRow).join("") + '</div>';
   } else {
     h += '<div class="nothing">' + ico("cal", "ic big") + '<b>Nothing planned yet</b><span>No events planned at the moment.</span>' + (leader() ? '<a class="btn primary" href="#/new" style="margin-top:14px">' + ico("add", "ic sm") + 'Create event</a>' : '') + '</div>';
   }
@@ -1504,8 +1513,6 @@ function renderHome(banner){
   if($("instBtn")) $("instBtn").onclick = function(){ showGuide(0); };
   if($("instHide")) $("instHide").onclick = function(){ ls("installHidden", true); renderHome(banner); };
   if($("remBtn")) $("remBtn").onclick = function(){ shareEvent(next); };
-  if($("heroStart")) $("heroStart").onclick = function(){ startStage(next); };
-  if(next) startCountdown(next);
 }
 
 /* ---------- countdown to the next event ---------- */

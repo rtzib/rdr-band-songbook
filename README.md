@@ -26,7 +26,7 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 ## Features
 
 - **Look:** styled like the OnStage app: big page titles, round buttons, one card per song/event, tabs at the bottom (Home, Songs, Events, Settings).
-- **Home:** team card (members), today and the next two weeks, saved songs, and Upcoming with the next event in a big blue card (**Start** button, countdown). Leaders get a "Send reminder" card the day before and on the day.
+- **Home:** team card (members), today and the next two weeks, saved songs, and Upcoming as simple cards (team, title, date). The Events tab has the next event in a big blue card (**Start** button, countdown). Leaders get a "Send reminder" card the day before and on the day.
 - **Songs:** tap the title ("4 Songs ⌄") to switch All / Saved / Originals / Covers. Search by title or lyrics, filters (saved, theme, album, originals/covers, genre, has lyrics), key and bpm on each row.
 - **Song page:** lyrics by part, `//` repeats as x2/x3 bars, chords. **Options** hides/shows key change, chords on/off, text size, metronome, keep screen on. **Listen** opens the practice link. Shows when it was last played at an event.
 - **Events:** next event in a blue card, then Upcoming and Past Events; search and type filters. Event page: date, time, location (Google Maps), who's playing, notes, set list with a key and note per song. **Share** sends the event and set list (WhatsApp or the phone's share menu). Leaders: **Copy** (same set list, one week later), **Edit**, and **Cancel event** (with a reason; shows as Canceled everywhere, **Undo cancel** brings it back, **Tell the band** shares the news). Events filters can hide canceled ones.
