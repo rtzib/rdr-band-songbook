@@ -5,13 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Rey de Reyes Songbook</title>
-<meta name="theme-color" content="#0b1120">
+<meta name="theme-color" content="#141617">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Songbook">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f5f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --soft:#eef2ff;
@@ -247,14 +250,6 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .cancel-box{background:var(--t-pink);color:var(--bad);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:15px}
 .cancel-box div{color:var(--ink);margin-top:4px}
 .ev-admin{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-/* floating + button */
-.fab{position:fixed;right:20px;bottom:24px;z-index:35;width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25);text-decoration:none}
-.fab svg{width:26px;height:26px}
-.fab:active{transform:scale(.95)}
-body.hasfab main{padding-bottom:110px}
-@media (max-width:640px){ body.hasfab main{padding-bottom:calc(var(--navh, 72px) + 100px)} }
-@media (max-width:640px){ .fab{bottom:calc(var(--navh, 72px) + 16px)} }
-body.stage .fab{display:none !important}
 /* countdown */
 .countdown{margin-top:14px}
 .cd-k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.85;margin-bottom:6px}
@@ -456,6 +451,212 @@ body.noscroll{overflow:hidden}
 .sheet-foot{display:flex;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--line)}
 .sheet-foot .btn{flex:1}
 .sheet-foot .btn.primary{flex:2}
+
+/* ===== OnStage-style look (v4) ===== */
+:root{
+  --bg:#f4f5f7; --card:#ffffff; --ink:#16181b; --muted:#7a8089; --line:#e6e8ec; --soft:#eef0f3;
+  --accent:#1e88ff; --accent-ink:#ffffff; --blue:#2a4fc4; --navy:#2f3f7a;
+  --t-blue:#eaf3ff; --radius:20px;
+}
+html.dark{
+  --bg:#141617; --card:#222427; --ink:#f2f3f5; --muted:#8c9199; --line:#2e3135; --soft:#2b2e32;
+  --accent:#1e90ff; --accent-ink:#ffffff; --blue:#2a4fc4; --navy:#34407a;
+  --t-blue:rgba(30,144,255,.14);
+}
+html,body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.ic.xs{width:15px;height:15px;vertical-align:-2px}
+.ic.big{width:58px;height:58px;stroke-width:1.6}
+.ibtn{background:var(--card)}
+@media (max-width:640px){
+  header.top{display:none}
+  main{padding-top:calc(env(safe-area-inset-top) + 14px)}
+  nav.bottom{background:var(--bg);border-top:1px solid var(--line)}
+  nav.bottom a{color:var(--muted);font-size:13px;font-weight:500;padding:10px 0 12px}
+  nav.bottom a svg{width:27px;height:27px;margin-bottom:4px}
+  nav.bottom a.on{color:var(--ink);font-weight:600}
+}
+/* page titles + round buttons */
+.pagehead{margin:4px 0 18px;min-height:56px}
+.pagehead h2{font-size:30px;font-weight:600;letter-spacing:-.01em}
+.ptitle{border:0;background:none;padding:0;font-size:30px;font-weight:600;display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
+.ptitle .muted{font-weight:600}
+.pchev{width:24px;height:24px;stroke-width:2.4}
+.rbtn{width:54px;height:54px;flex:0 0 54px;border-radius:50%;border:0;background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.rbtn .ic{width:26px;height:26px;stroke-width:2}
+.rbtn.spin svg,.grow.spin .gi svg{animation:spin 1s linear infinite}
+/* search */
+.search{margin-bottom:16px}
+.search input{height:54px;border-radius:18px;border:1px solid var(--line);background:var(--card);padding-left:50px;font-size:17px}
+.search svg{left:16px;top:15px;width:24px;height:24px}
+.search .x{top:10px}
+.fbtn{top:10px;right:10px;background:transparent}
+.fbtn svg{position:static;width:24px;height:24px}
+/* cards in a list: each one on its own */
+.songs{gap:10px;background:none;border-radius:0;overflow:visible}
+.songs > .card{background:var(--card);border-radius:var(--radius);border:0}
+.song-link{padding:18px 6px 18px 20px}
+.song-row .t,.ev-row .t,.set-row .t{font-size:18px;font-weight:500}
+.song-row .s{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:15px;font-weight:500}
+.song-row .sub{color:var(--muted)}
+.kchip{display:inline-block;background:var(--soft);color:var(--muted);border-radius:999px;padding:2px 12px;font-size:14px;font-weight:600}
+.heart{width:56px;height:56px;margin-right:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.heart .hic{width:28px;height:28px;stroke-width:1.8}
+.heart.on{color:#f0566a}
+.heart.on .hic{fill:currentColor}
+.group-h{margin:22px 6px 10px}
+/* event cards */
+.ev-row{padding:18px 18px 18px 20px}
+.ev-row .t{font-weight:600}
+.ev-row .s{font-size:15px;font-weight:500;margin-top:6px}
+.ev-row .when{display:flex;align-items:center;gap:6px}
+.home-ev{padding:20px 22px 22px}
+.he-k{font-size:15px;font-weight:500;color:var(--muted);margin-bottom:6px}
+.home-ev .t{font-size:20px;font-weight:700}
+.home-ev .when{font-size:16px;margin-top:8px}
+.home-ev .ic.xs{width:20px;height:20px}
+.avatar{flex:0 0 52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:16px;line-height:1}
+.avatar small{font-size:9px;font-weight:600;opacity:.8;margin-top:2px}
+.sec-h2{font-size:17px;font-weight:500;color:var(--ink);margin:26px 2px 14px}
+.sec-row{display:flex;align-items:center;justify-content:space-between;margin:10px 2px 14px}
+.linkbtn{border:0;background:none;color:var(--accent);font-size:16px;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:4px}
+/* the big blue card */
+.bluecard{background:var(--blue);color:#fff;border-radius:22px;padding:22px 22px 24px;min-height:200px;display:flex;flex-direction:column}
+.bc-k{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;opacity:.75;margin-bottom:6px}
+.bc-t{font-size:28px;font-weight:500;line-height:1.15;color:#fff;text-decoration:none}
+.bc-s{font-size:16px;opacity:.82;margin-top:6px}
+.bc-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:22px}
+.wbtn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border:0;border-radius:12px;background:#fff;color:var(--blue);font-size:17px;font-weight:600;text-decoration:none;cursor:pointer}
+.wbtn .ic{stroke-width:2.6}
+.wbtn.ghost{background:rgba(255,255,255,.16);color:#fff}
+.bluecard .cd-k{color:#fff;opacity:.75}
+.bluecard .cd-box{background:rgba(255,255,255,.14);color:#fff}
+.bluecard .cd-box span{color:#fff;opacity:.8}
+.bluecard .cd-now{background:rgba(255,255,255,.18);color:#fff}
+/* home dashboard */
+.dash2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash2 .dash-side{display:grid;gap:12px;grid-template-columns:1fr}
+.teamcard{display:flex;flex-direction:column;padding:20px;text-decoration:none;color:var(--ink);min-height:250px}
+.pilltag{align-self:flex-start;background:var(--soft);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500}
+.team-n{font-size:24px;font-weight:500;margin-top:22px;line-height:1.2}
+.team-s{font-size:15px;color:var(--muted);font-weight:500;margin-top:6px}
+.team-foot{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;gap:10px}
+.avs{display:inline-flex}
+.av{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--card);flex:0 0 auto}
+.avs .av + .av{margin-left:-10px}
+.av.more{background:var(--soft);color:var(--ink)}
+.datecard{padding:18px 16px 14px;min-width:0}
+.dc-h{font-size:26px;font-weight:500;margin:0 4px 10px}
+.dc-h b{font-weight:600}
+.datecard .week-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(46px,1fr);grid-template-columns:none;gap:2px}
+.datecard .day{padding:6px 0}
+.datecard .day span{font-size:13px}
+.datecard .day.today{background:var(--soft);color:var(--ink)}
+.dc-h{display:block;text-decoration:none;color:var(--ink)}
+/* band schedule */
+.cal{padding:20px 18px 18px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;padding:0 6px 16px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.cal-h b{font-size:20px;font-weight:500}
+.cal-h span{display:flex;gap:6px}
+.cal-nav{width:38px;height:38px;border-radius:50%;border:0;background:var(--soft);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:6px;text-align:center}
+.cal-wd span{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 0 8px}
+.cday{position:relative;border:0;background:none;color:var(--ink);height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0}
+.cday b{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:500;border:1.5px solid transparent}
+.cday i{position:absolute;bottom:1px;width:6px;height:6px;border-radius:50%;background:transparent}
+.cday.has i{background:var(--accent)}
+.cday.canc i{background:var(--bad)}
+.cday.today b{border-color:var(--muted)}
+.cday.sel b{background:var(--accent);color:#fff;border-color:var(--accent)}
+.savedcard{display:flex;flex-direction:column;padding:18px 18px 16px;text-decoration:none;color:var(--ink)}
+.sc-h{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:500}
+.sc-h .ic{width:26px;height:26px;color:#f0566a}
+.sc-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;padding-top:18px}
+.sc-v{font-size:32px;font-weight:500;line-height:1}
+.sc-go{width:40px;height:40px;border-radius:10px;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+@media (max-width:380px){ .dash2{grid-template-columns:1fr} .teamcard{min-height:0} }
+.nothing{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 16px 20px;gap:6px}
+.nothing b{font-size:18px;font-weight:600;margin-top:14px}
+.nothing span{color:var(--muted);font-size:15px}
+/* settings */
+.teamrow{display:flex;align-items:center;gap:12px;padding:20px 22px}
+.teamrow .team-n{font-size:22px;font-weight:600}
+.teamrow .team-s{margin-top:4px}
+.glist{background:var(--card);border-radius:var(--radius);overflow:hidden}
+.grow{display:flex;align-items:center;gap:16px;width:100%;min-height:62px;padding:12px 20px;border:0;background:none;text-align:left;text-decoration:none;color:var(--ink);font-size:17px;position:relative}
+.grow + .grow::before{content:"";position:absolute;top:0;left:64px;right:20px;border-top:1px solid var(--line)}
+.glist > .grow:first-child::before{display:none}
+.gi{width:28px;display:flex;justify-content:center;color:var(--muted)}
+.gi .ic{width:26px;height:26px;stroke-width:1.6}
+.gl{flex:1;min-width:0}
+.gr{color:var(--muted);font-size:15px;text-align:right;max-width:55%}
+.gchev{color:var(--muted);display:flex}
+.gcheck{color:var(--accent);font-weight:700}
+.grow .av{width:34px;height:34px;font-size:12px;border:0}
+.grow.danger{color:var(--bad)}
+.grow.danger .gi{color:var(--bad)}
+.tog{width:54px;height:32px;border-radius:16px;background:var(--line);position:relative;flex:0 0 auto;transition:background .15s}
+.tog i{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s}
+.tog.on{background:var(--accent)}
+.tog.on i{left:26px;background:var(--card)}
+html:not(.dark) .tog.on i{background:#fff}
+.step{display:flex;align-items:center;gap:8px}
+.step button{border:0;background:var(--soft);border-radius:10px;height:36px;min-width:44px;font-weight:600}
+.step b{min-width:24px;text-align:center;font-weight:600}
+.glist + .sec-h2,.teamrow + .glist{margin-top:26px}
+.sheet .glist{background:var(--card)}
+
+/* event page, event form, set list page */
+.subhead{display:flex;align-items:center;gap:14px;margin:2px 0 20px;min-height:56px}
+.subhead h2{flex:1;margin:0;font-size:21px;font-weight:600}
+.sbback{width:44px;height:44px;margin-left:-8px;display:flex;align-items:center;justify-content:center;color:var(--ink);border-radius:50%}
+.sbback .ic{width:28px;height:28px;stroke-width:2.2}
+.hpill{display:flex;gap:4px;background:var(--card);border-radius:20px;padding:6px}
+.hpill button{width:46px;height:46px;border:0;background:none;color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.hpill .ic{width:24px;height:24px}
+.savebtn{width:56px;height:56px;border:0;border-radius:16px;background:var(--card);color:var(--muted);display:flex;align-items:center;justify-content:center}
+.savebtn.on{background:var(--accent);color:#fff}
+.savebtn .ic{width:26px;height:26px}
+.savebtn.spin .ic{animation:spin 1s linear infinite}
+.evhero{min-height:250px;padding:20px 22px 22px;justify-content:space-between}
+.evh-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.whenpill{background:rgba(0,0,0,.45);color:#fff;border-radius:999px;padding:9px 18px;font-size:16px;font-weight:500}
+.typepill{background:rgba(255,255,255,.16);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.evh-bottom{margin-top:auto;padding-top:40px}
+.evh-loc{display:inline-flex;align-items:center;gap:6px;color:#fff;opacity:.8;font-size:16px;margin-top:8px;text-decoration:none}
+.evhero.canc{background:var(--soft);color:var(--ink)}
+.evhero.canc .evh-loc,.evhero.canc .bc-t{color:var(--ink)}
+.cancpill{display:inline-block;background:var(--bad);color:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;margin-bottom:8px}
+.evbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.evbtn{display:flex;align-items:center;justify-content:center;gap:10px;height:62px;border-radius:18px;border:0;background:var(--card);color:var(--accent);font-size:17px;font-weight:500;text-decoration:none}
+.evbtn .ic{width:26px;height:26px}
+.evbtn.primary{background:var(--accent);color:#fff}
+.evbtn.off{opacity:.4}
+.evbtn .cnt{background:var(--t-blue);border-radius:999px;padding:1px 9px;font-size:14px;font-weight:600}
+.addrow2{display:flex;align-items:center;gap:14px;width:100%;border:0;padding:20px 22px;margin-top:14px;color:var(--accent);font-size:17px;font-weight:500;text-decoration:none;text-align:left}
+.addrow2 .ic{width:26px;height:26px;stroke-width:2.2}
+.notescard{padding:16px 20px;font-size:16px;line-height:1.5}
+.form .fl{display:block;font-size:16px;font-weight:500;color:var(--ink);margin:20px 2px 10px}
+.form label.fl{margin-bottom:0}
+.form .fl i{color:var(--bad);font-style:normal;margin-left:6px}
+.form input,.form textarea{display:block;width:100%;margin-top:10px;height:58px;border:0;border-radius:18px;background:var(--card);padding:0 20px;font-size:17px;color:var(--ink)}
+.form textarea{height:110px;padding:16px 20px;resize:vertical;font-family:inherit}
+.form input::placeholder,.form textarea::placeholder{color:var(--muted)}
+.form .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form .gchips .chip{height:40px;padding:0 16px;font-size:15px;background:var(--card)}
+.form .gchips .chip.on{background:var(--accent);color:#fff}
+html.dark .form input[type=date],html.dark .form input[type=time]{color-scheme:dark}
+.savebar{position:sticky;bottom:12px;margin-top:24px;z-index:5}
+@media (max-width:640px){ .savebar{bottom:calc(var(--navh, 72px) + 12px)} }
+.savebar .btn{width:100%;height:60px;border-radius:18px;font-size:18px;font-weight:500}
+input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.sl-ev{color:var(--muted);font-size:15px;margin:-8px 2px 12px}
+.picker{padding:14px;margin-top:4px}
+.picker .search input{background:var(--bg)}
+.sel-row{padding:14px 14px 14px 16px}
+.sel-row .t{font-size:17px;font-weight:500}
+.set-row{padding:16px 18px}
+.set-row .chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.set-row .sub{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -466,23 +667,18 @@ body.noscroll{overflow:hidden}
       <a href="#/" data-v="home">Home</a>
       <a href="#/songs" data-v="songs">Songs</a>
       <a href="#/events" data-v="events">Events</a>
+      <a href="#/settings" data-v="settings">Settings</a>
     </nav>
-    <a class="ibtn" href="#/help" title="Help" aria-label="Help" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></a>
-    <button class="ibtn" id="btnRefresh" title="Refresh from the song doc" aria-label="Refresh">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-    </button>
-    <button class="ibtn" id="btnTheme" title="Light / dark mode" aria-label="Light or dark mode">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    </button>
   </div>
 </header>
 
 <main><div class="wrap" id="app"><div class="empty">Loading songs...</div></div></main>
 
 <nav class="bottom" id="tabsBottom">
-  <a href="#/" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
-  <a href="#/songs" data-v="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</a>
-  <a href="#/events" data-v="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 17h6"/></svg>Events</a>
+  <a href="#/" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19z"/></svg>Home</a>
+  <a href="#/songs" data-v="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h11M4 11h11M4 16h7"/><path d="M19 4v11"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>Songs</a>
+  <a href="#/events" data-v="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3.5 9.5h17M8 13.5h8M8 17h5"/></svg>Events</a>
+  <a href="#/settings" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h8M17 7h4M3 17h4M13 17h8"/><circle cx="14" cy="7" r="3"/><circle cx="10" cy="17" r="3"/></svg>Settings</a>
 </nav>
 
 <script>
@@ -770,15 +966,14 @@ var state = {
   q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], themes: f.themes || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
   chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
   saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
-  ef: (function(){ var f = ls("ef") || {}; return { view: f.view || "upcoming", types: f.types || [], when: f.when || "any", sort: f.sort || "", hideCanceled: !!f.hideCanceled }; })(),
+  ef: (function(){ var f = ls("ef") || {}; return { view: "all", types: f.types || [], when: f.when || "any", sort: f.sort || "", hideCanceled: !!f.hideCanceled }; })(),
   events: null, evQ: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
 };
 function leader(){ return !!state.pin; }
 
 /* theme */
-function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#0b1120" : "#1d4ed8"; }
+function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#141617" : "#f4f5f7"; }
 setTheme(ls("theme") || "dark");
-$("btnTheme").onclick = function(){ setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"); };
 document.documentElement.style.setProperty("--lyric", state.size + "px");
 
 /* ---------- talking to the Google script ---------- */
@@ -814,7 +1009,7 @@ function useData(raw, source, when){
 function load(force){
   if(state.loading) return Promise.resolve();
   if(!SCRIPT_URL){ if(window.SNAPSHOT) useData(window.SNAPSHOT, "snapshot"); else { state.error = "setup"; route(); } return Promise.resolve(); }
-  state.loading = true; $("btnRefresh").classList.add("spin"); status();
+  state.loading = true; spinRefresh(true); status();
   return jsonp(SCRIPT_URL + "?action=data" + (force ? "&fresh=1" : "")).then(function(d){
     if(!d || !d.ok) throw new Error((d && d.error) || "bad");
     state.error = "";
@@ -823,9 +1018,21 @@ function load(force){
   }).catch(function(e){
     state.error = String(e.message || e);
     if(!state.db){ var c = ls("cache2"); if(c && c.data) useData(c.data, "cache", c.at); else route(); } else route();
-  }).then(function(){ state.loading = false; $("btnRefresh").classList.remove("spin"); status(); });
+  }).then(function(){ state.loading = false; spinRefresh(false); status(); });
+}
+function spinRefresh(on){ document.querySelectorAll(".js-refresh").forEach(function(b){ b.classList.toggle("spin", on); }); }
+function statusText(){
+  var s = "";
+  if(state.loading) s = "Refreshing...";
+  else if(state.db){
+    var d = new Date(state.loadedAt), hhmm = d.toLocaleTimeString("en-US", { hour:"numeric", minute:"2-digit" });
+    var day = d.toDateString() === new Date().toDateString() ? "" : d.toLocaleDateString("en-US", { day:"numeric", month:"short" }) + " ";
+    s = state.source === "snapshot" ? "Test copy" : (state.source === "cache" ? "Offline copy " + day + hhmm : "Updated " + day + hhmm);
+  }
+  return s;
 }
 function status(){
+  var el = $("syncVal"); if(el) el.textContent = statusText();
   var s = "Rey de Reyes";
   if(state.loading) s = "Refreshing...";
   else if(state.db){
@@ -836,7 +1043,6 @@ function status(){
   if(leader()) s += " · Leader";
   $("status").textContent = s;
 }
-$("btnRefresh").onclick = function(){ load(true); };
 document.addEventListener("visibilitychange", function(){
   if(document.visibilityState === "visible"){
     if(SCRIPT_URL && Date.now() - state.loadedAt > REFRESH_MINUTES*60000) load(false);
@@ -857,17 +1063,21 @@ function route(){
   else if(h === "events") view = "events";
   else if((m = h.match(/^e\/([^\/]+)\/s\/(\d+)$/))){ view = "evsong"; arg = decodeURIComponent(m[1]); arg2 = +m[2]; }
   else if((m = h.match(/^e\/([^\/]+)\/edit$/))){ view = "edit"; arg = decodeURIComponent(m[1]); }
+  else if((m = h.match(/^e\/([^\/]+)\/setlist$/))){ view = "setlist"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^e\/([^\/]+)$/))){ view = "event"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
   else if(h === "manage") view = "manage";
+  else if(h === "settings") view = "settings";
+  else if((m = h.match(/^schedule(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "schedule"; arg = m[1] || ""; }
   else if(/^help/.test(h)) view = "help";
-  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home" }[view] || "";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", setlist:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
   if(view !== "evsong" && state.stage) endStage(true);
   document.body.classList.toggle("stage", view === "evsong" && state.stage);
   if(view !== "edit"){ state.draft = null; state.draftKey = ""; }
   if(view !== "songedit") state.sdraft = null;
+  if(view !== "setlist"){ state.sl = null; state.slAdd = false; }
   var app = $("app");
   if(!state.db){
     if(state.error === "setup") app.innerHTML = '<div class="card empty">The app is not connected to the band database yet.</div>';
@@ -885,6 +1095,7 @@ function route(){
   else if(view === "songedit") renderSongEditor(arg, banner);
   else if(view === "events") renderEvents(banner);
   else if(view === "event") renderEvent(arg, banner);
+  else if(view === "setlist") renderSetlist(arg, banner);
   else if(view === "evsong"){
     var ev = findEvent(arg);
     if(!ev) renderEvent(arg, banner);
@@ -897,21 +1108,13 @@ function route(){
   }
   else if(view === "edit") renderEditor(arg, arg2, banner);
   else if(view === "manage") renderManage(banner);
-  else if(view === "help"){ app.innerHTML = banner + helpHtml(); bindHelp(); scrollTop(); }
+  else if(view === "settings"){ renderSettings(banner); scrollTop(); }
+  else if(view === "schedule"){ if(arg) state.schedSel = arg; renderSchedule(banner); scrollTop(); }
+  else if(view === "help"){ app.innerHTML = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Help Center</h2></div>' + helpHtml(); bindHelp(); scrollTop(); }
   else { renderHome(banner); scrollTop(); }
-  setFab(view);
   if(!ls("guideDone") && view === "home" && !state.guideShown){ state.guideShown = true; showGuide(0); }
 }
 function scrollTop(){ window.scrollTo(0,0); }
-function setFab(view){
-  var fab = $("fab");
-  if(!fab){ fab = document.createElement("a"); fab.id = "fab"; fab.className = "fab"; fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'; document.body.appendChild(fab); }
-  var to = { songs: ["#/newsong", "New song"], events: ["#/new", "New event"] }[view];
-  var on = !!(to && leader() && state.db);
-  if(on){ fab.href = to[0]; fab.setAttribute("aria-label", to[1]); fab.title = to[1]; }
-  fab.style.display = on ? "" : "none";
-  document.body.classList.toggle("hasfab", on);
-}
 window.addEventListener("hashchange", route);
 
 /* ---------- leader sign-in (only the leader sees the edit buttons) ---------- */
@@ -962,17 +1165,14 @@ function sortSongs(list, how){
 }
 function keyLabel(k){ return k ? keyName(k, 0).replace(/m$/, "") + (k.minor ? " Minor" : " Major") : ""; }
 function songRow(s){
-  var bits = [];
-  if(s.artist && s.type === "Cover") bits.push(esc(s.artist));
-  if(s.genre) bits.push(esc(s.genre));
-  s.themes.forEach(function(t){ bits.push(esc(t)); });
   var tags = "";
   if(!s.hasLyrics) tags += '<span class="tag w">No lyrics</span>';
   if(s.link) tags += '<span class="tag">▶</span>';
-  var pills = (s.key ? '<span class="pill">' + esc(keyLabel(s.key)) + '</span>' : '') + (s.bpm ? '<span class="pill">' + s.bpm + ' bpm</span>' : '');
+  var sub = s.artist || s.genre || (s.themes[0] || "");
+  var chips = (s.key ? '<span class="kchip">' + esc(keyName(s.key, 0)) + '</span>' : '') + (s.bpm ? '<span class="kchip">' + s.bpm + ' bpm</span>' : '');
   return '<div class="card song-row"><a class="song-link" href="#/c/' + encodeURIComponent(s.id) + '">' +
-    '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div><div class="pills">' + pills + '</div></a>' +
-    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
+    '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (sub ? '<span class="sub">' + esc(sub) + '</span>' : '') + chips + '</div></div></a>' +
+    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="' + (state.saved[s.id] ? 'Unsave song' : 'Save song') + '">' + ico("heart", "ic hic") + '</button></div>';
 }
 var SORTS = { az: "A–Z", "new": "Recently changed", played: "Last played" };
 function themeNames(){ var t = {}; state.db.songs.forEach(function(s){ s.themes.forEach(function(x){ t[norm(x)] = t[norm(x)] || x; }); }); return t; }
@@ -981,7 +1181,8 @@ function saveFilters(){ ls("f", state.f); }
 function renderList(banner){
   var db = state.db, f = state.f, list = sortSongs(filtered(), f.sort);
   var n = sheetCount(f);
-  var tabs = [["all","All"],["saved","Saved"],["orig","Originals"],["cover","Covers"]];
+  var tabs = [["all","Songs"],["saved","Saved"],["orig","Originals"],["cover","Covers"]];
+  var tabName = (tabs.filter(function(t){ return t[0] === f.tab; })[0] || tabs[0])[1];
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
   var themes = themeNames(), chips = [];
   f.themes.forEach(function(t){ chips.push('<button class="fchip" data-rm-theme="' + esc(t) + '">' + esc(themes[t] || t) + ' <b>×</b></button>'); });
@@ -990,11 +1191,11 @@ function renderList(banner){
   if(f.lyrics) chips.push('<button class="fchip" data-rm-lyr="1">Has lyrics <b>×</b></button>');
   if(f.sort !== "az") chips.push('<button class="fchip" data-rm-sort="1">Sort: ' + SORTS[f.sort] + ' <b>×</b></button>');
   if(chips.length > 1) chips.push('<button class="fchip clear" id="fClearAll">Clear all</button>');
-  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2></div>' +
+  var html = banner + '<div class="pagehead"><button class="ptitle" id="viewBtn" aria-label="Change list"><span class="muted">' + list.length + '</span> ' + tabName + ico("down", "ic pchev") + '</button>' +
+    (leader() ? '<a class="rbtn" href="#/newsong" aria-label="New song" title="New song">' + ico("add") + '</a>' : '') + '</div>' +
     '<div class="search has-filter' + (state.q ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button>' +
     '<button class="fbtn' + (n ? ' on' : '') + '" id="fOpen" aria-label="Filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>' + (n ? '<i>' + n + '</i>' : '') + '</button></div>' +
-    '<div class="seg">' + tabs.map(function(t){ return '<button class="' + (f.tab === t[0] ? 'on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join("") + '</div>' +
     (chips.length ? '<div class="fchips">' + chips.join("") + '</div>' : '');
   var order = [];
   if(!list.length) html += '<div class="card empty">' + (f.tab === "saved" && !n && !state.q ? 'No saved songs yet. Tap ♡ on a song to save it.' : 'No songs match.') + '</div>';
@@ -1011,7 +1212,13 @@ function renderList(banner){
   q.oninput = function(){ state.q = q.value; ls("q", state.q); var pos = q.selectionStart; renderList(banner); var q2 = $("q"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){} };
   $("qx").onclick = function(){ state.q = ""; ls("q",""); renderList(banner); };
   $("fOpen").onclick = function(){ openFilters(banner); };
-  document.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ f.tab = b.getAttribute("data-tab"); saveFilters(); if(f.tab !== "saved" && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); }; });
+  $("viewBtn").onclick = function(){
+    var counts = { all: db.songs.length, saved: db.songs.filter(function(x){ return state.saved[x.id]; }).length, orig: db.songs.filter(function(x){ return x.type === "Original"; }).length, cover: db.songs.filter(function(x){ return x.type === "Cover"; }).length };
+    var names = { all: "All songs", saved: "Saved songs", orig: "Originals", cover: "Covers" };
+    openMenu("Show", tabs.map(function(t){ return { id: t[0], label: names[t[0]], right: counts[t[0]], on: f.tab === t[0] }; }), function(id){
+      f.tab = id; saveFilters(); if(f.tab !== "saved" && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner);
+    });
+  };
   document.querySelectorAll("[data-rm-album]").forEach(function(b){ b.onclick = function(){ f.albums = f.albums.filter(function(x){ return x !== b.getAttribute("data-rm-album"); }); saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-theme]").forEach(function(b){ b.onclick = function(){ f.themes = f.themes.filter(function(x){ return x !== b.getAttribute("data-rm-theme"); }); saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-genre]").forEach(function(b){ b.onclick = function(){ f.genres = f.genres.filter(function(x){ return x !== b.getAttribute("data-rm-genre"); }); saveFilters(); renderList(banner); }; });
@@ -1151,7 +1358,7 @@ function renderSong(id, banner, ctx){
   var struct = s.sections.filter(function(x){ return x.label; }).map(function(x, k){
     return '<a href="javascript:void 0" data-sec="' + s.sections.indexOf(x) + '" class="k-' + x.kind + '"><i>' + (k+1) + '</i>' + esc(x.label) + (x.reps ? ' ×' + x.reps : '') + '</a>';
   });
-  var back = ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) : '#/songs';
+  var back = ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) + '/setlist' : '#/songs';
   var head = (ctx ? evBarHtml(ctx) : '') + '<div class="card"><div class="song-head">' +
     (state.stage ? '' : '<div class="backrow"><a class="ibtn" href="' + back + '" style="text-decoration:none">' + (ctx ? '‹ Set list' : '‹ Songs') + '</a><div style="display:flex;gap:6px;align-items:center">' +
       (leader() ? '<a class="ibtn" href="#/c/' + encodeURIComponent(s.id) + '/edit" style="text-decoration:none">Edit</a>' : '') +
@@ -1274,10 +1481,48 @@ function isCanceled(e){ return e && e.status === "canceled"; }
 function findEvent(id){ var l = state.events || []; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
 function songFor(item){ if(!state.db) return null; return (item.id && find(item.id)) || findSong(state.db.songs, item.title); }
 function dateBox(e){ var d = evDate(e); return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>'; }
+function shortWhen(e){
+  var d = evDate(e); if(!d) return e.date || "";
+  return d.toLocaleDateString("en-US", { weekday:"short", day:"numeric", month:"short" }) + (e.time ? " • " + fmtTime(e.time) : "");
+}
 function evRow(e){
   var n = (e.songs || []).length;
-  return '<a class="card ev-row' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) + '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div><div class="s">' +
-    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span> ' : '') + esc(fmtDate(e)) + (e.location ? ' · ' + esc(e.location) : '') + ' · ' + n + (n === 1 ? ' song' : ' songs') + '</div></div><span class="chev">›</span></a>';
+  return '<a class="card ev-row' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '"><div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div>' +
+    '<div class="s when">' + ico("calsm", "ic xs") + esc(shortWhen(e)) + (e.location ? ' · ' + esc(e.location) : '') + '</div>' +
+    (e.type ? '<div class="s"><span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span></div>' : '') + '</div>' +
+    '<span class="avatar" title="' + n + (n === 1 ? ' song' : ' songs') + '">' + n + '<small>' + (n === 1 ? 'song' : 'songs') + '</small></span></a>';
+}
+// plain upcoming card on Home: team, title, date
+function homeEvRow(e){
+  return '<a class="card ev-row home-ev' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '"><div style="min-width:0;flex:1"><div class="he-k">RDR Band' + (e.type ? ' · ' + esc(e.type) : '') + '</div>' +
+    '<div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div>' +
+    '<div class="s when">' + ico("calsm", "ic xs") + esc(shortWhen(e)) + '</div></div></a>';
+}
+// the big blue card for the next event (Events tab)
+function nextCard(next, emptyText){
+  if(!next) return '<div class="bluecard"><div class="bc-t">No upcoming event</div><div class="bc-s">' + (emptyText || "There are no events planned yet.") + '</div>' +
+    (leader() ? '<div class="bc-btns"><a class="wbtn" href="#/new">' + ico("add", "ic sm") + 'Create Event</a></div>' : '') + '</div>';
+  var n = (next.songs || []).length;
+  return '<div class="bluecard"><div class="bc-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><a class="bc-t" href="#/e/' + encodeURIComponent(next.id) + '">' + esc(next.title) + '</a>' +
+    '<div class="bc-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="bc-s">' + esc(next.location) + '</div>' : '') +
+    '<div class="countdown" id="cd"></div>' +
+    '<div class="bc-btns">' + (n ? '<button class="wbtn" id="heroStart">▶ Start</button>' : '') + '<a class="wbtn ghost" href="#/e/' + encodeURIComponent(next.id) + '">Set list (' + n + ')</a></div></div>';
+}
+function initials(name){ var p = String(name || "").trim().split(/\s+/); return ((p[0] || "")[0] || "").toUpperCase() + ((p.length > 1 ? p[p.length-1][0] : (p[0] || "")[1]) || "").toUpperCase(); }
+function avatars(list, max){
+  max = max || 4; var more = list.length - max;
+  return '<span class="avs">' + list.slice(0, max).map(function(m){ return '<span class="av" title="' + esc(m.name) + '">' + esc(initials(m.name)) + '</span>'; }).join("") + (more > 0 ? '<span class="av more">+' + more + '</span>' : '') + '</span>';
+}
+// small sheet with a list of choices
+function openMenu(title, items, pick){
+  var ov = document.createElement("div"); ov.className = "sheet-bg";
+  document.body.appendChild(ov); document.body.classList.add("noscroll");
+  function close(){ ov.remove(); document.body.classList.remove("noscroll"); }
+  ov.innerHTML = '<div class="sheet"><div class="sheet-grab"></div><div class="sheet-head"><b>' + esc(title) + '</b><button class="xclose" aria-label="Close">×</button></div><div class="sheet-body" style="padding-bottom:18px"><div class="glist">' +
+    items.map(function(it){ return '<button class="grow" data-pick="' + esc(it.id) + '"><span class="gl">' + esc(it.label) + '</span>' + (it.right != null ? '<span class="gr">' + esc(it.right) + '</span>' : '') + (it.on ? '<span class="gcheck">✓</span>' : '') + '</button>'; }).join("") + '</div></div></div>';
+  ov.querySelector(".xclose").onclick = close;
+  ov.onclick = function(e){ if(e.target === ov) close(); };
+  ov.querySelectorAll("[data-pick]").forEach(function(b){ b.onclick = function(){ close(); pick(b.getAttribute("data-pick")); }; });
 }
 function shareText(e){
   if(isCanceled(e)) return ["*CANCELED: " + e.title + "*", fmtDate(e, true)].concat(e.statusNote ? ["Reason: " + e.statusNote] : []).concat(["", "This event will not happen. Please don't come for this one."]).join("\n");
@@ -1298,49 +1543,99 @@ function shareEvent(e){
 }
 function isInstalled(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
 
-var ICON = {"bolt": "<path d=\"M13 2 4 14h7l-1 8 9-12h-7z\"/>", "music": "<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>", "cal": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"17\" rx=\"3\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/>", "heart": "<path d=\"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z\"/>", "help": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01\"/>", "plus": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"4\"/><path d=\"M12 8v8M8 12h8\"/>", "doc": "<path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5M9 13h6M9 17h4\"/>", "tools": "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "pulse": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M7 12h2l2-3 2 6 2-3h2\"/>"};
+var ICON = {"share": "<circle cx=\"18\" cy=\"5\" r=\"2.5\"/><circle cx=\"6\" cy=\"12\" r=\"2.5\"/><circle cx=\"18\" cy=\"19\" r=\"2.5\"/><path d=\"m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4\"/>",
+  "list": "<path d=\"M4 6h11M4 11h11M4 16h7\"/><path d=\"M19 4v11\"/><circle cx=\"16.5\" cy=\"16.5\" r=\"2.5\"/>", "play": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m10 8.5 5 3.5-5 3.5z\"/>",
+  "save": "<path d=\"M5 3h11l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z\"/><path d=\"M8 3v5h7V3M8 21v-7h8v7\"/>", "edit": "<path d=\"M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z\"/><path d=\"m13.5 6.5 4 4\"/>",
+  "copy": "<rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2\"/>", "x": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m9 9 6 6M15 9l-6 6\"/>",
+  "add": "<path d=\"M12 5v14M5 12h14\"/>", "down": "<path d=\"m6 9 6 6 6-6\"/>", "right": "<path d=\"m9 6 6 6-6 6\"/>", "back": "<path d=\"m15 6-6 6 6 6\"/>",
+  "refresh": "<path d=\"M21 12a9 9 0 1 1-2.64-6.36\"/><path d=\"M21 3v6h-6\"/>", "crown": "<path d=\"m3 7 4.5 4L12 5l4.5 6L21 7l-1.5 11h-15z\"/><path d=\"M5 21h14\"/>",
+  "gift": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\"/><path d=\"M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\"/><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5\"/>",
+  "moon": "<path d=\"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z\"/>", "info": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 11v6M12 7.5h.01\"/>",
+  "users": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0\"/><path d=\"M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14a6.5 6.5 0 0 1 3.5 6\"/>",
+  "out": "<path d=\"M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4\"/><path d=\"M14 8l4 4-4 4M18 12H9\"/>", "text": "<path d=\"M4 7V5h11v2M9.5 5v14M7 19h5\"/><path d=\"M14 13v-1.5h6V13M17 11.5V19M15.5 19h3\"/>",
+  "globe": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18\"/>", "phone": "<rect x=\"6\" y=\"2.5\" width=\"12\" height=\"19\" rx=\"2.5\"/><path d=\"M11 18h2\"/>",
+  "book": "<path d=\"M4 5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2z\"/><path d=\"M4 20a2 2 0 0 0 2 1h13v-3\"/>", "chords": "<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>",
+  "calsm": "<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15.5\" rx=\"2.5\"/><path d=\"M16 3v4M8 3v4M3.5 10h17\"/>", "pin": "<path d=\"M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z\"/><circle cx=\"12\" cy=\"10\" r=\"2.5\"/>",
+  "bolt": "<path d=\"M13 2 4 14h7l-1 8 9-12h-7z\"/>", "music": "<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>", "cal": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"17\" rx=\"3\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/>", "heart": "<path d=\"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z\"/>", "help": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01\"/>", "plus": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"4\"/><path d=\"M12 8v8M8 12h8\"/>", "doc": "<path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5M9 13h6M9 17h4\"/>", "tools": "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "pulse": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M7 12h2l2-3 2 6 2-3h2\"/>"};
 function ico(n, cls){ return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + ICON[n] + '</svg>'; }
 /* ---------- home ---------- */
 function renderHome(banner){
   var sp = splitEvents(), live = sp.up.filter(function(e){ return !isCanceled(e); }), next = live[0], db = state.db, today = ymd(new Date());
   var tmw = new Date(); tmw.setDate(tmw.getDate() + 1);
-  var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length;
-  var h = banner;
+  var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length, mem = db.members || [];
+  var h = banner + '<div class="pagehead"><h2>Home</h2><button class="rbtn js-refresh' + (state.loading ? ' spin' : '') + '" id="homeRefresh" aria-label="Refresh" title="Refresh">' + ico("refresh") + '</button></div>';
   if(!isInstalled() && !ls("installHidden")) h += '<div class="card tip"><div style="flex:1"><b>Put the app on your home screen</b><div class="muted" style="font-size:13px">Then it opens like any other app, no link needed.</div></div><button class="btn small primary" id="instBtn">Show me how</button><button class="xclose" id="instHide" aria-label="Hide">×</button></div>';
   if(leader() && next && (next.date === today || next.date === ymd(tmw))) h += '<div class="card tip"><div style="flex:1"><b>' + (next.date === today ? 'Today' : 'Tomorrow') + ': ' + esc(next.title) + '</b><div class="muted" style="font-size:13px">Send the band a reminder with the set list.</div></div><button class="btn small primary" id="remBtn">Send reminder</button></div>';
-  var hero;
-  if(next){
-    hero = '<div class="hero"><div class="hero-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><div class="hero-t">' + esc(next.title) + '</div>' +
-      '<div class="hero-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="hero-s">' + esc(next.location) + '</div>' : '') +
-      '<div class="countdown" id="cd"></div>' +
-      '<div class="hero-btns">' + ((next.songs||[]).length ? '<button class="hero-b big" id="heroStart">▶ Start</button>' : '') + '<a class="hero-b ghost" href="#/e/' + encodeURIComponent(next.id) + '">Set list (' + (next.songs||[]).length + ')</a></div></div>';
-  } else {
-    hero = '<div class="hero"><div class="hero-k">Next up</div><div class="hero-t">Nothing planned yet</div><div class="hero-s">No upcoming events.</div>' + (leader() ? '<div class="hero-btns"><a class="hero-b big" href="#/new">+ Create event</a></div>' : '') + '</div>';
-  }
-  var noLyr = db.songs.filter(function(s){ return !s.hasLyrics; }).length;
-  h += '<div class="dash">' + hero + '<div class="dash-side">' +
-    '<a class="tile t-pink" href="#/songs?saved"><div class="tile-v">' + savedN + '</div><div class="tile-k">My saved songs</div><span class="tile-go">›</span></a>' +
-    '<a class="tile t-cream" href="#/songs"><div class="tile-v">' + db.songs.length + '</div><div class="tile-k">Songs' + (leader() && noLyr ? ' · ' + noLyr + ' need lyrics' : '') + '</div><span class="tile-go">›</span></a></div></div>';
-  function q(href, icon, label, id){ return '<a class="qtile" href="' + href + '"' + (id ? ' id="' + id + '"' : '') + '><span class="qicon">' + ico(icon) + '</span><span>' + label + '</span></a>'; }
-  h += '<div class="band"></div><div class="sec-title">' + ico("bolt", "ic sm") + 'Quick links</div><div class="quick">' +
-    (leader() ? q("#/new", "plus", "New<br>event") + q("#/newsong", "doc", "New<br>song") + q("#/songs", "music", "All<br>songs") + q("#/manage", "tools", "Leader<br>tools")
-              : q("#/songs", "music", "All<br>songs") + q("#/events", "cal", "All<br>events") + q("#/songs?saved", "heart", "Saved<br>songs") + q("#/help", "help", "How to<br>use")) + '</div><div class="band"></div>';
   var days = [], byDay = {};
   live.forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
   for(var i=0;i<14;i++){ var d = new Date(); d.setDate(d.getDate() + i); days.push(d); }
-  h += '<div class="sec-title">' + ico("cal", "ic sm") + 'Next two weeks</div><div class="week"><div class="week-row">' + days.map(function(d, i){
-    var k = ymd(d), evs = byDay[k] || [], href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : (leader() ? "#/new/" + k : "");
-    return '<' + (href ? 'a href="' + href + '"' : 'span') + ' class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></' + (href ? 'a' : 'span') + '>';
-  }).join("") + '</div></div><div class="band"></div>';
-  h += '<div class="sec-title">' + ico("pulse", "ic sm") + 'Coming up</div>' + (function(){ var rest = sp.up.filter(function(e){ return e !== next; }).slice(0, 5); return rest.length ? '<div class="songs">' + rest.map(evRow).join("") + '</div>' : '<div class="card empty">' + (next ? 'Nothing else planned after that.' : 'Nothing planned yet.') + '</div>'; })();
-  h += '<div class="foot">' + (leader() ? '<a href="#/manage">Leader tools</a> · <a href="javascript:void 0" id="soBtn">Leader sign out</a>' : '<a href="#/manage">Leader sign-in</a>') + ' · <a href="#/help">Help</a></div>';
+  var now = new Date();
+  h += '<div class="dash2">' +
+    '<a class="card teamcard" href="#/settings"><span class="pilltag">Current Team</span><div class="team-n">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + '</div>' +
+      '<div class="team-foot"><div class="team-s">' + db.songs.length + (db.songs.length === 1 ? ' song' : ' songs') + '</div>' + (mem.length ? avatars(mem, 4) : '') + '</div></a>' +
+    '<div class="dash-side">' +
+      '<div class="card datecard"><a class="dc-h" href="#/schedule">' + now.toLocaleDateString("en-US", { weekday:"short" }) + ' <b>' + now.getDate() + '</b></a><div class="week-row">' + days.map(function(d, i){
+        var k = ymd(d), evs = byDay[k] || [];
+        return '<a href="#/schedule/' + k + '" class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></a>';
+      }).join("") + '</div></div>' +
+      '<a class="card savedcard" href="#/songs?saved"><div class="sc-h">' + ico("heart", "ic heart-ic") + 'Saved Songs</div><div class="sc-row"><span class="sc-v">' + savedN + '</span><span class="sc-go">' + ico("right", "ic sm") + '</span></div></a>' +
+    '</div></div>';
+  h += '<div class="sec-h2">Upcoming</div>';
+  if(sp.up.length){
+    h += '<div class="songs">' + sp.up.slice(0, 6).map(homeEvRow).join("") + '</div>';
+  } else {
+    h += '<div class="nothing">' + ico("cal", "ic big") + '<b>Nothing planned yet</b><span>No events planned at the moment.</span>' + (leader() ? '<a class="btn primary" href="#/new" style="margin-top:14px">' + ico("add", "ic sm") + 'Create event</a>' : '') + '</div>';
+  }
   $("app").innerHTML = h;
+  $("homeRefresh").onclick = function(){ load(true); };
   if($("instBtn")) $("instBtn").onclick = function(){ showGuide(0); };
   if($("instHide")) $("instHide").onclick = function(){ ls("installHidden", true); renderHome(banner); };
   if($("remBtn")) $("remBtn").onclick = function(){ shareEvent(next); };
-  if($("heroStart")) $("heroStart").onclick = function(){ startStage(next); };
-  if(next) startCountdown(next);
-  if($("soBtn")) $("soBtn").onclick = signOut;
+}
+
+/* ---------- band schedule: month calendar + that day's events ---------- */
+function renderSchedule(banner){
+  var today = ymd(new Date()), sel = state.schedSel || today;
+  var p = sel.split("-"), selD = new Date(+p[0], +p[1]-1, +p[2]);
+  var mo = state.schedMonth && state.schedMonth.slice(0, 7) === sel.slice(0, 7) || state.schedMonthFree ? state.schedMonth : sel.slice(0, 7) + "-01";
+  state.schedMonth = mo; state.schedMonthFree = false;
+  var mp = mo.split("-"), first = new Date(+mp[0], +mp[1]-1, 1), daysIn = new Date(+mp[0], +mp[1], 0).getDate();
+  var byDay = {};
+  (state.events || []).forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
+  var lead = (first.getDay() + 6) % 7, cells = "";
+  for(var i=0;i<lead;i++) cells += '<span></span>';
+  for(var d=1; d<=daysIn; d++){
+    var k = ymd(new Date(first.getFullYear(), first.getMonth(), d)), evs = byDay[k] || [], live = evs.filter(function(e){ return !isCanceled(e); });
+    cells += '<button class="cday' + (k === today ? ' today' : '') + (k === sel ? ' sel' : '') + (evs.length ? ' has' : '') + (evs.length && !live.length ? ' canc' : '') + '" data-day="' + k + '"><b>' + d + '</b><i></i></button>';
+  }
+  var dayEvs = (byDay[sel] || []).slice().sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; });
+  var h = banner + '<div class="pagehead" style="justify-content:flex-start;gap:14px"><a class="rbtn" href="#/" aria-label="Back to Home">' + ico("back") + '</a><h2 style="font-size:22px">Band Schedule</h2></div>' +
+    '<div class="card cal"><div class="cal-h"><b>' + first.toLocaleDateString("en-US", { month:"long", year:"numeric" }) + '</b><span><button class="cal-nav" id="calPrev" aria-label="Previous month">' + ico("back", "ic sm") + '</button><button class="cal-nav" id="calNext" aria-label="Next month">' + ico("right", "ic sm") + '</button></span></div>' +
+    '<div class="cal-grid cal-wd">' + ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(function(w){ return '<span>' + w + '</span>'; }).join("") + '</div>' +
+    '<div class="cal-grid">' + cells + '</div>' +
+    (mo.slice(0, 7) !== today.slice(0, 7) || sel !== today ? '<button class="linkbtn" id="calToday" style="margin:6px auto 0;display:flex">Today</button>' : '') + '</div>';
+  h += '<div class="sec-h2" style="font-size:20px">' + selD.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" }) + '</div>';
+  if(dayEvs.length) h += '<div class="songs">' + dayEvs.map(homeEvRow).join("") + '</div>';
+  else h += '<div class="card empty" style="padding:20px">Nothing planned for the band this day.</div>';
+  if(leader()){
+    var tpl = '<div class="sec-h2" style="font-size:15px;color:var(--muted);margin-top:22px">Quick event on this date</div><div class="glist">';
+    [["Service","19:00"],["Rehearsal","19:00"],["Wedding","15:00"],["Other",""]].forEach(function(t){
+      tpl += '<button class="grow qev" data-qt="' + t[0] + '" data-qtime="' + t[1] + '"><span class="gl">New ' + (t[0] === "Other" ? 'event' : t[0].toLowerCase()) + '</span>' + (t[1] ? '<span class="gr">' + fmtTime(t[1]) + '</span>' : '') + '<span class="gchev">' + ico("right", "ic sm") + '</span></button>';
+    });
+    h += tpl + '</div>';
+  }
+  $("app").innerHTML = h;
+  document.querySelectorAll("[data-day]").forEach(function(b){ b.onclick = function(){ state.schedSel = b.getAttribute("data-day"); history.replaceState(null, "", "#/schedule/" + state.schedSel); renderSchedule(banner); }; });
+  function shift(n){ var x = new Date(first.getFullYear(), first.getMonth() + n, 1); state.schedMonth = ymd(x); state.schedMonthFree = true; renderSchedule(banner); }
+  $("calPrev").onclick = function(){ shift(-1); };
+  $("calNext").onclick = function(){ shift(1); };
+  if($("calToday")) $("calToday").onclick = function(){ state.schedSel = today; state.schedMonth = ""; history.replaceState(null, "", "#/schedule"); renderSchedule(banner); };
+  document.querySelectorAll("[data-qt]").forEach(function(b){ b.onclick = function(){
+    var type = b.getAttribute("data-qt");
+    state.draft = { id:"", title: type === "Other" ? "" : type, type: type, date: sel, time: b.getAttribute("data-qtime"), location:"", notes:"", songs:[], players:[] };
+    state.draftKey = "new" + sel; state.pick = "";
+    location.hash = "#/new/" + sel;
+  }; });
 }
 
 /* ---------- countdown to the next event ---------- */
@@ -1384,29 +1679,42 @@ function evFiltered(f){
 }
 function evSheetCount(f){ return f.types.length + (f.when !== "any" ? 1 : 0) + (f.sort ? 1 : 0) + (f.hideCanceled ? 1 : 0); }
 function renderEvents(banner){
-  var f = state.ef, list = evFiltered(f), n = evSheetCount(f);
-  var views = [["upcoming","Upcoming"],["past","Past"],["all","All"]];
+  var f = state.ef, n = evSheetCount(f), flat = !!(n || state.evQ), list = evFiltered(f);
   var chips = [];
   f.types.forEach(function(t){ chips.push('<button class="fchip" data-rm-type="' + esc(t) + '">' + esc(t) + ' <b>×</b></button>'); });
   if(f.when !== "any") chips.push('<button class="fchip" data-rm-when="1">' + WHENS[f.when] + ' <b>×</b></button>');
   if(f.sort) chips.push('<button class="fchip" data-rm-esort="1">' + ESORTS[f.sort] + ' <b>×</b></button>');
   if(f.hideCanceled) chips.push('<button class="fchip" data-rm-canc="1">Hiding canceled <b>×</b></button>');
   if(chips.length > 1) chips.push('<button class="fchip clear" id="efClearAll">Clear all</button>');
-  var h = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Events</h2></div>' +
+  var h = banner + '<div class="pagehead"><h2>Events</h2>' + (leader() ? '<a class="rbtn" href="#/new" aria-label="New event" title="New event">' + ico("add") + '</a>' : '') + '</div>' +
     '<div class="search has-filter' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-    '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button>' +
+    '<input id="eq" type="search" placeholder="Search events" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button>' +
     '<button class="fbtn' + (n ? ' on' : '') + '" id="efOpen" aria-label="Filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>' + (n ? '<i>' + n + '</i>' : '') + '</button></div>' +
-    '<div class="seg">' + views.map(function(v){ return '<button class="' + (f.view === v[0] ? 'on' : '') + '" data-ev="' + v[0] + '">' + v[1] + '</button>'; }).join("") + '</div>' +
     (chips.length ? '<div class="fchips">' + chips.join("") + '</div>' : '');
-  if(!list.length) h += '<div class="card empty">' + (n || state.evQ ? 'No events match.' : f.view === "upcoming" ? 'Nothing planned yet.' + (leader() ? ' Tap + to add an event.' : '') : f.view === "past" ? 'No past events yet.' : 'No events yet.') + '</div>';
-  else h += '<div class="songs">' + list.map(evRow).join("") + '</div>';
+  var next = null;
+  if(flat){
+    h += '<div class="count">' + list.length + (list.length === 1 ? ' event' : ' events') + '</div>';
+    h += list.length ? '<div class="songs">' + list.map(evRow).join("") + '</div>' : '<div class="card empty">No events match.</div>';
+  } else {
+    var sp = splitEvents(), live = sp.up.filter(function(e){ return !isCanceled(e); });
+    next = live[0];
+    h += nextCard(next, "You don't have any events planned.");
+    var rest = sp.up.filter(function(e){ return e !== next; });
+    if(rest.length) h += '<div class="sec-h2">Upcoming</div><div class="songs">' + rest.map(evRow).join("") + '</div>';
+    if(sp.past.length){
+      var showN = state.pastAll ? sp.past.length : 10;
+      h += '<div class="sec-h2">Past Events</div><div class="songs">' + sp.past.slice(0, showN).map(evRow).join("") + '</div>' +
+        (sp.past.length > showN ? '<button class="btn" id="pastMore" style="width:100%;margin-top:10px">Show all ' + sp.past.length + ' past events</button>' : '');
+    }
+  }
   $("app").innerHTML = h;
+  if(next){ startCountdown(next); if($("heroStart")) $("heroStart").onclick = function(){ startStage(next); }; }
+  if($("pastMore")) $("pastMore").onclick = function(){ state.pastAll = true; renderEvents(banner); };
   var eq = $("eq");
   eq.oninput = function(){ state.evQ = eq.value; var pos = eq.selectionStart; renderEvents(banner); var e2 = $("eq"); e2.focus(); try{ e2.setSelectionRange(pos,pos); }catch(e){} };
   $("eqx").onclick = function(){ state.evQ = ""; renderEvents(banner); };
   $("efOpen").onclick = function(){ openEventFilters(banner); };
   function save(){ ls("ef", state.ef); renderEvents(banner); }
-  document.querySelectorAll("[data-ev]").forEach(function(b){ b.onclick = function(){ f.view = b.getAttribute("data-ev"); save(); }; });
   document.querySelectorAll("[data-rm-type]").forEach(function(b){ b.onclick = function(){ f.types = f.types.filter(function(x){ return x !== b.getAttribute("data-rm-type"); }); save(); }; });
   document.querySelectorAll("[data-rm-when]").forEach(function(b){ b.onclick = function(){ f.when = "any"; save(); }; });
   document.querySelectorAll("[data-rm-esort]").forEach(function(b){ b.onclick = function(){ f.sort = ""; save(); }; });
@@ -1423,7 +1731,7 @@ function openEventFilters(banner){
       '<div class="sheet-h">Type</div><div class="gchips">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.types.indexOf(t) >= 0 ? ' on' : '') + '" data-ty="' + t + '">' + t + ' <span class="muted" style="font-size:12px">' + cnt(t) + '</span></button>'; }).join("") + '</div>' +
       '<div class="sheet-h">When</div><div class="seg">' + Object.keys(WHENS).map(function(k){ return '<button class="' + (d.when === k ? 'on' : '') + '" data-wh="' + k + '">' + WHENS[k] + '</button>'; }).join("") + '</div>' +
       '<div class="sheet-h">Sort by date</div><div class="seg"><button class="' + (!d.sort ? 'on' : '') + '" data-es="">Automatic</button>' + Object.keys(ESORTS).map(function(k){ return '<button class="' + (d.sort === k ? 'on' : '') + '" data-es="' + k + '">' + ESORTS[k] + '</button>'; }).join("") + '</div>' +
-      '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: upcoming events soonest first, past events most recent first.</div>' +
+      '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: newest date first when you search or filter.</div>' +
       '<label class="switch-row"><span>Hide canceled events</span><input type="checkbox" id="efHide"' + (d.hideCanceled ? ' checked' : '') + '><i></i></label>' +
       '</div><div class="sheet-foot"><button class="btn" id="efClear">Clear all</button><button class="btn primary" id="efGo">Show ' + evFiltered(d).length + ' events</button></div></div>';
     ov.querySelectorAll("[data-ty]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-ty"), i = d.types.indexOf(t); if(i >= 0) d.types.splice(i, 1); else d.types.push(t); draw(); }; });
@@ -1440,37 +1748,46 @@ function openEventFilters(banner){
 }
 
 /* ---------- one event ---------- */
+function eventPayload(e, songs){
+  return { id: e.id, title: String(e.title || "").trim(), type: e.type, date: e.date, time: e.time, location: String(e.location || "").trim(), notes: e.notes || "", players: [], status: e.status || "", statusNote: e.statusNote || "",
+    songs: (songs || e.songs || []).map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
+}
+function subHead(back, title, right){
+  return '<div class="subhead"><a class="sbback" href="' + back + '" aria-label="Back">' + ico("back") + '</a><h2>' + esc(title) + '</h2>' + (right || '') + '</div>';
+}
 function renderEvent(id, banner){
   var e = findEvent(id);
-  if(!e){ $("app").innerHTML = banner + '<div class="card empty">This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a></div>'; return; }
-  var items = e.songs || [];
+  if(!e){ $("app").innerHTML = banner + subHead("#/events", "Event") + '<div class="card empty">This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a></div>'; return; }
+  var items = e.songs || [], d = evDate(e);
   var MAP = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(e.location || "");
-  var h = banner + '<div class="card song-head">' +
-    '<div class="backrow"><a class="ibtn" href="#/events" style="text-decoration:none">‹ Events</a><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' +
-      '<button class="ibtn" id="evShare">Share</button>' +
-      (leader() ? '<button class="ibtn" id="evDup">Copy</button><a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '/edit" style="text-decoration:none">Edit</a>' : '') + '</div></div>' +
-    (isCanceled(e) ? '<div class="cancel-box"><b>This event was canceled.</b>' + (e.statusNote ? '<div>' + esc(e.statusNote) + '</div>' : '') + '</div>' : '') +
-    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span>' : '') +
-    '<h1 style="margin-top:8px"' + (isCanceled(e) ? ' class="struck"' : '') + '>' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span>' +
-    (e.location ? '<a class="loc" href="' + esc(MAP) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' + esc(e.location) + '</a>' : '') + '<span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
-    (e.notes ? '<div class="ev-notes">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>' : '') +
-    (items.length && !isCanceled(e) ? '<button class="btn primary big" style="margin-top:14px" id="evStart">▶ Start rehearsal</button>' : '') +
-    (leader() ? '<div class="ev-admin">' + (isCanceled(e) ? '<button class="btn" id="evUncancel">Undo cancel</button><button class="btn primary" id="evTell">Tell the band</button>' : '<button class="btn danger" id="evCancel">Cancel event</button>') + '</div>' : '') + '</div>';
-  h += '<div class="sec-title">Set list</div>';
-  if(!items.length) h += '<div class="card empty">No songs yet.' + (leader() ? ' Tap Edit to add the set list.' : '') + '</div>';
-  else h += '<div class="songs">' + items.map(function(it, i){
-    var s = songFor(it), bits = [], k = s && s.key ? keyName(s.key, 0) : "";
-    if(k) bits.push('<span class="pill">' + esc(k) + '</span>');
-    if(s && s.bpm) bits.push('<span class="pill">' + s.bpm + ' bpm</span>');
-    return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
-      (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : (s.artist && s.type === "Cover" ? '<div class="s">' + esc(s.artist) + '</div>' : '')) +
-      '</div><div class="pills">' + bits.join("") + '</div></a>';
-  }).join("") + '</div>';
+  var when = (e.time ? fmtTime(e.time) + " • " : "") + (d ? d.toLocaleDateString("en-US", { weekday:"short", day:"numeric", month:"long" }) : e.date);
+  var acts = '<div class="hpill"><button id="evShare" aria-label="Share" title="Share">' + ico("share") + '</button>' + (leader() ? '<button id="evMore" aria-label="More" title="More">' + ico("tools") + '</button>' : '') + '</div>';
+  var h = banner + subHead("#/events", "Event", acts) +
+    '<div class="bluecard evhero' + (isCanceled(e) ? ' canc' : '') + '"><div class="evh-top"><span class="whenpill">' + esc(when) + '</span>' + (e.type ? '<span class="typepill">' + esc(e.type) + '</span>' : '') + '</div>' +
+      '<div class="evh-bottom">' + (isCanceled(e) ? '<span class="cancpill">Canceled</span>' : '') + '<div class="bc-t' + (isCanceled(e) ? ' struck' : '') + '">' + esc(e.title) + '</div>' +
+      (e.location ? '<a class="evh-loc" href="' + esc(MAP) + '" target="_blank" rel="noopener">' + ico("pin", "ic xs") + esc(e.location) + '</a>' : '') + '</div></div>' +
+    '<div class="evbtns"><a class="evbtn" href="#/e/' + encodeURIComponent(e.id) + '/setlist">' + ico("list") + 'See Setlist' + (items.length ? ' <span class="cnt">' + items.length + '</span>' : '') + '</a>' +
+      (items.length && !isCanceled(e) ? '<button class="evbtn primary" id="evStart">' + ico("play") + 'Start Event</button>' : '<span class="evbtn primary off">' + ico("play") + 'Start Event</span>') + '</div>';
+  if(isCanceled(e)) h += '<div class="cancel-box" style="margin-top:14px"><b>This event was canceled.</b>' + (e.statusNote ? '<div>' + esc(e.statusNote) + '</div>' : '') + '</div>';
+  if(!items.length && leader() && !isCanceled(e)) h += '<a class="card addrow2" href="#/e/' + encodeURIComponent(e.id) + '/setlist">' + ico("add") + 'Add the set list</a>';
+  if(e.notes) h += '<div class="sec-h2">Notes</div><div class="card notescard">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>';
+  if(leader()) h += '<div class="sec-h2">Leader</div><div class="glist">' +
+    '<a class="grow" href="#/e/' + encodeURIComponent(e.id) + '/edit"><span class="gi">' + ico("edit") + '</span><span class="gl">Edit details</span><span class="gchev">' + ico("right", "ic sm") + '</span></a>' +
+    '<button class="grow" id="evDup"><span class="gi">' + ico("copy") + '</span><span class="gl">Copy to next week</span><span class="gchev">' + ico("right", "ic sm") + '</span></button>' +
+    (isCanceled(e) ? '<button class="grow" id="evTell"><span class="gi">' + ico("share") + '</span><span class="gl">Tell the band it\'s canceled</span></button><button class="grow" id="evUncancel"><span class="gi">' + ico("refresh") + '</span><span class="gl">Undo cancel</span></button>'
+                   : '<button class="grow danger" id="evCancel"><span class="gi">' + ico("x") + '</span><span class="gl">Cancel event</span></button>') + '</div>';
   $("app").innerHTML = h; scrollTop();
   $("evShare").onclick = function(){ shareEvent(e); };
+  if($("evMore")) $("evMore").onclick = function(){
+    openMenu("Event", [{ id: "edit", label: "Edit details" }, { id: "setlist", label: "Edit set list" }, { id: "copy", label: "Copy to next week" }], function(k){
+      if(k === "edit") location.hash = "#/e/" + encodeURIComponent(e.id) + "/edit";
+      else if(k === "setlist") location.hash = "#/e/" + encodeURIComponent(e.id) + "/setlist";
+      else $("evDup").click();
+    });
+  };
   function setStatus(status, note, btn){
-    btn.disabled = true; btn.textContent = "Saving...";
-    var payload = JSON.parse(JSON.stringify(e)); payload.status = status; payload.statusNote = note || "";
+    btn.disabled = true; btn.querySelector(".gl").textContent = "Saving...";
+    var payload = eventPayload(e); payload.status = status; payload.statusNote = note || "";
     send("save", state.pin, payload).then(function(r){
       if(r && r.ok) return load(true).then(function(){ if(status === "canceled" && confirm("Event canceled. Send the band a message about it now?")) shareEvent(findEvent(e.id) || payload); });
       if(r && r.error === "wrong_pin") return wrongPin();
@@ -1493,6 +1810,79 @@ function renderEvent(id, banner){
   };
 }
 
+/* ---------- set list of an event (its own page; leaders edit it here) ---------- */
+function renderSetlist(id, banner){
+  var e = findEvent(id), back = "#/e/" + encodeURIComponent(id);
+  if(!e){ $("app").innerHTML = banner + subHead("#/events", "Setlist") + '<div class="card empty">This event was not found.</div>'; return; }
+  var lead = leader();
+  if(lead && (!state.sl || state.sl.id !== id)){ state.sl = { id: id, songs: JSON.parse(JSON.stringify(e.songs || [])), dirty: false }; state.pick = ""; state.slAdd = false; }
+  var sl = state.sl, items = lead ? sl.songs : (e.songs || []);
+  var h = banner + subHead(back, "Setlist", lead ? '<button class="savebtn' + (sl.dirty ? ' on' : '') + '" id="slSave" aria-label="Save set list" title="Save set list">' + ico("save") + '</button>' : (items.length && !isCanceled(e) ? '<button class="savebtn on" id="slStart" aria-label="Start">' + ico("play") + '</button>' : ''));
+  h += '<div class="sl-ev">' + esc(e.title) + ' · ' + esc(shortWhen(e)) + '</div><div id="slMsg"></div>';
+  if(lead){
+    h += state.slAdd ? '<div class="card picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+        '<input id="pickQ" type="search" placeholder="Type a song title or lyrics" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div>' +
+        '<button class="linkbtn" id="slDone" style="margin:10px auto 0;display:flex">Done adding</button></div>'
+      : '<button class="card addrow2" id="slAdd">' + ico("add") + 'Add Songs</button>';
+  }
+  h += '<div id="selList" style="margin-top:12px"></div>';
+  $("app").innerHTML = h;
+  function mark(){ sl.dirty = true; var b = $("slSave"); if(b) b.classList.add("on"); }
+  function drawSel(){
+    if(!items.length){ $("selList").innerHTML = '<div class="card empty" style="padding:20px">' + (lead ? 'No songs yet. Tap Add Songs to build the set list.' : 'No songs in this set list yet.') + '</div>'; return; }
+    $("selList").innerHTML = '<div class="songs">' + items.map(function(it, i){
+      var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : "";
+      var chips = (k ? '<span class="kchip">' + esc(k) + '</span>' : '') + (s && s.bpm ? '<span class="kchip">' + s.bpm + ' bpm</span>' : '');
+      if(!lead) return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
+        (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : '<div class="s chips">' + (s.artist ? '<span class="sub">' + esc(s.artist) + '</span>' : '') + chips + '</div>') + '</div></a>';
+      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><a class="t" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '" style="color:inherit;text-decoration:none">' + esc(s ? s.title : it.title) + '</a> ' + chips +
+        '<div class="sel-in"><input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
+        '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === items.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
+    }).join("") + '</div>';
+    document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ items[+x.getAttribute("data-note")].note = x.value; mark(); }; });
+    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = items[i-1]; items[i-1] = items[i]; items[i] = t; mark(); drawSel(); }; });
+    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = items[i+1]; items[i+1] = items[i]; items[i] = t; mark(); drawSel(); }; });
+    document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ items.splice(+x.getAttribute("data-rm"), 1); mark(); drawSel(); drawPick(); }; });
+  }
+  function drawPick(){
+    if(!$("pickRes")) return;
+    var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
+    if(!q){ $("pickRes").innerHTML = '<div class="muted" style="padding:10px 2px 0;font-size:14px">Start typing to find a song.</div>'; return; }
+    items.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
+    var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
+      .sort(function(a,b){ var at = a.titleN.indexOf(q) === 0 ? 0 : 1, bt = b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, 12);
+    $("pickRes").innerHTML = res.map(function(s){
+      var lp = lastPlayed(s.id);
+      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
+        (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
+    }).join("") + (!res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
+    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); items.push({ id: s.id, title: s.title, note: "", key: "" }); mark(); clearPick(); drawSel(); drawPick(); }; });
+    if($("addFree")) $("addFree").onclick = function(){ items.push({ id:"", title: state.pick.trim(), note:"", key:"" }); mark(); clearPick(); drawSel(); drawPick(); };
+  }
+  function clearPick(){ state.pick = ""; var q = $("pickQ"); q.value = ""; q.parentNode.classList.remove("has"); q.focus(); }
+  drawSel();
+  if($("slStart")) $("slStart").onclick = function(){ startStage(e); };
+  if(!lead) return;
+  if($("slAdd")) $("slAdd").onclick = function(){ state.slAdd = true; renderSetlist(id, banner); $("pickQ").focus(); };
+  if($("slDone")) $("slDone").onclick = function(){ state.slAdd = false; state.pick = ""; renderSetlist(id, banner); };
+  if($("pickQ")){
+    $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
+    $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
+    drawPick();
+  }
+  document.querySelector(".sbback").onclick = function(ev){ if(sl.dirty && !confirm("Leave without saving the set list?")) ev.preventDefault(); };
+  $("slSave").onclick = function(){
+    var b = this;
+    b.disabled = true; b.classList.add("spin");
+    send("save", state.pin, eventPayload(e, items)).then(function(r){
+      if(r && r.ok){ state.sl = null; return load(true).then(function(){ if(location.hash === "#/e/" + encodeURIComponent(id) + "/setlist"){ renderSetlist(id, banner); $("slMsg").innerHTML = '<div class="banner ok">Set list saved.</div>'; } }); }
+      b.disabled = false; b.classList.remove("spin");
+      if(r && r.error === "wrong_pin") return wrongPin();
+      $("slMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
+    }).catch(function(x){ b.disabled = false; b.classList.remove("spin"); $("slMsg").innerHTML = '<div class="banner bad">Could not reach the server (' + esc(x.message) + '). Try again.</div>'; });
+  };
+}
+
 /* ---------- add / edit an event ---------- */
 function keySelect(cls, val, data){
   var o = '<option value="">Song key</option>';
@@ -1502,74 +1892,40 @@ function keySelect(cls, val, data){
 }
 function renderEditor(id, newDate, banner){
   var e = id ? findEvent(id) : null;
-  if(id && !e){ $("app").innerHTML = banner + '<div class="card empty">This event was not found.</div>'; return; }
+  if(id && !e){ $("app").innerHTML = banner + subHead("#/events", "Edit Event") + '<div class="card empty">This event was not found.</div>'; return; }
   var key = id || "new" + (newDate || "");
   if(!state.draft || (state.draftKey !== key && !(state.draftKey === "new" && !id))){
     state.draftKey = key;
     state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type:"Service", date: newDate || ymd(new Date()), time:"19:00", location:"", notes:"", songs:[], players:[] };
-    state.pick = "";
   }
-  var d = state.draft; d.players = d.players || [];
-  var h = banner + '<div class="card song-head editor">' +
-    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/e/' + encodeURIComponent(id) : '#/events') + '" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit event' : 'New event') + '</span></div>' +
-    '<label>Event name<input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="e.g. Sunday service, Boda | Rene Mena"></label>' +
-    '<div class="row2"><label>Type<select id="fType">' + EV_TYPES.map(function(t){ return '<option' + (d.type === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label>' +
-    '<label>Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label>Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
-    '<label>Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="e.g. Rey de Reyes church, San Antonio"></label>' +
-    '<label>Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label></div>';
-  h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div>';
-  h += '<div class="card song-head picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-    '<input id="pickQ" type="search" placeholder="Add a song: type a title" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div></div>';
-  h += '<div id="selList" style="margin-top:10px"></div>';
-  h += '<div class="card song-head" style="margin-top:10px"><div id="edMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="edSave">Save event</button>' + (id ? '<button class="btn danger" id="edDel">Delete event</button>' : '') + '</div></div>';
+  var d = state.draft, copying = !id && (d.songs || []).length;
+  var h = banner + subHead(id ? '#/e/' + encodeURIComponent(id) : '#/events', id ? "Edit Event" : "Create Event") +
+    '<div class="form">' +
+    '<label class="fl">Name <i>*</i><input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="Sunday Service"></label>' +
+    '<div class="fl">Type</div><div class="gchips" id="fTypes">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.type === t ? ' on' : '') + '" data-type="' + t + '">' + t + '</button>'; }).join("") + '</div>' +
+    '<label class="fl">Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="Rey de Reyes church, San Antonio"></label>' +
+    '<div class="frow"><label class="fl">Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label class="fl">Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
+    '<label class="fl">Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label>' +
+    (copying ? '<div class="muted" style="font-size:14px;margin-top:14px">The set list (' + d.songs.length + ' songs) is copied too. You can change it after saving.</div>' : !id ? '<div class="muted" style="font-size:14px;margin-top:14px">You add the set list after the event is created.</div>' : '') +
+    '<div id="edMsg" style="margin-top:14px"></div>' +
+    (id ? '<div class="glist" style="margin-top:18px"><button class="grow danger" id="edDel"><span class="gi">' + ico("x") + '</span><span class="gl">Delete event</span></button></div>' : '') +
+    '</div><div class="savebar"><button class="btn primary big" id="edSave">Save Event</button></div>';
   $("app").innerHTML = h;
   function bind(idn, k){ $(idn).oninput = $(idn).onchange = function(){ d[k] = this.value; }; }
-  bind("fTitle", "title"); bind("fType", "type"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes"); bind("fLoc", "location");
-  function drawSel(){
-    $("selCount").textContent = d.songs.length ? "(" + d.songs.length + ")" : "";
-    $("selList").innerHTML = d.songs.length ? '<div class="muted" style="font-size:12px;margin:0 2px 6px">In this set (' + d.songs.length + ')</div><div class="songs">' + d.songs.map(function(it, i){
-      var s = songFor(it);
-      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="pill">' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
-        '<div class="sel-in"><input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
-        '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === d.songs.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
-    }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search above to add them in order.</div>';
-    document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ d.songs[+x.getAttribute("data-note")].note = x.value; }; });
-    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
-    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = d.songs[i+1]; d.songs[i+1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
-    document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ d.songs.splice(+x.getAttribute("data-rm"), 1); drawSel(); drawPick(); }; });
-  }
-  function drawPick(){
-    var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
-    if(!q){ $("pickRes").innerHTML = ""; return; }   // no suggestions until something is typed
-    d.songs.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
-    var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
-      .sort(function(a,b){ var at = words.length && a.titleN.indexOf(q) === 0 ? 0 : 1, bt = words.length && b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, q ? 12 : 6);
-    $("pickRes").innerHTML = res.map(function(s){
-      var lp = lastPlayed(s.id);
-      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
-        (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
-    }).join("") + (q && !res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
-    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "", key: "" }); clearPick(); drawSel(); drawPick(); }; });
-    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"", key:"" }); clearPick(); drawSel(); drawPick(); };
-  }
-  function clearPick(){ state.pick = ""; var q = $("pickQ"); q.value = ""; q.parentNode.classList.remove("has"); q.focus(); }
-  $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
-  $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
-  drawSel(); drawPick();
-  function msg(t){ $("edMsg").innerHTML = t ? '<div class="banner bad" style="margin:0 0 10px">' + t + '</div>' : ''; }
+  bind("fTitle", "title"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes"); bind("fLoc", "location");
+  document.querySelectorAll("[data-type]").forEach(function(b){ b.onclick = function(){ d.type = b.getAttribute("data-type"); document.querySelectorAll("[data-type]").forEach(function(x){ x.classList.toggle("on", x === b); }); }; });
+  function msg(t){ $("edMsg").innerHTML = t ? '<div class="banner bad" style="margin:0">' + t + '</div>' : ''; }
   $("edSave").onclick = function(){
     var b = this;
     if(!d.title.trim()) return msg("Give the event a name.");
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.");
     b.disabled = true; b.textContent = "Saving...";
-    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: [], status: d.status || "", statusNote: d.statusNote || "",
-      songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
-    send("save", state.pin, payload).then(function(r){
+    send("save", state.pin, eventPayload(d)).then(function(r){
       if(r && r.ok){ state.draft = null; state.draftKey = ""; return load(true).then(function(){ location.hash = "#/e/" + encodeURIComponent(r.id); }); }
-      b.disabled = false; b.textContent = "Save event";
+      b.disabled = false; b.textContent = "Save Event";
       if(r && r.error === "wrong_pin") return wrongPin();
       msg("Could not save (" + esc((r && r.error) || "unknown") + ").");
-    }).catch(function(x){ b.disabled = false; b.textContent = "Save event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again."); });
+    }).catch(function(x){ b.disabled = false; b.textContent = "Save Event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again."); });
   };
   if($("edDel")) $("edDel").onclick = function(){
     if(!confirm('Delete "' + d.title + '"? This removes it for everyone.')) return;
@@ -1680,7 +2036,7 @@ function renderManage(banner){
       items.map(function(it){ var name = it.name || it; return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(name) + '</b>' + (it.year ? ' <span class="muted">' + esc(it.year) + '</span>' : '') + ' <span class="muted" style="font-size:12px">· ' + count(field, name) + ' songs</span></div>' +
         '<button class="btn small" data-ren="' + kind + '" data-name="' + esc(name) + '">Rename</button><button class="btn small danger" data-del="' + kind + '" data-name="' + esc(name) + '">Delete</button></div>'; }).join("") + '</div>';
   }
-  var h = banner + '<div class="pagehead"><h2>Leader tools</h2><button class="ibtn" id="mSignOut">Sign out</button></div><div id="mMsg"></div>' +
+  var h = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Leader tools</h2><button class="ibtn" id="mSignOut">Sign out</button></div><div id="mMsg"></div>' +
     '<div class="card block"><h2>Band members <span class="muted" style="font-size:14px">(' + (db.members || []).length + ')</span></h2>' +
     '<div class="addrow"><input id="addMembers" placeholder="Name"><input id="addInst" placeholder="Plays (e.g. guitar, vocals)"><button class="btn small primary" data-addk="Members">+ Add</button></div>' +
     (db.members || []).map(function(m){ return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(m.name) + '</b> <span class="muted">' + esc(m.instruments || "") + '</span></div>' +
@@ -1730,6 +2086,67 @@ function renderManage(banner){
     var m = db.members.filter(function(x){ return x.id === b.getAttribute("data-mdel"); })[0];
     if(m && confirm("Remove " + m.name + " from the band list?")) op({ kind: "Members", op: "delete", id: m.id }, "Removed " + m.name + ".");
   }; });
+}
+
+/* ---------- settings ---------- */
+function appLink(){ return location.href.split("#")[0]; }
+function inviteBand(){
+  var text = "Rey de Reyes Songbook: songs, set lists and rehearsal mode for the band.\n" + appLink();
+  if(navigator.share){ navigator.share({ text: text }).catch(function(){}); return; }
+  window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+}
+function renderSettings(banner){
+  var db = state.db, mem = db.members || [], dark = document.documentElement.classList.contains("dark");
+  function row(o){
+    var inner = '<span class="gi">' + ico(o.icon) + '</span><span class="gl">' + o.label + '</span>' + (o.right != null ? '<span class="gr"' + (o.rightId ? ' id="' + o.rightId + '"' : '') + '>' + o.right + '</span>' : '') +
+      (o.toggle != null ? '<span class="tog' + (o.toggle ? ' on' : '') + '"><i></i></span>' : o.stepper ? '' : '<span class="gchev">' + ico("right", "ic sm") + '</span>');
+    if(o.href) return '<a class="grow" href="' + o.href + '">' + inner + '</a>';
+    if(o.stepper) return '<div class="grow">' + inner + o.stepper + '</div>';
+    return '<button class="grow' + (o.cls ? ' ' + o.cls : '') + '" id="' + o.id + '"' + (o.toggle != null ? ' role="switch" aria-checked="' + !!o.toggle + '"' : '') + '>' + inner + '</button>';
+  }
+  var h = banner + '<div class="pagehead"><h2>Settings</h2></div>';
+  h += '<div class="sec-row"><span class="sec-h2" style="margin:0">Team</span>' + (mem.length ? '<button class="linkbtn" id="stTeam">' + (state.showTeam ? 'Hide' : 'Members') + ico(state.showTeam ? "down" : "right", "ic xs") + '</button>' : '') + '</div>' +
+    '<div class="card teamrow"><div style="flex:1;min-width:0"><div class="team-n" style="margin:0">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + ' · ' + db.songs.length + ' songs</div></div>' + (mem.length ? avatars(mem, 3) : '') + '</div>';
+  if(state.showTeam && mem.length) h += '<div class="glist" style="margin-top:10px">' + mem.map(function(m){ return '<div class="grow"><span class="av">' + esc(initials(m.name)) + '</span><span class="gl">' + esc(m.name) + '</span><span class="gr">' + esc(m.instruments || "") + '</span></div>'; }).join("") + '</div>';
+  h += '<div class="glist" style="margin-top:14px">' +
+    row({ href: "#/manage", icon: "crown", label: leader() ? "Leader tools" : "Leader sign-in", right: leader() ? "LEADER" : "MEMBER" }) +
+    row({ id: "stInvite", icon: "gift", label: "Invite the band" }) + '</div>';
+  h += '<div class="sec-h2">Personal</div><div class="glist">' +
+    row({ id: "stDark", icon: "moon", label: "Dark Mode", toggle: dark }) +
+    row({ id: "stChords", icon: "chords", label: "Show chords", toggle: state.chords }) +
+    row({ icon: "text", label: "Lyrics text size", stepper: '<span class="step"><button id="stSm" aria-label="Smaller">A−</button><b>' + state.size + '</b><button id="stBg" aria-label="Bigger">A+</button></span>' }) +
+    row({ id: "stLang", icon: "globe", label: "Guide language", right: state.lang === "es" ? "Español" : "English" }) + '</div>';
+  h += '<div class="sec-h2">General</div><div class="glist">' +
+    row({ id: "stSync", icon: "refresh", label: "Refresh songs", right: esc(statusText()), rightId: "syncVal", cls: "js-refresh" + (state.loading ? " spin" : "") }) +
+    (isInstalled() ? '' : row({ id: "stInstall", icon: "phone", label: "Add to Home screen" })) +
+    row({ id: "stGuide", icon: "book", label: "Quick guide" }) +
+    row({ href: "#/help", icon: "help", label: "Help Center" }) +
+    row({ id: "stAbout", icon: "info", label: "About" }) + '</div>';
+  if(leader()) h += '<div class="glist" style="margin-top:22px"><button class="grow danger" id="stOut"><span class="gi">' + ico("out") + '</span><span class="gl">Leader sign out</span></button></div>';
+  h += '<div class="foot">Rey de Reyes Songbook</div>';
+  $("app").innerHTML = h;
+  function again(){ renderSettings(banner); }
+  if($("stTeam")) $("stTeam").onclick = function(){ state.showTeam = !state.showTeam; again(); };
+  $("stInvite").onclick = inviteBand;
+  $("stDark").onclick = function(){ setTheme(dark ? "light" : "dark"); again(); };
+  $("stChords").onclick = function(){ state.chords = !state.chords; ls("chords", state.chords); again(); };
+  $("stSm").onclick = function(){ setSize(state.size - 2); again(); };
+  $("stBg").onclick = function(){ setSize(state.size + 2); again(); };
+  $("stLang").onclick = function(){ state.lang = state.lang === "es" ? "en" : "es"; ls("lang", state.lang); again(); };
+  $("stSync").onclick = function(){ load(true); };
+  if($("stInstall")) $("stInstall").onclick = function(){ showGuide(0); };
+  $("stGuide").onclick = function(){ showGuide(0); };
+  $("stAbout").onclick = function(){
+    var ev = (state.events || []).length;
+    openMenu("About", [
+      { id: "a1", label: "Rey de Reyes Songbook", right: "" },
+      { id: "a2", label: "Songs", right: db.songs.length },
+      { id: "a3", label: "Events", right: ev },
+      { id: "a4", label: "Data", right: state.source === "live" ? "Band database" : state.source === "cache" ? "Copy on this phone" : "Test copy" },
+      { id: "a5", label: "Last update", right: statusText() }
+    ], function(){});
+  };
+  if($("stOut")) $("stOut").onclick = function(){ if(confirm("Sign out as leader on this phone?")) signOut(); };
 }
 
 /* ---------- help ---------- */

@@ -20,15 +20,21 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 ## Who can do what
 
 - **Everyone:** read songs, open events, rehearsal mode, change key/text size on their own phone, save songs (heart), share an event.
-- **Leaders** (anyone with the band PIN, signed in once on their phone via Home > Leader sign-in): add/edit/delete songs and events, copy events, manage albums, artists, genres, themes and band members (Leader tools).
+- **Leaders** (anyone with the band PIN, signed in once on their phone via Settings > Leader sign-in): add/edit/delete songs and events, copy events, manage albums, artists, genres, themes and band members (Leader tools).
 - The PIN is stored in the script's settings, not here. To see it, run `setupBand` in the script. To change it: put it in `NEW_PIN`, run `changePin`, set `NEW_PIN` back to "". 20 wrong tries locks saving for an hour.
 
 ## Features
 
-- **Home:** install tip, next event with a big **Start** button, the next two weeks, saved songs, coming up. Leaders get a "Send reminder" card the day before and on the day.
-- **Songs:** search by title or lyrics, filters (saved, theme, album, originals/covers, genre, has lyrics), key and bpm on each row.
+- **Look:** styled like the OnStage app: big page titles, round buttons, one card per song/event, tabs at the bottom (Home, Songs, Events, Settings).
+- **Home:** team card (members), today and the next two weeks, saved songs, and Upcoming as simple cards (team, title, date). The Events tab has the next event in a big blue card (**Start** button, countdown). Leaders get a "Send reminder" card the day before and on the day.
+- **Songs:** tap the title ("4 Songs ⌄") to switch All / Saved / Originals / Covers. Search by title or lyrics, filters (saved, theme, album, originals/covers, genre, has lyrics), key and bpm on each row.
 - **Song page:** lyrics by part, `//` repeats as x2/x3 bars, chords. **Options** hides/shows key change, chords on/off, text size, metronome, keep screen on. **Listen** opens the practice link. Shows when it was last played at an event.
-- **Events:** upcoming and past, search, type filters. Event page: date, time, location (Google Maps), who's playing, notes, set list with a key and note per song. **Share** sends the event and set list (WhatsApp or the phone's share menu). Leaders: **Copy** (same set list, one week later), **Edit**, and **Cancel event** (with a reason; shows as Canceled everywhere, **Undo cancel** brings it back, **Tell the band** shares the news). Events filters can hide canceled ones.
+- **Events:** next event in a blue card, then Upcoming and Past Events; search and type filters.
+- **Event page:** blue card with time and date, name, location (opens Google Maps), **See Setlist** and **Start Event**, notes. Share at the top. Leaders: Edit details, Copy to next week, Cancel event (with a reason; **Undo cancel**, **Tell the band**).
+- **Create / Edit Event:** name, type, location, date, time, notes, and a big **Save Event** button. No set list here: save the event first, then add songs on its Setlist page.
+- **Setlist page** (See Setlist): everyone sees the songs in order with key and bpm and can open each one. Leaders tap **Add Songs** to search and add, move songs up/down, add a note per song, remove, then tap the blue save button.
+- **Band Schedule** (tap the date card on Home): month calendar (Mon–Sun, arrows for other months, dots on days with events, red dot if canceled). Tap a day to see its events. Leaders get "Quick event on this date": New service / rehearsal / wedding / event opens the event form with that date, type and a usual time filled in.
+- **Settings:** team members, Leader sign-in / Leader tools, invite the band (shares the app link), dark mode, chords on/off, lyrics text size, guide language, refresh songs, add to Home screen, quick guide, Help Center, About, leader sign out.
 - **Rehearsal mode** (Start): full screen, screen stays on, swipe left/right or the big buttons to move between songs, plays each song in the key set for the event.
 - **First-run guide** (English / Spanish): install the app, open the next event, swipe song by song. Help has it again.
 - **Song editor:** title, album, type, artist, key, BPM, time, genre, themes, practice link, lyrics with part buttons and a live preview. "+ Add new..." in the album/artist/genre lists adds a new one.
