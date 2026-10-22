@@ -811,6 +811,152 @@ input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display
 .pick-row{padding:8px 2px}
 .sheet-head{font-size:17px}
 .tip{padding:10px 12px}
+
+/* set list: view + edit */
+.cntb{display:inline-block;background:var(--soft);color:var(--muted);border-radius:999px;padding:1px 10px;font-size:14px;font-weight:600;margin-left:10px;vertical-align:2px}
+.hpill a{width:46px;height:46px;color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.hpill button.on{background:var(--accent);color:#fff}
+.sl-list{display:grid;gap:10px}
+.sl-row{display:flex;align-items:center;gap:14px;padding:14px 12px 14px 16px;text-decoration:none;color:var(--ink);min-height:74px}
+.sl-row .num{min-width:26px;text-align:center;color:var(--muted);font-weight:600;font-size:15px}
+.sl-body{flex:1;min-width:0}
+.sl-chips{display:flex;gap:6px;margin-bottom:5px;flex-wrap:wrap}
+.sl-row .t{font-size:17px;font-weight:500;line-height:1.25}
+.sl-desc{color:var(--muted);font-size:14px;margin-top:3px}
+.sl-row.moment{background:color-mix(in srgb, var(--accent) 30%, var(--card))}
+.sl-row.moment .sl-desc{color:var(--ink);opacity:.7}
+.sl-row.edit{cursor:pointer;transition:transform .15s}
+.sl-row.dragging{transition:none;position:relative;z-index:5;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.drag{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--muted);touch-action:none;cursor:grab}
+.drag .ic{width:24px;height:24px}
+/* sheets */
+.sheet.choice{padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+.sheet.choice .glist{background:var(--card)}
+.ch-opt{min-height:76px}
+.ch-opt .gl{display:flex;flex-direction:column;gap:2px}
+.ch-opt b{font-weight:500;font-size:18px}
+.ch-opt small{color:var(--muted);font-size:14px}
+.c-song .gi{color:#22c55e} .c-moment .gi{color:var(--accent)}
+.fs-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;font-size:18px}
+.rb{width:44px;height:44px;border-radius:50%;background:var(--card);border:0;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:none}
+.rb .ic{width:22px;height:22px}
+.fl{display:block;font-size:14px;font-weight:600;margin:8px 2px 8px}
+.fbox{background:var(--card);border-radius:18px;overflow:hidden}
+.fbox.bad{box-shadow:0 0 0 2px var(--bad)}
+.fbox input,.fbox textarea,.fin{display:block;width:100%;border:0;background:var(--card);color:var(--ink);font:inherit;font-size:16px;padding:15px 16px;outline:none;resize:vertical}
+.fbox input{border-bottom:1px solid var(--line)}
+.fin{border-radius:14px}
+.rmrow{margin-top:14px;border-radius:14px;background:var(--card)!important}
+.fs-foot{padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
+.bigbtn{width:100%;height:54px;border:0;border-radius:16px;background:var(--accent);color:#fff;font-size:17px;font-weight:600;cursor:pointer}
+.bigbtn:disabled{opacity:.45;cursor:default}
+.sheet.full{height:100dvh;max-height:100dvh;border-radius:0}
+@media (min-width:641px){ .sheet.full{height:86vh;max-height:86vh;border-radius:22px} }
+.pk-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 6px}
+.pk-tabs{display:flex;gap:16px}
+.pk-tabs button{border:0;background:none;font-size:25px;font-weight:700;color:var(--muted);padding:0}
+.pk-tabs button.on{color:var(--ink)}
+.pk-search{margin:8px 16px 4px}
+.pk-list{flex:1;display:grid;gap:10px;align-content:start;padding-top:10px}
+.pk-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid transparent;padding:13px 16px;color:var(--ink);cursor:pointer}
+.pk-row.on{border-color:var(--accent)}
+.pk-txt{flex:1;min-width:0}
+.pk-txt b{display:block;font-size:17px;font-weight:500}
+.pk-sub{display:flex;gap:8px;align-items:center;margin-top:5px;color:var(--muted);font-size:14px;flex-wrap:wrap}
+.pk-in{color:var(--accent);font-size:12.5px;font-weight:600}
+.pk-ck{width:28px;height:28px;border-radius:50%;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex:none;font-weight:800;font-size:15px;color:#fff}
+.pk-row.on .pk-ck{background:var(--accent);border-color:var(--accent)}
+.keybox{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border-radius:18px;padding:14px}
+.keybox div{text-align:center}
+.keybox b{display:block;font-size:34px;font-weight:700}
+.keybox small{color:var(--muted);font-size:13px}
+.kstep{width:58px;height:58px;border:0;border-radius:16px;background:var(--soft);color:var(--ink);font-size:28px;font-weight:600}
+.optlist{display:grid;gap:10px;padding-bottom:16px}
+.optlist .tool{justify-content:flex-start;flex-wrap:wrap;background:var(--card);border:0;border-radius:14px;padding:8px}
+.optlist .tool .lbl{flex:1 0 100%;padding:2px 6px 4px;font-size:13px}
+.optlist .tool button{flex:1;background:var(--soft);color:var(--ink)}
+.optlist .tool button.on{background:var(--accent);color:#fff}
+/* rehearsal screen */
+.kc-intro{--kc:var(--k-intro)} .kc-verse{--kc:var(--k-verse)} .kc-pre{--kc:var(--k-pre)} .kc-chorus{--kc:var(--k-chorus)}
+.kc-bridge{--kc:var(--k-bridge)} .kc-inst{--kc:var(--k-inst)} .kc-outro{--kc:var(--k-outro)} .kc-other{--kc:var(--muted)}
+.rs-top{position:sticky;top:var(--toph, 0px);z-index:20;display:flex;align-items:center;gap:8px;padding:8px 0 10px;background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax)}
+.rs-back{width:44px;height:44px;margin-left:-8px;border:0;background:none;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:none}
+.rs-back .ic{width:28px;height:28px;stroke-width:2.2}
+.rs-top .hpill button{position:relative}
+.rs-top .beat{position:absolute;top:6px;right:6px;width:8px;height:8px;margin:0;background:rgba(255,255,255,.4)}
+.keybtn{font-size:17px;font-weight:700;min-width:46px;width:auto!important;padding:0 8px}
+.rs-k{font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin:4px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rs-t{font-size:24px;font-weight:600;margin:2px 2px 6px;line-height:1.2}
+.rs-sub{color:var(--muted);font-size:16px;margin:0 2px 14px;display:flex;align-items:center;flex-wrap:wrap;gap:0 10px}
+.rs-sub .dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.rs-struct{display:flex;gap:10px;overflow-x:auto;padding:6px 2px 12px;scrollbar-width:none;position:sticky;top:calc(var(--toph, 0px) + var(--rstoph, 62px));z-index:19;background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax)}
+.rs-c.on{box-shadow:0 0 0 3px var(--bg), 0 0 0 5px var(--kc)}
+.rs-struct{padding-left:6px;padding-right:6px}
+.rs-struct::-webkit-scrollbar{display:none}
+.rs-c{flex:none;height:48px;min-width:48px;border-radius:999px;border:3px solid var(--kc);background:none;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;padding:0;cursor:pointer}
+.rs-c i{font-style:normal}
+.rs-c.wide{background:color-mix(in srgb, var(--kc) 55%, var(--card));padding:0 16px 0 3px;gap:12px}
+.rs-c.wide i{width:36px;height:36px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.rs-c.wide span{font-size:15px}
+.rs-desc{padding:16px 18px;margin-bottom:18px;font-size:16px;white-space:pre-wrap}
+.rs-desc.none{color:var(--muted)}
+.rs-secs{display:grid;gap:18px}
+.rs-sec{scroll-margin-top:calc(var(--toph, 0px) + var(--rstoph, 62px) + var(--rssh, 66px) + 26px)}
+.rs-sh{position:relative;z-index:1;display:flex;align-items:center;gap:8px;margin:0 0 -18px 18px;flex-wrap:wrap}
+.rs-pill{display:inline-flex;align-items:center;gap:10px;background:color-mix(in srgb, var(--kc) 45%, var(--card));color:var(--ink);border-radius:999px;padding:4px 16px 4px 4px;font-size:14px;font-weight:600;font-family:var(--font, inherit)}
+.rs-pill i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px}
+.rs-x{background:color-mix(in srgb, var(--kc) 45%, var(--card));color:var(--ink);border-radius:999px;padding:6px 10px;font-size:13px;font-weight:700}
+.rs-note{font-size:13px;color:var(--muted);font-style:italic}
+.rs-sb{padding:30px 18px 18px}
+.rs-sb.nohead{padding-top:18px}
+.pager{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));z-index:40;display:flex;gap:10px;align-items:center;background:var(--ink);padding:8px 12px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.pg{width:22px;height:22px;border-radius:50%;background:color-mix(in srgb, var(--bg) 55%, var(--ink));display:block;border:0;padding:0;flex:none}
+.pg.sm{width:14px;height:14px}
+.pg.on{width:58px;height:30px;border-radius:999px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pg.on .ic{width:16px;height:16px}
+body.rsview main{padding-bottom:110px}
+@media (min-width:641px){ body.rsview:not(.stage){--toph:64px} }
+@media (max-width:640px){
+  body.rsview:not(.stage) .pager{bottom:calc(var(--navh, 64px) + 14px)}
+  body.rsview:not(.stage) main{padding-bottom:calc(var(--navh, 64px) + 100px)}
+  .rs-top .hpill button,.rs-top .hpill a{width:40px;height:40px}
+  .rs-t{font-size:21px}
+  .rs-sub{font-size:14.5px}
+  .rs-c{height:42px;min-width:42px;font-size:14px}
+  .rs-c.wide i{width:32px;height:32px}
+  .sl-row{min-height:64px;padding:12px 10px 12px 14px}
+  .sl-row .t{font-size:16px}
+  .hpill a{width:38px;height:38px}
+}
+
+/* live session */
+.hpill button.live{background:#dc2626;color:#fff;animation:livepulse 1.4s ease-out infinite}
+.hpill button.live.off{background:none;color:#dc2626;animation:none}
+@keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.65)}70%{box-shadow:0 0 0 11px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+.livebar{display:flex;align-items:center;gap:10px;background:rgba(220,38,38,.14);color:#ef4444;border-radius:12px;padding:8px 12px;font-size:14px;font-weight:600;margin:0 0 10px}
+.livebar.off{background:var(--soft);color:var(--muted)}
+.livebar i,.livejoin i{width:10px;height:10px;border-radius:50%;background:#dc2626;flex:none;animation:liveblink 1s steps(2,start) infinite}
+.livebar.off i{animation:none;background:var(--muted)}
+@keyframes liveblink{to{visibility:hidden}}
+.livejoin{display:flex;align-items:center;gap:14px;padding:14px 16px;margin-top:14px;text-decoration:none;color:var(--ink);background:rgba(220,38,38,.14)}
+.livejoin span{flex:1;display:flex;flex-direction:column}
+.livejoin b{color:#ef4444;font-weight:700}
+.livejoin small{color:var(--muted);font-size:14px}
+.sheet.confirm{padding:22px 18px calc(18px + env(safe-area-inset-bottom))}
+.cf h3{margin:0 0 8px;font-size:20px;font-weight:600}
+.cf p{margin:0 0 18px;color:var(--muted);font-size:15.5px;line-height:1.45}
+.cf-btns{display:flex;gap:10px}
+.cf-btns > *{flex:1;height:52px}
+/* key picker */
+.kp-now{text-align:center;background:var(--card);border-radius:18px;padding:14px}
+.kp-now b{display:block;font-size:36px;font-weight:700;line-height:1.1}
+.kp-now small{color:var(--muted);font-size:13px}
+.kp-row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
+.kp-row.acc{grid-template-columns:1fr 1fr}
+.kp-row button{height:50px;border:0;border-radius:12px;background:var(--card);color:var(--ink);font-size:19px;font-weight:600}
+.kp-row.acc button{font-size:24px}
+.kp-row button.on{background:var(--accent);color:#fff}
+.kp-row button:disabled{opacity:.3}
 </style>
 </head>
 <body>
@@ -1218,6 +1364,7 @@ function route(){
   else if((m = h.match(/^e\/([^\/]+)\/s\/(\d+)$/))){ view = "evsong"; arg = decodeURIComponent(m[1]); arg2 = +m[2]; }
   else if((m = h.match(/^e\/([^\/]+)\/edit$/))){ view = "edit"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^e\/([^\/]+)\/setlist$/))){ view = "setlist"; arg = decodeURIComponent(m[1]); }
+  else if((m = h.match(/^e\/([^\/]+)\/setlist\/edit$/))){ view = "setlistedit"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^e\/([^\/]+)$/))){ view = "event"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
   else if(h === "manage") view = "manage";
@@ -1225,14 +1372,20 @@ function route(){
   else if(h === "team") view = "team";
   else if((m = h.match(/^schedule(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "schedule"; arg = m[1] || ""; }
   else if(/^help/.test(h)) view = "help";
-  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", setlist:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", team:"settings", help:"settings", manage:"settings" }[view] || "";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", setlist:"events", setlistedit:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", team:"settings", help:"settings", manage:"settings" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
-  if(view !== "evsong" && state.stage) endStage(true);
+  var editingFromStage = view === "songedit" && !!state.returnTo;
+  if(view !== "evsong" && state.stage && !editingFromStage) endStage(true);
+  if(view !== "songedit" && view !== "evsong") state.returnTo = "";
+  if(view !== "evsong" && view !== "event" && !editingFromStage) liveUnwatch();
+  if(view !== "evsong") liveCtx = null;
   document.body.classList.toggle("stage", view === "evsong" && state.stage);
   if(view !== "edit"){ state.draft = null; state.draftKey = ""; }
   if(view !== "songedit") state.sdraft = null;
-  if(view !== "setlist"){ state.sl = null; state.slAdd = false; }
+  if(view !== "setlistedit") state.sl = null;
+  auto.stop();
+  document.body.classList.toggle("rsview", view === "evsong");
   var app = $("app");
   if(!state.db){
     if(state.error === "setup") app.innerHTML = '<div class="card empty">The app is not connected to the band database yet.</div>';
@@ -1243,22 +1396,22 @@ function route(){
   var banner = "";
   if(state.error && state.source === "cache") banner = '<div class="banner warn">No internet. You are seeing the last copy saved on this phone.</div>';
   else if(state.error && state.source === "live") banner = '<div class="banner warn">Could not refresh. You are seeing the last version that loaded.</div>';
-  var needsLeader = { songedit:1, edit:1, manage:1 };
+  var needsLeader = { songedit:1, edit:1, manage:1, setlistedit:1 };
   if(needsLeader[view] && !leader()){ app.innerHTML = banner + leaderGateHtml(); bindLeaderGate(); return; }
   if(view === "song") renderSong(arg, banner);
   else if(view === "songs") renderList(banner);
   else if(view === "songedit") renderSongEditor(arg, banner);
   else if(view === "events") renderEvents(banner);
   else if(view === "event") renderEvent(arg, banner);
-  else if(view === "setlist") renderSetlist(arg, banner);
+  else if(view === "setlist"){ renderSetlist(arg, banner); scrollTop(); }
+  else if(view === "setlistedit") renderSetlist(arg, banner, true);
   else if(view === "evsong"){
     var ev = findEvent(arg);
     if(!ev) renderEvent(arg, banner);
     else {
       var it = (ev.songs || [])[arg2];
       if(!it){ location.hash = "#/e/" + encodeURIComponent(ev.id); return; }
-      var sg = songFor(it);
-      renderSong(sg ? sg.id : "", banner, { ev: ev, idx: arg2, item: it });
+      renderStage(songFor(it), { ev: ev, idx: arg2, item: it }, banner);
     }
   }
   else if(view === "edit") renderEditor(arg, arg2, banner);
@@ -1556,6 +1709,274 @@ function renderSong(id, banner, ctx){
 function find(id){ var l = state.db.songs; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
 function setSize(v){ state.size = Math.max(14, Math.min(40, v)); ls("size", state.size); document.documentElement.style.setProperty("--lyric", state.size + "px"); }
 
+/* ---------- live session: a leader's phone leads, the band's phones follow ---------- */
+state.transF = ls("transF") || {};
+var live = { ev: "", on: false, mine: false, idx: -1, sec: -1, follow: true, poll: 0, beat: 0, sendT: 0, sent: "", busy: false,
+  sid: ls("sid") || (function(){ var x = Math.random().toString(36).slice(2, 10); ls("sid", x); return x; })() };
+function liveWatch(evId){
+  if(live.ev !== evId){ liveUnwatch(); live.ev = evId; live.on = false; live.mine = false; live.follow = true; live.idx = -1; live.sec = -1; }
+  if(!live.poll) liveTick();
+}
+function liveUnwatch(){ clearTimeout(live.poll); live.poll = 0; if(!live.mine){ clearInterval(live.beat); live.beat = 0; } live.ev = live.mine ? live.ev : ""; }
+function liveTick(){
+  clearTimeout(live.poll); live.poll = 0;
+  var ev = live.ev; if(!ev || !SCRIPT_URL) return;
+  live.poll = -1;
+  jsonp(SCRIPT_URL + "?action=live&ev=" + encodeURIComponent(ev), 15000).then(function(r){ if(live.ev === ev && r && r.ok) liveApply(r.live); }).catch(function(){})
+    .then(function(){ if(live.ev === ev && live.poll === -1) live.poll = setTimeout(liveTick, live.on && !live.mine ? 2500 : 12000); });
+}
+function liveApply(v){
+  var was = live.on + "|" + live.mine;
+  live.on = !!(v && v.on); live.mine = live.on && v.sid === live.sid;
+  if(live.on && !live.mine){
+    var moved = v.idx !== live.idx || v.sec !== live.sec; live.idx = v.idx; live.sec = v.sec;
+    if(moved && live.follow) liveFollow();
+  }
+  if(!live.on){ clearInterval(live.beat); live.beat = 0; }
+  if(was !== live.on + "|" + live.mine) liveUi();
+}
+// a follower jumps to the leader's song and part
+function liveFollow(){
+  var m = location.hash.match(/^#\/e\/([^\/]+)\/s\/(\d+)$/);
+  if(!m || decodeURIComponent(m[1]) !== live.ev) return;
+  if(+m[2] !== live.idx){ location.hash = "#/e/" + encodeURIComponent(live.ev) + "/s/" + live.idx; return; }
+  liveScroll(true);
+}
+function liveScroll(smooth){
+  if(live.sec < 0){ window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" }); return; }
+  var el = $("sec-" + live.sec); if(el) el.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+}
+// which part of the song is at the top of the leader's screen
+function stickyH(){ var b = document.querySelector(".rs-struct") || document.querySelector(".rs-top"); return b ? b.getBoundingClientRect().bottom : 0; }
+function liveSecNow(){
+  var cur = -1, lim = stickyH() + 40; document.querySelectorAll(".rs-sec").forEach(function(el){ if(el.getBoundingClientRect().top <= lim) cur = +el.id.slice(4); });
+  return cur;
+}
+// keep the sticky bars measured, and light up the part that is on screen
+function fitStage(){
+  var t = document.querySelector(".rs-top"), st = document.querySelector(".rs-struct");
+  if(t) document.documentElement.style.setProperty("--rstoph", t.offsetHeight + "px");
+  if(st) document.documentElement.style.setProperty("--rssh", st.offsetHeight + "px");
+}
+function markSec(){
+  var st = document.querySelector(".rs-struct"); if(!st) return;
+  var cur = liveSecNow(), on = null;
+  st.querySelectorAll("[data-sec]").forEach(function(b){ var y = +b.getAttribute("data-sec") === cur; b.classList.toggle("on", y); if(y) on = b; });
+  if(on){ var l = on.offsetLeft - st.offsetLeft, r = l + on.offsetWidth; if(l < st.scrollLeft + 8 || r > st.scrollLeft + st.clientWidth - 8) st.scrollTo({ left: Math.max(0, l - 40), behavior: "smooth" }); }
+}
+var markT = 0;
+window.addEventListener("scroll", function(){ if(!document.body.classList.contains("rsview")) return; clearTimeout(markT); markT = setTimeout(markSec, 60); }, { passive: true });
+window.addEventListener("resize", function(){ if(document.body.classList.contains("rsview")) fitStage(); });
+function liveSend(idx, sec, force){
+  if(!live.mine) return;
+  var key = idx + ":" + sec; if(!force && key === live.sent) return;
+  clearTimeout(live.sendT);
+  live.sendT = setTimeout(function(){
+    live.sent = key;
+    send("golive", state.pin, { ev: live.ev, on: 1, idx: idx, sec: sec, sid: live.sid }).then(function(r){ if(r && r.error === "wrong_pin") wrongPin(); }).catch(function(){ live.sent = ""; });
+  }, force ? 0 : 450);
+}
+function liveStart(ev, idx){
+  return send("golive", state.pin, { ev: ev.id, on: 1, idx: idx, sec: liveSecNow(), sid: live.sid }).then(function(r){
+    if(r && r.error === "wrong_pin"){ wrongPin(); return false; }
+    if(!r || !r.ok) throw new Error((r && r.error) || "unknown");
+    live.ev = ev.id; live.on = true; live.mine = true; live.sent = idx + ":" + liveSecNow();
+    clearInterval(live.beat); live.beat = setInterval(function(){ if(!live.mine) return; var m = location.hash.match(/\/s\/(\d+)$/); liveSend(m ? +m[1] : 0, liveSecNow(), true); }, 60000);
+    liveUi(); return true;
+  });
+}
+function liveEnd(){
+  var ev = live.ev; live.mine = false; live.on = false; clearInterval(live.beat); live.beat = 0; clearTimeout(live.sendT); liveUi();
+  if(ev) send("golive", state.pin, { ev: ev, on: 0, sid: live.sid }).catch(function(){});
+}
+function liveBtnHtml(){
+  if(!leader() && !live.on) return "";
+  var cls = live.mine ? "live" : live.on ? (live.follow ? "live" : "live off") : "";
+  var lbl = live.mine ? "You are live. Tap to end" : live.on ? (live.follow ? "Following live. Tap to stop" : "Live session on. Tap to follow") : "Go live";
+  return '<button id="rsLive" class="' + cls + '" aria-label="' + lbl + '" title="' + lbl + '">' + ico("live") + '</button>';
+}
+function liveBannerHtml(){
+  if(!live.on) return "";
+  if(live.mine) return '<div class="livebar"><i></i>You are live. The band follows you.</div>';
+  return '<div class="livebar' + (live.follow ? '' : ' off') + '"><i></i>' + (live.follow ? 'Following the leader live' : 'Live session on. Tap the live button to follow.') + '</div>';
+}
+// update just the live bits, so the page does not jump
+function liveUi(){
+  var b = $("rsLive"), wrap = $("rsLeft");
+  if(wrap){ var tmp = document.createElement("div"); tmp.innerHTML = liveBtnHtml(); var nb = tmp.firstChild; if(b && nb) b.replaceWith(nb); else if(b) b.remove(); else if(nb) wrap.appendChild(nb); bindLive(); }
+  var bar = $("liveBar"); if(bar) bar.innerHTML = liveBannerHtml();
+  var eb = $("evLive"); if(eb) eb.innerHTML = live.on && !live.mine ? '<a class="card livejoin" href="#/e/' + encodeURIComponent(live.ev) + '/s/' + Math.max(0, live.idx) + '"><i></i><span><b>Live now</b><small>The leader is on item ' + (live.idx + 1) + '. Tap to join.</small></span>' + ico("right", "ic sm") + '</a>' : '';
+}
+function confirmSheet(title, text, yes, onYes){
+  var sh = sheetOpen("confirm", '<div class="cf"><h3>' + esc(title) + '</h3><p>' + esc(text) + '</p><div class="cf-btns"><button class="btn big" id="cfNo">Cancel</button><button class="bigbtn" id="cfYes">' + esc(yes) + '</button></div></div>');
+  sh.el.querySelector("#cfNo").onclick = sh.close;
+  sh.el.querySelector("#cfYes").onclick = function(){ var b = this; b.disabled = true; b.textContent = "Starting..."; Promise.resolve(onYes()).then(function(){ sh.close(); }).catch(function(x){ b.disabled = false; b.textContent = yes; alert("Could not reach the server (" + (x && x.message || x) + "). Try again."); }); };
+}
+var liveCtx = null;
+function bindLive(){
+  var b = $("rsLive"); if(!b || !liveCtx) return;
+  b.onclick = function(){
+    var ctx = liveCtx;
+    if(live.mine) return confirmSheet("End live session?", "The band's phones stop following you.", "End session", function(){ liveEnd(); });
+    if(live.on){ live.follow = !live.follow; liveUi(); if(live.follow) liveFollow(); return; }
+    confirmSheet("Start Live Session?", "Once you go live, everyone on this event follows your place in the song. Their key and text size stay on their own.", "Start Session", function(){ return liveStart(ctx.ev, ctx.idx); });
+  };
+}
+// the leader's scrolling tells the band where we are
+var liveScrollT = 0;
+window.addEventListener("scroll", function(){
+  if(!live.mine || !liveCtx || !document.body.classList.contains("rsview")) return;
+  clearTimeout(liveScrollT); liveScrollT = setTimeout(function(){ if(liveCtx) liveSend(liveCtx.idx, liveSecNow()); }, 250);
+}, { passive: true });
+
+/* key picker: letters, then flat / sharp */
+var LETTERS = ["C", "D", "E", "F", "G", "A", "B"], NO_SHARP = { E: 1, B: 1 }, NO_FLAT = { C: 1, F: 1 };
+function flatsFor(s, tk, n){ return state.transF[tk] != null ? state.transF[tk] : useFlats(s.key, n); }
+function stageKeyName(s, tk, n){ return transposeChord(s.key.root, n, flatsFor(s, tk, n)) + (s.key.minor ? "m" : ""); }
+function keySheet(s, tk, again){
+  formSheet("Key", '<div class="kp-now"><b id="kNow"></b><small id="kWas"></small></div>' +
+    '<div class="kp-row">' + LETTERS.map(function(l){ return '<button data-l="' + l + '">' + l + '</button>'; }).join("") + '</div>' +
+    '<div class="kp-row acc"><button data-a="b" aria-label="Flat">♭</button><button data-a="#" aria-label="Sharp">♯</button></div>' +
+    '<button class="btn" id="kReset" style="width:100%;margin-top:14px">Back to the written key</button><p class="muted" style="font-size:13.5px;margin:12px 2px 4px">Only changes the key on this phone.</p>', "", function(box){
+    function show(){
+      var n = state.trans[tk] || 0, r = transposeChord(s.key.root, n, flatsFor(s, tk, n)), L = r.charAt(0), A = r.slice(1);
+      box.querySelector("#kNow").textContent = r + (s.key.minor ? "m" : "");
+      box.querySelector("#kWas").textContent = n ? "Written in " + keyName(s.key, 0) : "Written key";
+      box.querySelectorAll("[data-l]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-l") === L); });
+      box.querySelectorAll("[data-a]").forEach(function(b){ var a = b.getAttribute("data-a"); b.classList.toggle("on", a === A); b.disabled = a === "#" ? !!NO_SHARP[L] : !!NO_FLAT[L]; });
+      box.querySelector("#kReset").disabled = !n && state.transF[tk] == null;
+    }
+    function pick(L, A){
+      if((A === "#" && NO_SHARP[L]) || (A === "b" && NO_FLAT[L])) A = "";
+      var n = ((NOTE_IDX[L + A] - NOTE_IDX[s.key.root]) % 12 + 12) % 12; if(n > 6) n -= 12;
+      if(n) state.trans[tk] = n; else delete state.trans[tk];
+      if(A === "b") state.transF[tk] = true; else if(A === "#") state.transF[tk] = false; else delete state.transF[tk];
+      ls("trans", state.trans); ls("transF", state.transF); again(); show();
+    }
+    function curL(){ var n = state.trans[tk] || 0, r = transposeChord(s.key.root, n, flatsFor(s, tk, n)); return { L: r.charAt(0), A: r.slice(1) }; }
+    box.querySelectorAll("[data-l]").forEach(function(b){ b.onclick = function(){ pick(b.getAttribute("data-l"), ""); }; });
+    box.querySelectorAll("[data-a]").forEach(function(b){ b.onclick = function(){ var c = curL(), a = b.getAttribute("data-a"); pick(c.L, c.A === a ? "" : a); }; });
+    box.querySelector("#kReset").onclick = function(){ delete state.trans[tk]; delete state.transF[tk]; ls("trans", state.trans); ls("transF", state.transF); again(); show(); };
+    show();
+  });
+}
+
+/* ---------- rehearsal screen: one set list item (song or moment) ---------- */
+state.scroll = ls("scroll") || 2;
+var MOMENT_ID = "~moment";
+function isMoment(it){ return !!it && it.id === MOMENT_ID; }
+function secAbbr(x){
+  var A = { intro: "IN", verse: "V", pre: "PC", chorus: "C", bridge: "B", inst: "I", outro: "O" }, R = { I: 1, II: 2, III: 3, IV: 4, V: 5 };
+  var a = A[x.kind] || String(x.label || "?").slice(0, 2).toUpperCase(), num = String(x.key || "").split("|")[1] || "";
+  return a + (num ? (R[num] || num) : "");
+}
+function secInner(x, n, flats, showChords){
+  var src = x.lines.length ? x : (x.copyOf || null);
+  if(src && src !== x) return '<div class="copied-lbl">Same as before</div><div class="copied">' + sectionBody(src, n, flats, showChords) + '</div>';
+  if(src) return sectionBody(x, n, flats, showChords);
+  if(x.kind !== "inst" && x.kind !== "intro" && x.kind !== "outro" && x.kind !== "other") return '<div class="pending">Lyrics missing</div>';
+  return "";
+}
+// auto scroll for hands-free reading
+var SPEEDS = { 1: 14, 2: 26, 3: 42 };
+var auto = { on: false, timer: 0, last: 0, acc: 0,
+  start: function(){ var self = this; self.stop(); self.on = true; self.last = Date.now(); self.acc = 0;
+    self.timer = setInterval(function(){
+      var now = Date.now(); self.acc += (now - self.last) / 1000 * SPEEDS[state.scroll || 2]; self.last = now;
+      var px = Math.floor(self.acc); if(px){ self.acc -= px; window.scrollBy(0, px); }
+      if(window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2){ self.stop(); var b = $("rsScroll"); if(b) b.classList.remove("on"); }
+    }, 40); },
+  stop: function(){ this.on = false; if(this.timer) clearInterval(this.timer); this.timer = 0; }
+};
+function pagerHtml(ctx){
+  var N = ctx.ev.songs.length, eid = encodeURIComponent(ctx.ev.id), i0 = Math.max(0, Math.min(ctx.idx - 3, N - 7)), i1 = Math.min(N, i0 + 7), h = "";
+  for(var i = i0; i < i1; i++){
+    var edge = (i === i0 && i0 > 0) || (i === i1 - 1 && i1 < N) ? ' sm' : '';
+    h += i === ctx.idx ? '<button class="pg on" id="pgList" aria-label="Item ' + (i+1) + ' of ' + N + '. Show the whole set list">' + ico("tri") + '</button>'
+                       : '<a class="pg' + edge + '" href="#/e/' + eid + '/s/' + i + '" aria-label="Go to item ' + (i+1) + '"></a>';
+  }
+  return '<div class="pager">' + h + '</div>';
+}
+function renderStage(s, ctx, banner){
+  var it = ctx.item, mom = isMoment(it), eid = ctx.ev.id, N = ctx.ev.songs.length;
+  var tk = "@" + eid + ":" + ctx.idx, n = s && state.trans[tk] != null ? state.trans[tk] : 0;
+  var flats = s && s.key ? flatsFor(s, tk, n) : false, showChords = !!(s && state.chords && s.hasChords);
+  var left = '<div class="hpill" id="rsLeft">' + (s ? '<button id="rsScroll" class="' + (auto.on ? 'on' : '') + '" aria-label="Auto scroll" title="Auto scroll">' + ico("updown") + '</button>' : '') + liveBtnHtml() + '</div>';
+  var right = s ? '<div class="hpill">' + (s.bpm ? '<button id="rsMetro" class="' + (metro.on ? 'on' : '') + '" aria-label="Metronome" title="Metronome">' + ico("pulse") + (metro.on ? '<span class="beat" id="beat"></span>' : '') + '</button>' : '') +
+    (s.key ? '<button id="rsKey" class="keybtn" aria-label="Key" title="Change key">' + esc(stageKeyName(s, tk, n)) + '</button>' : '') +
+    (s.link ? '<a href="' + esc(s.link) + '" target="_blank" rel="noopener" aria-label="Listen" title="Listen">' + ico("clip") + '</a>' : '') +
+    (leader() ? '<button id="rsEdit" aria-label="Edit" title="Edit">' + ico("edit") + '</button>' : '') +
+    '<button id="rsOpts" aria-label="Options" title="Options">' + ico("sliders") + '</button></div>' : '';
+  var h = '<div class="rs-top"><button class="rs-back" id="rsBack" aria-label="Back">' + ico("back") + '</button>' + left + '<span style="flex:1"></span>' + right + '</div><div id="liveBar">' + liveBannerHtml() + '</div>';
+  var kick = '<div class="rs-k">' + (ctx.idx + 1) + ' of ' + N + ' · ' + esc(ctx.ev.title) + '</div>';
+  var desc = '<div class="card rs-desc' + (it.note ? '' : ' none') + '">' + (it.note ? esc(it.note) : 'No description') + '</div>';
+  if(mom) h += kick + '<h1 class="rs-t">' + esc(it.title) + '</h1><div class="rs-sub">Moment</div>' + desc;
+  else if(!s) h += kick + '<h1 class="rs-t">' + esc(it.title) + '</h1>' + desc + '<div class="card nolyrics">This song is not in the songbook yet, so there are no lyrics to show.</div>';
+  else {
+    var sub = [s.artist || s.type, s.bpm ? s.bpm + ' BPM' : '', s.time || ''].filter(Boolean).map(esc).join('<i class="dot"></i>');
+    var circles = s.sections.map(function(x, i){ if(!x.label) return ""; return '<button class="rs-c kc-' + x.kind + (x.reps ? ' wide' : '') + '" data-sec="' + i + '" aria-label="' + esc(x.label) + '"><i>' + esc(secAbbr(x)) + '</i>' + (x.reps ? '<span>x ' + x.reps + '</span>' : '') + '</button>'; }).join("");
+    h += kick + '<h1 class="rs-t">' + esc(s.title) + '</h1><div class="rs-sub">' + sub + '</div>' + (circles ? '<div class="rs-struct">' + circles + '</div>' : '') + desc;
+    var secs = s.sections.map(function(x, i){
+      var inner = secInner(x, n, flats, showChords);
+      var head = x.label ? '<div class="rs-sh"><span class="rs-pill kc-' + x.kind + '"><i>' + esc(secAbbr(x)) + '</i>' + esc(x.label) + '</span>' + (x.reps ? '<span class="rs-x kc-' + x.kind + '">x' + x.reps + '</span>' : '') + (x.note ? '<span class="rs-note">' + esc(x.note) + '</span>' : '') + '</div>' : '';
+      if(!head && !inner) return "";
+      return '<div class="rs-sec" id="sec-' + i + '">' + head + '<div class="card rs-sb' + (head ? '' : ' nohead') + '">' + (inner || '<div class="muted" style="font-size:15px">Instrumental</div>') + '</div></div>';
+    }).join("");
+    if(!s.sections.length || (!s.hasLyrics && !s.hasChords)) secs = '<div class="card nolyrics">This song does not have lyrics yet.' + (leader() ? ' <a href="#/c/' + encodeURIComponent(s.id) + '/edit">Add them</a>.' : '') + '</div>' + secs;
+    h += '<div class="rs-secs body">' + secs + '</div>';
+  }
+  h += pagerHtml(ctx);
+  var songKey = "@" + eid + ":" + ctx.idx, same = $("app").getAttribute("data-song") === songKey, y = window.scrollY;
+  $("app").innerHTML = banner + h;
+  $("app").setAttribute("data-song", songKey);
+  if(same) window.scrollTo(0, y); else { scrollTop(); metro.stop(); }
+  swipe.ctx = ctx;
+  function again(){ renderStage(s, ctx, banner); }
+  fitStage(); markSec();
+  liveCtx = ctx; liveWatch(eid); bindLive();
+  if(live.mine) setTimeout(function(){ liveSend(ctx.idx, liveSecNow()); }, 0);
+  else if(live.on && live.follow && live.idx === ctx.idx && !same) setTimeout(function(){ liveScroll(false); }, 0);
+  $("rsBack").onclick = function(){
+    var to = state.stage ? (state.stageFrom || slUrl(eid)) : slUrl(eid);
+    if(live.mine) liveEnd();
+    if(state.stage) endStage();
+    location.hash = to;
+  };
+  $("pgList").onclick = function(){
+    openMenu("Set list", ctx.ev.songs.map(function(x, i){ var sg = songFor(x); return { id: String(i), label: (i+1) + ". " + (sg ? sg.title : x.title) + (isMoment(x) ? " (moment)" : ""), on: i === ctx.idx }; }),
+      function(k){ location.hash = "#/e/" + encodeURIComponent(eid) + "/s/" + k; });
+  };
+  document.querySelectorAll("[data-sec]").forEach(function(a){ a.onclick = function(){ var el = $("sec-" + a.getAttribute("data-sec")); if(el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
+  if(!s) return;
+  $("rsScroll").onclick = function(){ if(auto.on) auto.stop(); else auto.start(); this.classList.toggle("on", auto.on); };
+  if($("rsMetro")) $("rsMetro").onclick = function(){ metro.on ? metro.stop() : metro.start(s); again(); };
+  if($("rsKey")) $("rsKey").onclick = function(){ keySheet(s, tk, again); };
+  if($("rsEdit")) $("rsEdit").onclick = function(){
+    openMenu(s.title, [{ id: "edit", label: "Edit song" }], function(){ state.returnTo = location.hash; location.hash = "#/c/" + encodeURIComponent(s.id) + "/edit"; });
+  };
+  $("rsOpts").onclick = function(){
+    formSheet("Options", '<div id="optBody"></div>', "", function(box){
+      function draw(){
+        var rows = '';
+        if(s.hasChords) rows += '<div class="tool"><span class="lbl">Chords</span><button data-o="cOn" class="' + (state.chords ? 'on' : '') + '">On</button><button data-o="cOff" class="' + (state.chords ? '' : 'on') + '">Off</button></div>';
+        rows += '<div class="tool"><span class="lbl">Text size</span><button data-o="zDn">A−</button><span class="val">' + state.size + '</span><button data-o="zUp">A+</button></div>';
+        rows += '<div class="tool"><span class="lbl">Scroll speed</span>' + [1,2,3].map(function(v){ return '<button data-o="sp' + v + '" class="' + ((state.scroll || 2) === v ? 'on' : '') + '">' + ["Slow","Normal","Fast"][v-1] + '</button>'; }).join("") + '</div>';
+        if("wakeLock" in navigator) rows += '<div class="tool"><span class="lbl">Screen</span><button data-o="wk" class="' + (wake.want ? 'on' : '') + '">' + (wake.want ? 'Stays on' : 'Normal') + '</button></div>';
+        box.querySelector("#optBody").innerHTML = '<div class="optlist">' + rows + '</div>';
+        box.querySelectorAll("[data-o]").forEach(function(b){ b.onclick = function(){
+          var o = b.getAttribute("data-o");
+          if(o === "cOn" || o === "cOff"){ state.chords = o === "cOn"; ls("chords", state.chords); }
+          else if(o === "zUp") setSize(state.size + 2); else if(o === "zDn") setSize(state.size - 2);
+          else if(o === "wk"){ wake.want ? wake.off() : wake.on(); }
+          else { state.scroll = +o.slice(2); ls("scroll", state.scroll); }
+          showChords = !!(state.chords && s.hasChords); again(); draw();
+        }; });
+      }
+      draw();
+    });
+  };
+}
+
 /* ---------- set list mode + rehearsal (stage) mode ---------- */
 function evBarHtml(ctx){
   var e = ctx.ev, n = (e.songs || []).length;
@@ -1575,9 +1996,9 @@ function bindStage(ctx){
   if($("stEnd")) $("stEnd").onclick = function(){ endStage(); location.hash = "#/e/" + encodeURIComponent(ctx.ev.id); };
   if($("snDone") && state.stage) $("snDone").onclick = function(){ endStage(); };
 }
-document.addEventListener("touchstart", function(e){ if(!document.body.classList.contains("stage")) return; var t = e.touches[0]; swipe.x = t.clientX; swipe.y = t.clientY; }, { passive: true });
+document.addEventListener("touchstart", function(e){ if(!document.body.classList.contains("rsview") || document.querySelector(".sheet-bg")) return; var t = e.touches[0]; swipe.x = t.clientX; swipe.y = t.clientY; }, { passive: true });
 document.addEventListener("touchend", function(e){
-  if(!document.body.classList.contains("stage") || !swipe.ctx) return;
+  if(!document.body.classList.contains("rsview") || !swipe.ctx || document.querySelector(".sheet-bg")) return;
   var t = e.changedTouches[0], dx = t.clientX - swipe.x, dy = t.clientY - swipe.y;
   if(Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
   var c = swipe.ctx, to = c.idx + (dx < 0 ? 1 : -1);
@@ -1585,12 +2006,12 @@ document.addEventListener("touchend", function(e){
 }, { passive: true });
 // a Rehearsal-type event runs as a rehearsal, anything else as a live event (shown in the top bar)
 function startStage(ev){
-  state.stage = true; state.stageMode = norm(ev.type) === "rehearsal" ? "rehearsal" : "event"; wake.on();
+  state.stageFrom = location.hash; state.stage = true; state.stageMode = norm(ev.type) === "rehearsal" ? "rehearsal" : "event"; wake.on();
   try{ var el = document.documentElement; (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el); }catch(e){}
   location.hash = "#/e/" + encodeURIComponent(ev.id) + "/s/0";
 }
 function endStage(quiet){
-  state.stage = false; document.body.classList.remove("stage"); wake.off(); metro.stop();
+  state.stage = false; document.body.classList.remove("stage"); wake.off(); metro.stop(); auto.stop();
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
 }
 
@@ -1642,7 +2063,7 @@ function splitEvents(){
 }
 function isCanceled(e){ return e && e.status === "canceled"; }
 function findEvent(id){ var l = state.events || []; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
-function songFor(item){ if(!state.db) return null; return (item.id && find(item.id)) || findSong(state.db.songs, item.title); }
+function songFor(item){ if(!state.db || isMoment(item)) return null; return (item.id && find(item.id)) || findSong(state.db.songs, item.title); }
 function dateBox(e){ var d = evDate(e); return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>'; }
 function shortWhen(e){
   var d = evDate(e); if(!d) return e.date || "";
@@ -1694,7 +2115,7 @@ function shareText(e){
   if(e.notes) lines.push(e.notes);
   if((e.songs || []).length){
     lines.push("", "Set list:");
-    e.songs.forEach(function(it, i){ var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : ""; lines.push((i+1) + ". " + (s ? s.title : it.title) + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
+    e.songs.forEach(function(it, i){ var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : ""; lines.push((i+1) + ". " + (isMoment(it) ? "(" : "") + (s ? s.title : it.title) + (isMoment(it) ? ")" : "") + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
   }
   lines.push("", "Open it in the app: " + location.href.split("#")[0] + "#/e/" + encodeURIComponent(e.id));
   return lines.join("\n");
@@ -1706,7 +2127,11 @@ function shareEvent(e){
 }
 function isInstalled(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
 
-var ICON = {"share": "<circle cx=\"18\" cy=\"5\" r=\"2.5\"/><circle cx=\"6\" cy=\"12\" r=\"2.5\"/><circle cx=\"18\" cy=\"19\" r=\"2.5\"/><path d=\"m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4\"/>",
+var ICON = {"live": "<circle cx=\"12\" cy=\"12\" r=\"2\"/><path d=\"M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8\"/>", "playt": "<path d=\"M7 4.5v15l12-7.5z\"/>", "tri": "<path d=\"M8 5v14l11-7z\" fill=\"currentColor\"/>", "x2": "<path d=\"M6 6l12 12M18 6 6 18\"/>",
+  "grip": "<circle cx=\"9\" cy=\"6\" r=\"1.3\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"6\" r=\"1.3\" fill=\"currentColor\"/><circle cx=\"9\" cy=\"12\" r=\"1.3\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"12\" r=\"1.3\" fill=\"currentColor\"/><circle cx=\"9\" cy=\"18\" r=\"1.3\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"18\" r=\"1.3\" fill=\"currentColor\"/>",
+  "mic": "<rect x=\"9\" y=\"3\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5 11a7 7 0 0 0 14 0M12 18v3\"/>", "updown": "<path d=\"m8 9 4-4 4 4M8 15l4 4 4-4\"/>",
+  "sliders": "<path d=\"M3 7h8M17 7h4M3 17h4M13 17h8\"/><circle cx=\"14\" cy=\"7\" r=\"3\"/><circle cx=\"10\" cy=\"17\" r=\"3\"/>", "clip": "<path d=\"m20 11.5-8.2 8.2a5.3 5.3 0 0 1-7.5-7.5l8.6-8.6a3.5 3.5 0 0 1 5 5l-8.6 8.6a1.8 1.8 0 0 1-2.5-2.5l7.9-7.9\"/>",
+  "share": "<circle cx=\"18\" cy=\"5\" r=\"2.5\"/><circle cx=\"6\" cy=\"12\" r=\"2.5\"/><circle cx=\"18\" cy=\"19\" r=\"2.5\"/><path d=\"m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4\"/>",
   "list": "<path d=\"M4 6h11M4 11h11M4 16h7\"/><path d=\"M19 4v11\"/><circle cx=\"16.5\" cy=\"16.5\" r=\"2.5\"/>", "play": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m10 8.5 5 3.5-5 3.5z\"/>",
   "save": "<path d=\"M5 3h11l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z\"/><path d=\"M8 3v5h7V3M8 21v-7h8v7\"/>", "edit": "<path d=\"M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z\"/><path d=\"m13.5 6.5 4 4\"/>",
   "copy": "<rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2\"/>", "x": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m9 9 6 6M15 9l-6 6\"/>",
@@ -1916,10 +2341,10 @@ function openEventFilters(banner){
 /* ---------- one event ---------- */
 function eventPayload(e, songs){
   return { id: e.id, title: String(e.title || "").trim(), type: e.type, date: e.date, time: e.time, location: String(e.location || "").trim(), notes: e.notes || "", players: [], status: e.status || "", statusNote: e.statusNote || "",
-    songs: (songs || e.songs || []).map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
+    songs: (songs || e.songs || []).map(function(it){ if(isMoment(it)) return { id: MOMENT_ID, title: String(it.title || "").trim(), note: it.note || "", key: "" }; var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
 }
-function subHead(back, title, right){
-  return '<div class="subhead"><a class="sbback" href="' + back + '" aria-label="Back">' + ico("back") + '</a><h2>' + esc(title) + '</h2>' + (right || '') + '</div>';
+function subHead(back, title, right, badge){
+  return '<div class="subhead"><a class="sbback" href="' + back + '" aria-label="Back">' + ico("back") + '</a><h2>' + esc(title) + (badge || '') + '</h2>' + (right || '') + '</div>';
 }
 function renderEvent(id, banner){
   var e = findEvent(id);
@@ -1934,8 +2359,9 @@ function renderEvent(id, banner){
       (e.location ? '<a class="evh-loc" href="' + esc(MAP) + '" target="_blank" rel="noopener">' + ico("pin", "ic xs") + esc(e.location) + '</a>' : '') + '</div></div>' +
     '<div class="evbtns"><a class="evbtn" href="#/e/' + encodeURIComponent(e.id) + '/setlist">' + ico("list") + 'See Setlist' + (items.length ? ' <span class="cnt">' + items.length + '</span>' : '') + '</a>' +
       (items.length && !isCanceled(e) ? '<button class="evbtn primary" id="evStart">' + ico("play") + 'Start Event</button>' : '<span class="evbtn primary off">' + ico("play") + 'Start Event</span>') + '</div>';
+  h += '<div id="evLive"></div>';
   if(isCanceled(e)) h += '<div class="cancel-box" style="margin-top:14px"><b>This event was canceled.</b>' + (e.statusNote ? '<div>' + esc(e.statusNote) + '</div>' : '') + '</div>';
-  if(!items.length && leader() && !isCanceled(e)) h += '<a class="card addrow2" href="#/e/' + encodeURIComponent(e.id) + '/setlist">' + ico("add") + 'Add the set list</a>';
+  if(!items.length && leader() && !isCanceled(e)) h += '<a class="card addrow2" href="' + slUrl(e.id, true) + '">' + ico("add") + 'Add Songs or Moments</a>';
   if(e.notes) h += '<div class="sec-h2">Notes</div><div class="card notescard">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>';
   if(leader()) h += '<div class="sec-h2">Leader</div><div class="glist">' +
     '<a class="grow" href="#/e/' + encodeURIComponent(e.id) + '/edit"><span class="gi">' + ico("edit") + '</span><span class="gl">Edit details</span><span class="gchev">' + ico("right", "ic sm") + '</span></a>' +
@@ -1943,11 +2369,12 @@ function renderEvent(id, banner){
     (isCanceled(e) ? '<button class="grow" id="evTell"><span class="gi">' + ico("share") + '</span><span class="gl">Tell the band it\'s canceled</span></button><button class="grow" id="evUncancel"><span class="gi">' + ico("refresh") + '</span><span class="gl">Undo cancel</span></button>'
                    : '<button class="grow danger" id="evCancel"><span class="gi">' + ico("x") + '</span><span class="gl">Cancel event</span></button>') + '</div>';
   $("app").innerHTML = h; scrollTop();
+  liveWatch(e.id); liveUi();
   $("evShare").onclick = function(){ shareEvent(e); };
   if($("evMore")) $("evMore").onclick = function(){
     openMenu("Event", [{ id: "edit", label: "Edit details" }, { id: "setlist", label: "Edit set list" }, { id: "copy", label: "Copy to next week" }], function(k){
       if(k === "edit") location.hash = "#/e/" + encodeURIComponent(e.id) + "/edit";
-      else if(k === "setlist") location.hash = "#/e/" + encodeURIComponent(e.id) + "/setlist";
+      else if(k === "setlist") location.hash = slUrl(e.id, true);
       else $("evDup").click();
     });
   };
@@ -1976,77 +2403,162 @@ function renderEvent(id, banner){
   };
 }
 
-/* ---------- set list of an event (its own page; leaders edit it here) ---------- */
-function renderSetlist(id, banner){
+/* ---------- set list of an event: view mode for everyone, edit mode for leaders ---------- */
+function slUrl(id, edit){ return "#/e/" + encodeURIComponent(id) + "/setlist" + (edit ? "/edit" : ""); }
+function slRowInner(it){
+  if(isMoment(it)) return '<div class="sl-body"><div class="t">' + esc(it.title) + '</div>' + (it.note ? '<div class="sl-desc">' + esc(it.note) + '</div>' : '') + '</div>';
+  var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : "";
+  var chips = (k ? '<span class="kchip">' + esc(k) + '</span>' : '') + (s && s.bpm ? '<span class="kchip">' + s.bpm + ' BPM</span>' : '');
+  return '<div class="sl-body">' + (chips ? '<div class="sl-chips">' + chips + '</div>' : '') + '<div class="t">' + esc(s ? s.title : it.title) + '</div>' +
+    (!s ? '<div class="sl-desc" style="color:var(--warn)">Not in the songbook</div>' : '') + (it.note ? '<div class="sl-desc">' + esc(it.note) + '</div>' : '') + '</div>';
+}
+function renderSetlist(id, banner, editing){
   var e = findEvent(id), back = "#/e/" + encodeURIComponent(id);
   if(!e){ $("app").innerHTML = banner + subHead("#/events", "Setlist") + '<div class="card empty">This event was not found.</div>'; return; }
-  var lead = leader();
-  if(lead && (!state.sl || state.sl.id !== id)){ state.sl = { id: id, songs: JSON.parse(JSON.stringify(e.songs || [])), dirty: false }; state.pick = ""; state.slAdd = false; }
-  var sl = state.sl, items = lead ? sl.songs : (e.songs || []);
-  var h = banner + subHead(back, "Setlist", lead ? '<button class="savebtn' + (sl.dirty ? ' on' : '') + '" id="slSave" aria-label="Save set list" title="Save set list">' + ico("save") + '</button>' : (items.length && !isCanceled(e) ? '<button class="savebtn on" id="slStart" aria-label="Start">' + ico("play") + '</button>' : ''));
-  h += '<div class="sl-ev">' + esc(e.title) + ' · ' + esc(shortWhen(e)) + '</div><div id="slMsg"></div>';
-  if(lead){
-    h += state.slAdd ? '<div class="card picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-        '<input id="pickQ" type="search" placeholder="Type a song title or lyrics" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div>' +
-        '<button class="linkbtn" id="slDone" style="margin:10px auto 0;display:flex">Done adding</button></div>'
-      : '<button class="card addrow2" id="slAdd">' + ico("add") + 'Add Songs</button>';
+  var lead = leader(), canStart = !isCanceled(e) && (e.songs || []).length;
+  if(!editing){
+    var items0 = e.songs || [];
+    var acts = '<div class="hpill">' + (canStart ? '<button id="slStart" aria-label="Start rehearsal" title="Start rehearsal">' + ico("playt") + '</button>' : '') +
+      (lead ? '<a href="' + slUrl(id, true) + '" aria-label="Edit set list" title="Edit set list">' + ico("edit") + '</a>' : '') + '</div>';
+    var h0 = banner + subHead(back, "Setlist", (canStart || lead) ? acts : '', '<span class="cntb">' + items0.length + '</span>');
+    h0 += '<div class="sl-ev">' + esc(e.title) + ' · ' + esc(shortWhen(e)) + '</div>' + (state.slMsg ? '<div class="banner ok">' + esc(state.slMsg) + '</div>' : '');
+    state.slMsg = "";
+    h0 += items0.length ? '<div class="sl-list">' + items0.map(function(it, i){
+      return '<a class="card sl-row' + (isMoment(it) ? ' moment' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><span class="num">' + (i+1) + '</span>' + slRowInner(it) + '</a>';
+    }).join("") + '</div>' : '<div class="card empty" style="padding:20px">No songs in this set list yet.</div>' + (lead ? '<a class="card addrow2" href="' + slUrl(id, true) + '">' + ico("add") + 'Add Songs or Moments</a>' : '');
+    $("app").innerHTML = h0;
+    if($("slStart")) $("slStart").onclick = function(){ startStage(e); };
+    return;
   }
-  h += '<div id="selList" style="margin-top:12px"></div>';
+  if(!state.sl || state.sl.id !== id) state.sl = { id: id, songs: JSON.parse(JSON.stringify(e.songs || [])), dirty: false };
+  var sl = state.sl, items = sl.songs;
+  var h = banner + subHead(slUrl(id), "Edit setlist", '<button class="savebtn' + (sl.dirty ? ' on' : '') + '" id="slSave" aria-label="Save set list" title="Save set list">' + ico("save") + '</button>', '<span class="cntb" id="slCnt">' + items.length + '</span>');
+  h += '<div class="sl-ev">' + esc(e.title) + ' · ' + esc(shortWhen(e)) + '</div><div id="slMsg"></div><div id="selList"></div>' +
+    '<button class="card addrow2" id="slAdd">' + ico("add") + 'Add Songs or Moments</button>';
   $("app").innerHTML = h;
   function mark(){ sl.dirty = true; var b = $("slSave"); if(b) b.classList.add("on"); }
   function drawSel(){
-    if(!items.length){ $("selList").innerHTML = '<div class="card empty" style="padding:20px">' + (lead ? 'No songs yet. Tap Add Songs to build the set list.' : 'No songs in this set list yet.') + '</div>'; return; }
-    $("selList").innerHTML = '<div class="songs">' + items.map(function(it, i){
-      var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : "";
-      var chips = (k ? '<span class="kchip">' + esc(k) + '</span>' : '') + (s && s.bpm ? '<span class="kchip">' + s.bpm + ' bpm</span>' : '');
-      if(!lead) return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
-        (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : '<div class="s chips">' + (s.artist ? '<span class="sub">' + esc(s.artist) + '</span>' : '') + chips + '</div>') + '</div></a>';
-      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><a class="t" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '" style="color:inherit;text-decoration:none">' + esc(s ? s.title : it.title) + '</a> ' + chips +
-        '<div class="sel-in"><input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
-        '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === items.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
+    $("slCnt").textContent = items.length;
+    if(!items.length){ $("selList").innerHTML = '<div class="card empty" style="padding:20px">Nothing here yet. Tap Add Songs or Moments below.</div>'; return; }
+    $("selList").innerHTML = '<div class="sl-list">' + items.map(function(it, i){
+      return '<div class="card sl-row edit' + (isMoment(it) ? ' moment' : '') + '" data-row="' + i + '"><span class="num">' + (i+1) + '</span>' + slRowInner(it) +
+        '<span class="drag" data-drag="' + i + '" aria-label="Drag to move">' + ico("grip") + '</span></div>';
     }).join("") + '</div>';
-    document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ items[+x.getAttribute("data-note")].note = x.value; mark(); }; });
-    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = items[i-1]; items[i-1] = items[i]; items[i] = t; mark(); drawSel(); }; });
-    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = items[i+1]; items[i+1] = items[i]; items[i] = t; mark(); drawSel(); }; });
-    document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ items.splice(+x.getAttribute("data-rm"), 1); mark(); drawSel(); drawPick(); }; });
+    document.querySelectorAll("[data-row]").forEach(function(r){ r.onclick = function(ev){ if(ev.target.closest(".drag")) return; editItem(+r.getAttribute("data-row")); }; });
+    document.querySelectorAll("[data-drag]").forEach(function(hd){ hd.onpointerdown = function(ev){ startDrag(ev, +hd.getAttribute("data-drag")); }; });
   }
-  function drawPick(){
-    if(!$("pickRes")) return;
-    var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
-    if(!q){ $("pickRes").innerHTML = '<div class="muted" style="padding:10px 2px 0;font-size:14px">Start typing to find a song.</div>'; return; }
-    items.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
-    var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
-      .sort(function(a,b){ var at = a.titleN.indexOf(q) === 0 ? 0 : 1, bt = b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, 12);
-    $("pickRes").innerHTML = res.map(function(s){
-      var lp = lastPlayed(s.id);
-      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
-        (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
-    }).join("") + (!res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
-    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); items.push({ id: s.id, title: s.title, note: "", key: "" }); mark(); clearPick(); drawSel(); drawPick(); }; });
-    if($("addFree")) $("addFree").onclick = function(){ items.push({ id:"", title: state.pick.trim(), note:"", key:"" }); mark(); clearPick(); drawSel(); drawPick(); };
+  // drag a row by its handle to move it
+  function startDrag(ev, from){
+    ev.preventDefault();
+    var rows = [].slice.call(document.querySelectorAll("[data-row]")), row = rows[from], y0 = ev.clientY, to = from;
+    var mids = rows.map(function(r){ var b = r.getBoundingClientRect(); return b.top + b.height / 2; }), hgt = row.getBoundingClientRect().height + 10;
+    row.classList.add("dragging");
+    function move(m){
+      var dy = m.clientY - y0, c = mids[from] + dy, i;
+      row.style.transform = "translateY(" + dy + "px)";
+      to = from;
+      for(i = 0; i < from; i++) if(c < mids[i]){ to = i; break; }
+      for(i = mids.length - 1; i > from; i--) if(c > mids[i]){ to = i; break; }
+      rows.forEach(function(r, k){ if(k === from) return; var sh = (from < to && k > from && k <= to) ? -hgt : (from > to && k >= to && k < from) ? hgt : 0; r.style.transform = sh ? "translateY(" + sh + "px)" : ""; });
+    }
+    function up(){
+      document.removeEventListener("pointermove", move); document.removeEventListener("pointerup", up); document.removeEventListener("pointercancel", up);
+      if(to !== from){ var it = items.splice(from, 1)[0]; items.splice(to, 0, it); mark(); }
+      drawSel();
+    }
+    document.addEventListener("pointermove", move); document.addEventListener("pointerup", up); document.addEventListener("pointercancel", up);
   }
-  function clearPick(){ state.pick = ""; var q = $("pickQ"); q.value = ""; q.parentNode.classList.remove("has"); q.focus(); }
+  function editItem(i){
+    var it = items[i];
+    if(isMoment(it)) return momentSheet(it, function(m){ if(m === null) items.splice(i, 1); else { it.title = m.title; it.note = m.note; } mark(); drawSel(); });
+    var s = songFor(it);
+    formSheet(s ? s.title : it.title, '<label class="fl">Note for the band</label><textarea id="fsNote" class="fin" maxlength="200" rows="3" placeholder="e.g. skip Verso II, end after the chorus">' + esc(it.note || "") + '</textarea>' +
+      '<button class="grow danger rmrow" id="fsRm"><span class="gi">' + ico("x") + '</span><span class="gl">Remove from set list</span></button>', "Save", function(box, close){
+      box.querySelector("#fsRm").onclick = function(){ items.splice(i, 1); mark(); drawSel(); close(); };
+      return function(){ it.note = box.querySelector("#fsNote").value.trim(); mark(); drawSel(); return true; };
+    });
+  }
   drawSel();
-  if($("slStart")) $("slStart").onclick = function(){ startStage(e); };
-  if(!lead) return;
-  if($("slAdd")) $("slAdd").onclick = function(){ state.slAdd = true; renderSetlist(id, banner); $("pickQ").focus(); };
-  if($("slDone")) $("slDone").onclick = function(){ state.slAdd = false; state.pick = ""; renderSetlist(id, banner); };
-  if($("pickQ")){
-    $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
-    $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
-    drawPick();
-  }
-  document.querySelector(".sbback").onclick = function(ev){ if(sl.dirty && !confirm("Leave without saving the set list?")) ev.preventDefault(); };
+  $("slAdd").onclick = function(){
+    choiceSheet([
+      { id: "songs", icon: "music", cls: "c-song", label: "Add songs", sub: "Start adding your songs to your event" },
+      { id: "moment", icon: "mic", cls: "c-moment", label: "Add moment", sub: "Prayers, announcements and others" }
+    ], function(k){
+      if(k === "songs") songPicker(items, function(picked){ picked.forEach(function(s){ items.push({ id: s.id, title: s.title, note: "", key: "" }); }); if(picked.length){ mark(); drawSel(); } });
+      else momentSheet(null, function(m){ if(m){ items.push({ id: MOMENT_ID, title: m.title, note: m.note, key: "" }); mark(); drawSel(); } });
+    });
+  };
+  document.querySelector(".sbback").onclick = function(ev){ if(!sl.dirty) return; if(!confirm("Leave without saving the set list?")) ev.preventDefault(); else state.sl = null; };
   $("slSave").onclick = function(){
     var b = this;
     b.disabled = true; b.classList.add("spin");
     send("save", state.pin, eventPayload(e, items)).then(function(r){
-      if(r && r.ok){ state.sl = null; return load(true).then(function(){ if(location.hash === "#/e/" + encodeURIComponent(id) + "/setlist"){ renderSetlist(id, banner); $("slMsg").innerHTML = '<div class="banner ok">Set list saved.</div>'; } }); }
+      if(r && r.ok){ state.sl = null; return load(true).then(function(){ state.slMsg = "Set list saved."; if(location.hash === slUrl(id, true)) location.hash = slUrl(id); }); }
       b.disabled = false; b.classList.remove("spin");
       if(r && r.error === "wrong_pin") return wrongPin();
       $("slMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
     }).catch(function(x){ b.disabled = false; b.classList.remove("spin"); $("slMsg").innerHTML = '<div class="banner bad">Could not reach the server (' + esc(x.message) + '). Try again.</div>'; });
   };
+}
+/* sheets used by the set list editor and rehearsal screen */
+function sheetOpen(cls, html){
+  var ov = document.createElement("div"); ov.className = "sheet-bg";
+  ov.innerHTML = '<div class="sheet ' + (cls || '') + '">' + html + '</div>';
+  document.body.appendChild(ov); document.body.classList.add("noscroll");
+  function close(){ ov.remove(); if(!document.querySelector(".sheet-bg")) document.body.classList.remove("noscroll"); }
+  ov.onclick = function(e){ if(e.target === ov) close(); };
+  var x = ov.querySelector(".xclose"); if(x) x.onclick = close;
+  return { el: ov, close: close };
+}
+function choiceSheet(opts, pick){
+  var sh = sheetOpen("choice", '<div class="glist">' + opts.map(function(o){
+    return '<button class="grow ch-opt ' + o.cls + '" data-pick="' + o.id + '"><span class="gi">' + ico(o.icon) + '</span><span class="gl"><b>' + esc(o.label) + '</b><small>' + esc(o.sub) + '</small></span></button>';
+  }).join("") + '</div>');
+  sh.el.querySelectorAll("[data-pick]").forEach(function(b){ b.onclick = function(){ sh.close(); pick(b.getAttribute("data-pick")); }; });
+}
+// title + a form + one big button; setup returns the save function (true = close)
+function formSheet(title, body, btn, setup){
+  var sh = sheetOpen("form", '<div class="fs-head"><button class="xclose rb" aria-label="Close">' + ico("x2") + '</button><b>' + esc(title) + '</b><span style="width:44px"></span></div>' +
+    '<div class="sheet-body">' + body + '</div>' + (btn ? '<div class="fs-foot"><button class="bigbtn" id="fsGo">' + esc(btn) + '</button></div>' : ''));
+  var save = setup(sh.el, sh.close);
+  if(btn) sh.el.querySelector("#fsGo").onclick = function(){ if(save()) sh.close(); };
+  return sh;
+}
+function momentSheet(it, done){
+  formSheet(it ? "Edit moment" : "Add moment", '<label class="fl">Title</label><div class="fbox"><input id="mTitle" maxlength="120" placeholder="Enter a title" value="' + esc(it ? it.title : "") + '">' +
+    '<textarea id="mDesc" maxlength="200" rows="4" placeholder="Enter a description">' + esc(it ? it.note : "") + '</textarea></div>' +
+    (it ? '<button class="grow danger rmrow" id="mRm"><span class="gi">' + ico("x") + '</span><span class="gl">Remove moment</span></button>' : ''),
+    it ? "Save" : "Create", function(box, close){
+      var t = box.querySelector("#mTitle"); if(!it) setTimeout(function(){ t.focus(); }, 50);
+      if(box.querySelector("#mRm")) box.querySelector("#mRm").onclick = function(){ close(); done(null); };
+      return function(){
+        var title = t.value.trim(); if(!title){ t.focus(); t.parentNode.classList.add("bad"); return false; }
+        done({ title: title, note: box.querySelector("#mDesc").value.trim() }); return true;
+      };
+    });
+}
+// full-screen song chooser: All / Saved, search, tick several, Add (N)
+function songPicker(items, done){
+  var tab = "all", q = "", picked = [], inList = {};
+  items.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
+  var sh = sheetOpen("full", '<div class="pk-head"><div class="pk-tabs"><button data-t="all" class="on">All</button><button data-t="saved">Saved</button></div><button class="xclose rb" aria-label="Close">' + ico("x2") + '</button></div>' +
+    '<div class="pk-search search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="pkQ" type="search" placeholder="Search by title or lyrics" autocomplete="off"></div>' +
+    '<div class="sheet-body pk-list" id="pkList"></div><div class="fs-foot"><button class="bigbtn" id="pkAdd" disabled>Add</button></div>');
+  var el = sh.el;
+  function draw(){
+    var words = norm(q) ? norm(q).split(" ") : [];
+    var list = state.db.songs.filter(function(s){ if(tab === "saved" && !state.saved[s.id]) return false; for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; }).sort(byTitle);
+    el.querySelector("#pkList").innerHTML = list.length ? list.map(function(s){
+      var on = picked.indexOf(s.id) >= 0;
+      return '<button class="card pk-row' + (on ? ' on' : '') + '" data-id="' + esc(s.id) + '"><span class="pk-txt"><b>' + esc(s.title) + '</b><span class="pk-sub">' + (s.artist ? '<span>' + esc(s.artist) + '</span>' : '') + (s.key ? '<span class="kchip">' + esc(keyName(s.key, 0)) + '</span>' : '') + (inList[s.id] ? '<span class="pk-in">In set list</span>' : '') + '</span></span><span class="pk-ck">' + (on ? '✓' : '') + '</span></button>';
+    }).join("") : '<div class="muted" style="padding:30px 10px;text-align:center">' + (tab === "saved" && !q ? 'No saved songs on this phone yet. Tap ♡ on a song to save it.' : 'No songs match.') + '</div>';
+    el.querySelectorAll("[data-id]").forEach(function(b){ b.onclick = function(){ var id = b.getAttribute("data-id"), at = picked.indexOf(id); if(at >= 0) picked.splice(at, 1); else picked.push(id); draw(); }; });
+    var add = el.querySelector("#pkAdd"); add.disabled = !picked.length; add.textContent = picked.length ? "Add (" + picked.length + ")" : "Add";
+  }
+  el.querySelectorAll("[data-t]").forEach(function(b){ b.onclick = function(){ tab = b.getAttribute("data-t"); el.querySelectorAll("[data-t]").forEach(function(x){ x.classList.toggle("on", x === b); }); draw(); }; });
+  el.querySelector("#pkQ").oninput = function(){ q = this.value; draw(); };
+  el.querySelector("#pkAdd").onclick = function(){ var out = picked.map(find).filter(Boolean); sh.close(); done(out); };
+  draw();
 }
 
 /* ---------- add / edit an event ---------- */
@@ -2121,7 +2633,7 @@ function renderSongEditor(id, banner){
   }
   var keyOpts = '<option value="">(not sure yet)</option>' + KEYS.map(function(k){ return '<option' + (d.key === k ? ' selected' : '') + '>' + k + '</option>'; }).join("") + KEYS.map(function(k){ return '<option' + (d.key === k + "m" ? ' selected' : '') + '>' + k + 'm</option>'; }).join("");
   var h = banner + '<div class="card song-head editor">' +
-    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/c/' + encodeURIComponent(id) : '#/songs') + '" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit song' : 'New song') + '</span></div>' +
+    '<div class="backrow"><a class="ibtn" href="' + (state.returnTo || (id ? '#/c/' + encodeURIComponent(id) : '#/songs')) + '" style="text-decoration:none">‹ ' + (state.returnTo ? 'Back' : 'Cancel') + '</a><span class="muted" style="font-size:13px">' + (id ? 'Edit song' : 'New song') + '</span></div>' +
     '<label>Song title<input id="sTitle" maxlength="100" value="' + esc(d.title) + '"></label>' +
     '<div class="row2"><label>Album<select id="sAlbum">' + opts(db.albums.map(function(a){ return a.name; }), d.album, "(no album)") + '</select></label>' +
     '<label>Type<select id="sType"><option' + (d.type === "Original" ? ' selected' : '') + '>Original</option><option' + (d.type === "Cover" ? ' selected' : '') + '>Cover</option></select></label>' +
@@ -2176,7 +2688,7 @@ function renderSongEditor(id, banner){
     b.disabled = true; b.textContent = "Saving...";
     var payload = { id: d.id, title: d.title.trim(), album: d.album, type: d.type, artist: d.artist, key: d.key, bpm: d.bpm, time: d.time, genre: d.genre, themes: d.themes, link: (d.link || "").trim(), lyrics: d.lyrics };
     send("savesong", state.pin, payload).then(function(r){
-      if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = "#/c/" + encodeURIComponent(r.id); }); }
+      if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = state.returnTo || ("#/c/" + encodeURIComponent(r.id)); }); }
       b.disabled = false; b.textContent = id ? "Save changes" : "Add song";
       if(r && r.error === "wrong_pin") return wrongPin();
       msg(r && r.error === "exists" ? "Another song already has that title." : "Could not save (" + esc((r && r.error) || "unknown") + ").");
@@ -2185,7 +2697,7 @@ function renderSongEditor(id, banner){
   if($("sDel")) $("sDel").onclick = function(){
     if(!confirm('Delete "' + d.title + '" from the songbook? This removes it for everyone.')) return;
     jsonp(SCRIPT_URL + "?action=deletesong&pin=" + encodeURIComponent(state.pin) + "&id=" + encodeURIComponent(id)).then(function(r){
-      if(r && r.ok){ state.sdraft = null; return load(true).then(function(){ location.hash = "#/songs"; }); }
+      if(r && r.ok){ state.sdraft = null; state.returnTo = ""; if(state.stage) endStage(true); return load(true).then(function(){ location.hash = "#/songs"; }); }
       if(r && r.error === "wrong_pin") return wrongPin();
       msg("Could not delete (" + esc((r && r.error) || "unknown") + ").");
     });
