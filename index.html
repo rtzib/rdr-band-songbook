@@ -5,13 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Rey de Reyes Songbook</title>
-<meta name="theme-color" content="#0b1120">
+<meta name="theme-color" content="#141617">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Songbook">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f5f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --soft:#eef2ff;
@@ -247,14 +250,6 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .cancel-box{background:var(--t-pink);color:var(--bad);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:15px}
 .cancel-box div{color:var(--ink);margin-top:4px}
 .ev-admin{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-/* floating + button */
-.fab{position:fixed;right:20px;bottom:24px;z-index:35;width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25);text-decoration:none}
-.fab svg{width:26px;height:26px}
-.fab:active{transform:scale(.95)}
-body.hasfab main{padding-bottom:110px}
-@media (max-width:640px){ body.hasfab main{padding-bottom:calc(var(--navh, 72px) + 100px)} }
-@media (max-width:640px){ .fab{bottom:calc(var(--navh, 72px) + 16px)} }
-body.stage .fab{display:none !important}
 /* countdown */
 .countdown{margin-top:14px}
 .cd-k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:.85;margin-bottom:6px}
@@ -456,6 +451,138 @@ body.noscroll{overflow:hidden}
 .sheet-foot{display:flex;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--line)}
 .sheet-foot .btn{flex:1}
 .sheet-foot .btn.primary{flex:2}
+
+/* ===== OnStage-style look (v4) ===== */
+:root{
+  --bg:#f4f5f7; --card:#ffffff; --ink:#16181b; --muted:#7a8089; --line:#e6e8ec; --soft:#eef0f3;
+  --accent:#1e88ff; --accent-ink:#ffffff; --blue:#2a4fc4; --navy:#2f3f7a;
+  --t-blue:#eaf3ff; --radius:20px;
+}
+html.dark{
+  --bg:#141617; --card:#222427; --ink:#f2f3f5; --muted:#8c9199; --line:#2e3135; --soft:#2b2e32;
+  --accent:#1e90ff; --accent-ink:#ffffff; --blue:#2a4fc4; --navy:#34407a;
+  --t-blue:rgba(30,144,255,.14);
+}
+html,body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.ic.xs{width:15px;height:15px;vertical-align:-2px}
+.ic.big{width:58px;height:58px;stroke-width:1.6}
+.ibtn{background:var(--card)}
+@media (max-width:640px){
+  header.top{display:none}
+  main{padding-top:calc(env(safe-area-inset-top) + 14px)}
+  nav.bottom{background:var(--bg);border-top:1px solid var(--line)}
+  nav.bottom a{color:var(--muted);font-size:13px;font-weight:500;padding:10px 0 12px}
+  nav.bottom a svg{width:27px;height:27px;margin-bottom:4px}
+  nav.bottom a.on{color:var(--ink);font-weight:600}
+}
+/* page titles + round buttons */
+.pagehead{margin:4px 0 18px;min-height:56px}
+.pagehead h2{font-size:30px;font-weight:600;letter-spacing:-.01em}
+.ptitle{border:0;background:none;padding:0;font-size:30px;font-weight:600;display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
+.ptitle .muted{font-weight:600}
+.pchev{width:24px;height:24px;stroke-width:2.4}
+.rbtn{width:54px;height:54px;flex:0 0 54px;border-radius:50%;border:0;background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.rbtn .ic{width:26px;height:26px;stroke-width:2}
+.rbtn.spin svg,.grow.spin .gi svg{animation:spin 1s linear infinite}
+/* search */
+.search{margin-bottom:16px}
+.search input{height:54px;border-radius:18px;border:1px solid var(--line);background:var(--card);padding-left:50px;font-size:17px}
+.search svg{left:16px;top:15px;width:24px;height:24px}
+.search .x{top:10px}
+.fbtn{top:10px;right:10px;background:transparent}
+.fbtn svg{position:static;width:24px;height:24px}
+/* cards in a list: each one on its own */
+.songs{gap:10px;background:none;border-radius:0;overflow:visible}
+.songs > .card{background:var(--card);border-radius:var(--radius);border:0}
+.song-link{padding:18px 6px 18px 20px}
+.song-row .t,.ev-row .t,.set-row .t{font-size:18px;font-weight:500}
+.song-row .s{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:15px;font-weight:500}
+.song-row .sub{color:var(--muted)}
+.kchip{display:inline-block;background:var(--soft);color:var(--muted);border-radius:999px;padding:2px 12px;font-size:14px;font-weight:600}
+.heart{width:56px;height:56px;margin-right:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.heart .hic{width:28px;height:28px;stroke-width:1.8}
+.heart.on{color:#f0566a}
+.heart.on .hic{fill:currentColor}
+.group-h{margin:22px 6px 10px}
+/* event cards */
+.ev-row{padding:18px 18px 18px 20px}
+.ev-row .t{font-weight:600}
+.ev-row .s{font-size:15px;font-weight:500;margin-top:6px}
+.ev-row .when{display:flex;align-items:center;gap:6px}
+.avatar{flex:0 0 52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:16px;line-height:1}
+.avatar small{font-size:9px;font-weight:600;opacity:.8;margin-top:2px}
+.sec-h2{font-size:17px;font-weight:500;color:var(--ink);margin:26px 2px 14px}
+.sec-row{display:flex;align-items:center;justify-content:space-between;margin:10px 2px 14px}
+.linkbtn{border:0;background:none;color:var(--accent);font-size:16px;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:4px}
+/* the big blue card */
+.bluecard{background:var(--blue);color:#fff;border-radius:22px;padding:22px 22px 24px;min-height:200px;display:flex;flex-direction:column}
+.bc-k{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;opacity:.75;margin-bottom:6px}
+.bc-t{font-size:28px;font-weight:500;line-height:1.15;color:#fff;text-decoration:none}
+.bc-s{font-size:16px;opacity:.82;margin-top:6px}
+.bc-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:22px}
+.wbtn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border:0;border-radius:12px;background:#fff;color:var(--blue);font-size:17px;font-weight:600;text-decoration:none;cursor:pointer}
+.wbtn .ic{stroke-width:2.6}
+.wbtn.ghost{background:rgba(255,255,255,.16);color:#fff}
+.bluecard .cd-k{color:#fff;opacity:.75}
+.bluecard .cd-box{background:rgba(255,255,255,.14);color:#fff}
+.bluecard .cd-box span{color:#fff;opacity:.8}
+.bluecard .cd-now{background:rgba(255,255,255,.18);color:#fff}
+/* home dashboard */
+.dash2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash2 .dash-side{display:grid;gap:12px;grid-template-columns:1fr}
+.teamcard{display:flex;flex-direction:column;padding:20px;text-decoration:none;color:var(--ink);min-height:250px}
+.pilltag{align-self:flex-start;background:var(--soft);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500}
+.team-n{font-size:24px;font-weight:500;margin-top:22px;line-height:1.2}
+.team-s{font-size:15px;color:var(--muted);font-weight:500;margin-top:6px}
+.team-foot{margin-top:auto;padding-top:14px;display:flex;flex-direction:column;gap:10px}
+.avs{display:inline-flex}
+.av{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--card);flex:0 0 auto}
+.avs .av + .av{margin-left:-10px}
+.av.more{background:var(--soft);color:var(--ink)}
+.datecard{padding:18px 16px 14px;min-width:0}
+.dc-h{font-size:26px;font-weight:500;margin:0 4px 10px}
+.dc-h b{font-weight:600}
+.datecard .week-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(46px,1fr);grid-template-columns:none;gap:2px}
+.datecard .day{padding:6px 0}
+.datecard .day span{font-size:13px}
+.datecard .day.today{background:var(--soft);color:var(--ink)}
+.savedcard{display:flex;flex-direction:column;padding:18px 18px 16px;text-decoration:none;color:var(--ink)}
+.sc-h{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:500}
+.sc-h .ic{width:26px;height:26px;color:#f0566a}
+.sc-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;padding-top:18px}
+.sc-v{font-size:32px;font-weight:500;line-height:1}
+.sc-go{width:40px;height:40px;border-radius:10px;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+@media (max-width:380px){ .dash2{grid-template-columns:1fr} .teamcard{min-height:0} }
+.nothing{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 16px 20px;gap:6px}
+.nothing b{font-size:18px;font-weight:600;margin-top:14px}
+.nothing span{color:var(--muted);font-size:15px}
+/* settings */
+.teamrow{display:flex;align-items:center;gap:12px;padding:20px 22px}
+.teamrow .team-n{font-size:22px;font-weight:600}
+.teamrow .team-s{margin-top:4px}
+.glist{background:var(--card);border-radius:var(--radius);overflow:hidden}
+.grow{display:flex;align-items:center;gap:16px;width:100%;min-height:62px;padding:12px 20px;border:0;background:none;text-align:left;text-decoration:none;color:var(--ink);font-size:17px;position:relative}
+.grow + .grow::before{content:"";position:absolute;top:0;left:64px;right:20px;border-top:1px solid var(--line)}
+.glist > .grow:first-child::before{display:none}
+.gi{width:28px;display:flex;justify-content:center;color:var(--muted)}
+.gi .ic{width:26px;height:26px;stroke-width:1.6}
+.gl{flex:1;min-width:0}
+.gr{color:var(--muted);font-size:15px;text-align:right;max-width:55%}
+.gchev{color:var(--muted);display:flex}
+.gcheck{color:var(--accent);font-weight:700}
+.grow .av{width:34px;height:34px;font-size:12px;border:0}
+.grow.danger{color:var(--bad)}
+.grow.danger .gi{color:var(--bad)}
+.tog{width:54px;height:32px;border-radius:16px;background:var(--line);position:relative;flex:0 0 auto;transition:background .15s}
+.tog i{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s}
+.tog.on{background:var(--accent)}
+.tog.on i{left:26px;background:var(--card)}
+html:not(.dark) .tog.on i{background:#fff}
+.step{display:flex;align-items:center;gap:8px}
+.step button{border:0;background:var(--soft);border-radius:10px;height:36px;min-width:44px;font-weight:600}
+.step b{min-width:24px;text-align:center;font-weight:600}
+.glist + .sec-h2,.teamrow + .glist{margin-top:26px}
+.sheet .glist{background:var(--card)}
 </style>
 </head>
 <body>
@@ -466,23 +593,18 @@ body.noscroll{overflow:hidden}
       <a href="#/" data-v="home">Home</a>
       <a href="#/songs" data-v="songs">Songs</a>
       <a href="#/events" data-v="events">Events</a>
+      <a href="#/settings" data-v="settings">Settings</a>
     </nav>
-    <a class="ibtn" href="#/help" title="Help" aria-label="Help" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></a>
-    <button class="ibtn" id="btnRefresh" title="Refresh from the song doc" aria-label="Refresh">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-    </button>
-    <button class="ibtn" id="btnTheme" title="Light / dark mode" aria-label="Light or dark mode">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    </button>
   </div>
 </header>
 
 <main><div class="wrap" id="app"><div class="empty">Loading songs...</div></div></main>
 
 <nav class="bottom" id="tabsBottom">
-  <a href="#/" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
-  <a href="#/songs" data-v="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Songs</a>
-  <a href="#/events" data-v="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M8 17h6"/></svg>Events</a>
+  <a href="#/" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 0 1 4 19z"/></svg>Home</a>
+  <a href="#/songs" data-v="songs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h11M4 11h11M4 16h7"/><path d="M19 4v11"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>Songs</a>
+  <a href="#/events" data-v="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3.5 9.5h17M8 13.5h8M8 17h5"/></svg>Events</a>
+  <a href="#/settings" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h8M17 7h4M3 17h4M13 17h8"/><circle cx="14" cy="7" r="3"/><circle cx="10" cy="17" r="3"/></svg>Settings</a>
 </nav>
 
 <script>
@@ -770,15 +892,14 @@ var state = {
   q: ls("q") || "", f: (function(){ var f = ls("f") || {}; return { tab: f.tab || "all", albums: f.albums || [], genres: f.genres || [], themes: f.themes || [], lyrics: !!f.lyrics, sort: f.sort || "az" }; })(),
   chords: ls("chords") !== false, size: ls("size") || 20, trans: ls("trans") || {}, lastList: [],
   saved: ls("saved") || {}, pin: ls("pin") || "", showTools: !!ls("showTools"),
-  ef: (function(){ var f = ls("ef") || {}; return { view: f.view || "upcoming", types: f.types || [], when: f.when || "any", sort: f.sort || "", hideCanceled: !!f.hideCanceled }; })(),
+  ef: (function(){ var f = ls("ef") || {}; return { view: "all", types: f.types || [], when: f.when || "any", sort: f.sort || "", hideCanceled: !!f.hideCanceled }; })(),
   events: null, evQ: "", draft: null, draftKey: "", pick: "", sdraft: null, stage: false, installEvt: null, lang: ls("lang") || "en"
 };
 function leader(){ return !!state.pin; }
 
 /* theme */
-function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#0b1120" : "#1d4ed8"; }
+function setTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); ls("theme", t); document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#141617" : "#f4f5f7"; }
 setTheme(ls("theme") || "dark");
-$("btnTheme").onclick = function(){ setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"); };
 document.documentElement.style.setProperty("--lyric", state.size + "px");
 
 /* ---------- talking to the Google script ---------- */
@@ -814,7 +935,7 @@ function useData(raw, source, when){
 function load(force){
   if(state.loading) return Promise.resolve();
   if(!SCRIPT_URL){ if(window.SNAPSHOT) useData(window.SNAPSHOT, "snapshot"); else { state.error = "setup"; route(); } return Promise.resolve(); }
-  state.loading = true; $("btnRefresh").classList.add("spin"); status();
+  state.loading = true; spinRefresh(true); status();
   return jsonp(SCRIPT_URL + "?action=data" + (force ? "&fresh=1" : "")).then(function(d){
     if(!d || !d.ok) throw new Error((d && d.error) || "bad");
     state.error = "";
@@ -823,9 +944,21 @@ function load(force){
   }).catch(function(e){
     state.error = String(e.message || e);
     if(!state.db){ var c = ls("cache2"); if(c && c.data) useData(c.data, "cache", c.at); else route(); } else route();
-  }).then(function(){ state.loading = false; $("btnRefresh").classList.remove("spin"); status(); });
+  }).then(function(){ state.loading = false; spinRefresh(false); status(); });
+}
+function spinRefresh(on){ document.querySelectorAll(".js-refresh").forEach(function(b){ b.classList.toggle("spin", on); }); }
+function statusText(){
+  var s = "";
+  if(state.loading) s = "Refreshing...";
+  else if(state.db){
+    var d = new Date(state.loadedAt), hhmm = d.toLocaleTimeString("en-US", { hour:"numeric", minute:"2-digit" });
+    var day = d.toDateString() === new Date().toDateString() ? "" : d.toLocaleDateString("en-US", { day:"numeric", month:"short" }) + " ";
+    s = state.source === "snapshot" ? "Test copy" : (state.source === "cache" ? "Offline copy " + day + hhmm : "Updated " + day + hhmm);
+  }
+  return s;
 }
 function status(){
+  var el = $("syncVal"); if(el) el.textContent = statusText();
   var s = "Rey de Reyes";
   if(state.loading) s = "Refreshing...";
   else if(state.db){
@@ -836,7 +969,6 @@ function status(){
   if(leader()) s += " · Leader";
   $("status").textContent = s;
 }
-$("btnRefresh").onclick = function(){ load(true); };
 document.addEventListener("visibilitychange", function(){
   if(document.visibilityState === "visible"){
     if(SCRIPT_URL && Date.now() - state.loadedAt > REFRESH_MINUTES*60000) load(false);
@@ -860,8 +992,9 @@ function route(){
   else if((m = h.match(/^e\/([^\/]+)$/))){ view = "event"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
   else if(h === "manage") view = "manage";
+  else if(h === "settings") view = "settings";
   else if(/^help/.test(h)) view = "help";
-  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home" }[view] || "";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
   if(view !== "evsong" && state.stage) endStage(true);
@@ -897,21 +1030,12 @@ function route(){
   }
   else if(view === "edit") renderEditor(arg, arg2, banner);
   else if(view === "manage") renderManage(banner);
-  else if(view === "help"){ app.innerHTML = banner + helpHtml(); bindHelp(); scrollTop(); }
+  else if(view === "settings"){ renderSettings(banner); scrollTop(); }
+  else if(view === "help"){ app.innerHTML = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Help Center</h2></div>' + helpHtml(); bindHelp(); scrollTop(); }
   else { renderHome(banner); scrollTop(); }
-  setFab(view);
   if(!ls("guideDone") && view === "home" && !state.guideShown){ state.guideShown = true; showGuide(0); }
 }
 function scrollTop(){ window.scrollTo(0,0); }
-function setFab(view){
-  var fab = $("fab");
-  if(!fab){ fab = document.createElement("a"); fab.id = "fab"; fab.className = "fab"; fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'; document.body.appendChild(fab); }
-  var to = { songs: ["#/newsong", "New song"], events: ["#/new", "New event"] }[view];
-  var on = !!(to && leader() && state.db);
-  if(on){ fab.href = to[0]; fab.setAttribute("aria-label", to[1]); fab.title = to[1]; }
-  fab.style.display = on ? "" : "none";
-  document.body.classList.toggle("hasfab", on);
-}
 window.addEventListener("hashchange", route);
 
 /* ---------- leader sign-in (only the leader sees the edit buttons) ---------- */
@@ -962,17 +1086,14 @@ function sortSongs(list, how){
 }
 function keyLabel(k){ return k ? keyName(k, 0).replace(/m$/, "") + (k.minor ? " Minor" : " Major") : ""; }
 function songRow(s){
-  var bits = [];
-  if(s.artist && s.type === "Cover") bits.push(esc(s.artist));
-  if(s.genre) bits.push(esc(s.genre));
-  s.themes.forEach(function(t){ bits.push(esc(t)); });
   var tags = "";
   if(!s.hasLyrics) tags += '<span class="tag w">No lyrics</span>';
   if(s.link) tags += '<span class="tag">▶</span>';
-  var pills = (s.key ? '<span class="pill">' + esc(keyLabel(s.key)) + '</span>' : '') + (s.bpm ? '<span class="pill">' + s.bpm + ' bpm</span>' : '');
+  var sub = s.artist || s.genre || (s.themes[0] || "");
+  var chips = (s.key ? '<span class="kchip">' + esc(keyName(s.key, 0)) + '</span>' : '') + (s.bpm ? '<span class="kchip">' + s.bpm + ' bpm</span>' : '');
   return '<div class="card song-row"><a class="song-link" href="#/c/' + encodeURIComponent(s.id) + '">' +
-    '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (bits.join(" · ") || "&nbsp;") + '</div></div><div class="pills">' + pills + '</div></a>' +
-    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="Save song">' + (state.saved[s.id] ? '♥' : '♡') + '</button></div>';
+    '<div style="min-width:0;flex:1"><div class="t">' + esc(s.title) + tags + '</div><div class="s">' + (sub ? '<span class="sub">' + esc(sub) + '</span>' : '') + chips + '</div></div></a>' +
+    '<button class="heart' + (state.saved[s.id] ? ' on' : '') + '" data-heart="' + esc(s.id) + '" aria-label="' + (state.saved[s.id] ? 'Unsave song' : 'Save song') + '">' + ico("heart", "ic hic") + '</button></div>';
 }
 var SORTS = { az: "A–Z", "new": "Recently changed", played: "Last played" };
 function themeNames(){ var t = {}; state.db.songs.forEach(function(s){ s.themes.forEach(function(x){ t[norm(x)] = t[norm(x)] || x; }); }); return t; }
@@ -981,7 +1102,8 @@ function saveFilters(){ ls("f", state.f); }
 function renderList(banner){
   var db = state.db, f = state.f, list = sortSongs(filtered(), f.sort);
   var n = sheetCount(f);
-  var tabs = [["all","All"],["saved","Saved"],["orig","Originals"],["cover","Covers"]];
+  var tabs = [["all","Songs"],["saved","Saved"],["orig","Originals"],["cover","Covers"]];
+  var tabName = (tabs.filter(function(t){ return t[0] === f.tab; })[0] || tabs[0])[1];
   var genres = {}; db.songs.forEach(function(s){ if(s.genre) genres[norm(s.genre)] = genres[norm(s.genre)] || s.genre; });
   var themes = themeNames(), chips = [];
   f.themes.forEach(function(t){ chips.push('<button class="fchip" data-rm-theme="' + esc(t) + '">' + esc(themes[t] || t) + ' <b>×</b></button>'); });
@@ -990,11 +1112,11 @@ function renderList(banner){
   if(f.lyrics) chips.push('<button class="fchip" data-rm-lyr="1">Has lyrics <b>×</b></button>');
   if(f.sort !== "az") chips.push('<button class="fchip" data-rm-sort="1">Sort: ' + SORTS[f.sort] + ' <b>×</b></button>');
   if(chips.length > 1) chips.push('<button class="fchip clear" id="fClearAll">Clear all</button>');
-  var html = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Songs</h2></div>' +
+  var html = banner + '<div class="pagehead"><button class="ptitle" id="viewBtn" aria-label="Change list"><span class="muted">' + list.length + '</span> ' + tabName + ico("down", "ic pchev") + '</button>' +
+    (leader() ? '<a class="rbtn" href="#/newsong" aria-label="New song" title="New song">' + ico("add") + '</a>' : '') + '</div>' +
     '<div class="search has-filter' + (state.q ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
     '<input id="q" type="search" placeholder="Search by title or lyrics" autocomplete="off" value="' + esc(state.q) + '"><button class="x" id="qx" aria-label="Clear">×</button>' +
     '<button class="fbtn' + (n ? ' on' : '') + '" id="fOpen" aria-label="Filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>' + (n ? '<i>' + n + '</i>' : '') + '</button></div>' +
-    '<div class="seg">' + tabs.map(function(t){ return '<button class="' + (f.tab === t[0] ? 'on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join("") + '</div>' +
     (chips.length ? '<div class="fchips">' + chips.join("") + '</div>' : '');
   var order = [];
   if(!list.length) html += '<div class="card empty">' + (f.tab === "saved" && !n && !state.q ? 'No saved songs yet. Tap ♡ on a song to save it.' : 'No songs match.') + '</div>';
@@ -1011,7 +1133,13 @@ function renderList(banner){
   q.oninput = function(){ state.q = q.value; ls("q", state.q); var pos = q.selectionStart; renderList(banner); var q2 = $("q"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){} };
   $("qx").onclick = function(){ state.q = ""; ls("q",""); renderList(banner); };
   $("fOpen").onclick = function(){ openFilters(banner); };
-  document.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ f.tab = b.getAttribute("data-tab"); saveFilters(); if(f.tab !== "saved" && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner); }; });
+  $("viewBtn").onclick = function(){
+    var counts = { all: db.songs.length, saved: db.songs.filter(function(x){ return state.saved[x.id]; }).length, orig: db.songs.filter(function(x){ return x.type === "Original"; }).length, cover: db.songs.filter(function(x){ return x.type === "Cover"; }).length };
+    var names = { all: "All songs", saved: "Saved songs", orig: "Originals", cover: "Covers" };
+    openMenu("Show", tabs.map(function(t){ return { id: t[0], label: names[t[0]], right: counts[t[0]], on: f.tab === t[0] }; }), function(id){
+      f.tab = id; saveFilters(); if(f.tab !== "saved" && /\?saved/.test(location.hash)) history.replaceState(null, "", "#/songs"); renderList(banner);
+    });
+  };
   document.querySelectorAll("[data-rm-album]").forEach(function(b){ b.onclick = function(){ f.albums = f.albums.filter(function(x){ return x !== b.getAttribute("data-rm-album"); }); saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-theme]").forEach(function(b){ b.onclick = function(){ f.themes = f.themes.filter(function(x){ return x !== b.getAttribute("data-rm-theme"); }); saveFilters(); renderList(banner); }; });
   document.querySelectorAll("[data-rm-genre]").forEach(function(b){ b.onclick = function(){ f.genres = f.genres.filter(function(x){ return x !== b.getAttribute("data-rm-genre"); }); saveFilters(); renderList(banner); }; });
@@ -1274,10 +1402,42 @@ function isCanceled(e){ return e && e.status === "canceled"; }
 function findEvent(id){ var l = state.events || []; for(var i=0;i<l.length;i++) if(l[i].id === id) return l[i]; return null; }
 function songFor(item){ if(!state.db) return null; return (item.id && find(item.id)) || findSong(state.db.songs, item.title); }
 function dateBox(e){ var d = evDate(e); return '<div class="datebox"><b>' + (d ? d.getDate() : "?") + '</b><span>' + (d ? d.toLocaleDateString("en-US", { month:"short" }) : "") + '</span></div>'; }
+function shortWhen(e){
+  var d = evDate(e); if(!d) return e.date || "";
+  return d.toLocaleDateString("en-US", { weekday:"short", day:"numeric", month:"short" }) + (e.time ? " • " + fmtTime(e.time) : "");
+}
 function evRow(e){
   var n = (e.songs || []).length;
-  return '<a class="card ev-row' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '">' + dateBox(e) + '<div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div><div class="s">' +
-    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span> ' : '') + esc(fmtDate(e)) + (e.location ? ' · ' + esc(e.location) : '') + ' · ' + n + (n === 1 ? ' song' : ' songs') + '</div></div><span class="chev">›</span></a>';
+  return '<a class="card ev-row' + (isCanceled(e) ? ' canceled' : '') + '" href="#/e/' + encodeURIComponent(e.id) + '"><div style="min-width:0;flex:1"><div class="t">' + esc(e.title) + (isCanceled(e) ? ' <span class="tag x">Canceled</span>' : '') + '</div>' +
+    '<div class="s when">' + ico("calsm", "ic xs") + esc(shortWhen(e)) + (e.location ? ' · ' + esc(e.location) : '') + '</div>' +
+    (e.type ? '<div class="s"><span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span></div>' : '') + '</div>' +
+    '<span class="avatar" title="' + n + (n === 1 ? ' song' : ' songs') + '">' + n + '<small>' + (n === 1 ? 'song' : 'songs') + '</small></span></a>';
+}
+// the big blue card for the next event (Home and Events)
+function nextCard(next, emptyText){
+  if(!next) return '<div class="bluecard"><div class="bc-t">No upcoming event</div><div class="bc-s">' + (emptyText || "There are no events planned yet.") + '</div>' +
+    (leader() ? '<div class="bc-btns"><a class="wbtn" href="#/new">' + ico("add", "ic sm") + 'Create Event</a></div>' : '') + '</div>';
+  var n = (next.songs || []).length;
+  return '<div class="bluecard"><div class="bc-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><a class="bc-t" href="#/e/' + encodeURIComponent(next.id) + '">' + esc(next.title) + '</a>' +
+    '<div class="bc-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="bc-s">' + esc(next.location) + '</div>' : '') +
+    '<div class="countdown" id="cd"></div>' +
+    '<div class="bc-btns">' + (n ? '<button class="wbtn" id="heroStart">▶ Start</button>' : '') + '<a class="wbtn ghost" href="#/e/' + encodeURIComponent(next.id) + '">Set list (' + n + ')</a></div></div>';
+}
+function initials(name){ var p = String(name || "").trim().split(/\s+/); return ((p[0] || "")[0] || "").toUpperCase() + ((p.length > 1 ? p[p.length-1][0] : (p[0] || "")[1]) || "").toUpperCase(); }
+function avatars(list, max){
+  max = max || 4; var more = list.length - max;
+  return '<span class="avs">' + list.slice(0, max).map(function(m){ return '<span class="av" title="' + esc(m.name) + '">' + esc(initials(m.name)) + '</span>'; }).join("") + (more > 0 ? '<span class="av more">+' + more + '</span>' : '') + '</span>';
+}
+// small sheet with a list of choices
+function openMenu(title, items, pick){
+  var ov = document.createElement("div"); ov.className = "sheet-bg";
+  document.body.appendChild(ov); document.body.classList.add("noscroll");
+  function close(){ ov.remove(); document.body.classList.remove("noscroll"); }
+  ov.innerHTML = '<div class="sheet"><div class="sheet-grab"></div><div class="sheet-head"><b>' + esc(title) + '</b><button class="xclose" aria-label="Close">×</button></div><div class="sheet-body" style="padding-bottom:18px"><div class="glist">' +
+    items.map(function(it){ return '<button class="grow" data-pick="' + esc(it.id) + '"><span class="gl">' + esc(it.label) + '</span>' + (it.right != null ? '<span class="gr">' + esc(it.right) + '</span>' : '') + (it.on ? '<span class="gcheck">✓</span>' : '') + '</button>'; }).join("") + '</div></div></div>';
+  ov.querySelector(".xclose").onclick = close;
+  ov.onclick = function(e){ if(e.target === ov) close(); };
+  ov.querySelectorAll("[data-pick]").forEach(function(b){ b.onclick = function(){ close(); pick(b.getAttribute("data-pick")); }; });
 }
 function shareText(e){
   if(isCanceled(e)) return ["*CANCELED: " + e.title + "*", fmtDate(e, true)].concat(e.statusNote ? ["Reason: " + e.statusNote] : []).concat(["", "This event will not happen. Please don't come for this one."]).join("\n");
@@ -1298,49 +1458,54 @@ function shareEvent(e){
 }
 function isInstalled(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
 
-var ICON = {"bolt": "<path d=\"M13 2 4 14h7l-1 8 9-12h-7z\"/>", "music": "<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>", "cal": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"17\" rx=\"3\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/>", "heart": "<path d=\"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z\"/>", "help": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01\"/>", "plus": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"4\"/><path d=\"M12 8v8M8 12h8\"/>", "doc": "<path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5M9 13h6M9 17h4\"/>", "tools": "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "pulse": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M7 12h2l2-3 2 6 2-3h2\"/>"};
+var ICON = {"add": "<path d=\"M12 5v14M5 12h14\"/>", "down": "<path d=\"m6 9 6 6 6-6\"/>", "right": "<path d=\"m9 6 6 6-6 6\"/>", "back": "<path d=\"m15 6-6 6 6 6\"/>",
+  "refresh": "<path d=\"M21 12a9 9 0 1 1-2.64-6.36\"/><path d=\"M21 3v6h-6\"/>", "crown": "<path d=\"m3 7 4.5 4L12 5l4.5 6L21 7l-1.5 11h-15z\"/><path d=\"M5 21h14\"/>",
+  "gift": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\"/><path d=\"M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\"/><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5\"/>",
+  "moon": "<path d=\"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z\"/>", "info": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 11v6M12 7.5h.01\"/>",
+  "users": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20a6.5 6.5 0 0 1 13 0\"/><path d=\"M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14a6.5 6.5 0 0 1 3.5 6\"/>",
+  "out": "<path d=\"M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4\"/><path d=\"M14 8l4 4-4 4M18 12H9\"/>", "text": "<path d=\"M4 7V5h11v2M9.5 5v14M7 19h5\"/><path d=\"M14 13v-1.5h6V13M17 11.5V19M15.5 19h3\"/>",
+  "globe": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18\"/>", "phone": "<rect x=\"6\" y=\"2.5\" width=\"12\" height=\"19\" rx=\"2.5\"/><path d=\"M11 18h2\"/>",
+  "book": "<path d=\"M4 5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2z\"/><path d=\"M4 20a2 2 0 0 0 2 1h13v-3\"/>", "chords": "<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>",
+  "calsm": "<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15.5\" rx=\"2.5\"/><path d=\"M16 3v4M8 3v4M3.5 10h17\"/>", "pin": "<path d=\"M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z\"/><circle cx=\"12\" cy=\"10\" r=\"2.5\"/>",
+  "bolt": "<path d=\"M13 2 4 14h7l-1 8 9-12h-7z\"/>", "music": "<path d=\"M9 18V5l12-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"18\" cy=\"16\" r=\"3\"/>", "cal": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"17\" rx=\"3\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/>", "heart": "<path d=\"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z\"/>", "help": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01\"/>", "plus": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"4\"/><path d=\"M12 8v8M8 12h8\"/>", "doc": "<path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5M9 13h6M9 17h4\"/>", "tools": "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "pulse": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M7 12h2l2-3 2 6 2-3h2\"/>"};
 function ico(n, cls){ return '<svg class="' + (cls || 'ic') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + ICON[n] + '</svg>'; }
 /* ---------- home ---------- */
 function renderHome(banner){
   var sp = splitEvents(), live = sp.up.filter(function(e){ return !isCanceled(e); }), next = live[0], db = state.db, today = ymd(new Date());
   var tmw = new Date(); tmw.setDate(tmw.getDate() + 1);
-  var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length;
-  var h = banner;
+  var savedN = db.songs.filter(function(s){ return state.saved[s.id]; }).length, mem = db.members || [];
+  var h = banner + '<div class="pagehead"><h2>Home</h2><button class="rbtn js-refresh' + (state.loading ? ' spin' : '') + '" id="homeRefresh" aria-label="Refresh" title="Refresh">' + ico("refresh") + '</button></div>';
   if(!isInstalled() && !ls("installHidden")) h += '<div class="card tip"><div style="flex:1"><b>Put the app on your home screen</b><div class="muted" style="font-size:13px">Then it opens like any other app, no link needed.</div></div><button class="btn small primary" id="instBtn">Show me how</button><button class="xclose" id="instHide" aria-label="Hide">×</button></div>';
   if(leader() && next && (next.date === today || next.date === ymd(tmw))) h += '<div class="card tip"><div style="flex:1"><b>' + (next.date === today ? 'Today' : 'Tomorrow') + ': ' + esc(next.title) + '</b><div class="muted" style="font-size:13px">Send the band a reminder with the set list.</div></div><button class="btn small primary" id="remBtn">Send reminder</button></div>';
-  var hero;
-  if(next){
-    hero = '<div class="hero"><div class="hero-k">Next up' + (next.type ? ' · ' + esc(next.type) : '') + '</div><div class="hero-t">' + esc(next.title) + '</div>' +
-      '<div class="hero-s">' + esc(fmtDate(next, true)) + '</div>' + (next.location ? '<div class="hero-s">' + esc(next.location) + '</div>' : '') +
-      '<div class="countdown" id="cd"></div>' +
-      '<div class="hero-btns">' + ((next.songs||[]).length ? '<button class="hero-b big" id="heroStart">▶ Start</button>' : '') + '<a class="hero-b ghost" href="#/e/' + encodeURIComponent(next.id) + '">Set list (' + (next.songs||[]).length + ')</a></div></div>';
-  } else {
-    hero = '<div class="hero"><div class="hero-k">Next up</div><div class="hero-t">Nothing planned yet</div><div class="hero-s">No upcoming events.</div>' + (leader() ? '<div class="hero-btns"><a class="hero-b big" href="#/new">+ Create event</a></div>' : '') + '</div>';
-  }
-  var noLyr = db.songs.filter(function(s){ return !s.hasLyrics; }).length;
-  h += '<div class="dash">' + hero + '<div class="dash-side">' +
-    '<a class="tile t-pink" href="#/songs?saved"><div class="tile-v">' + savedN + '</div><div class="tile-k">My saved songs</div><span class="tile-go">›</span></a>' +
-    '<a class="tile t-cream" href="#/songs"><div class="tile-v">' + db.songs.length + '</div><div class="tile-k">Songs' + (leader() && noLyr ? ' · ' + noLyr + ' need lyrics' : '') + '</div><span class="tile-go">›</span></a></div></div>';
-  function q(href, icon, label, id){ return '<a class="qtile" href="' + href + '"' + (id ? ' id="' + id + '"' : '') + '><span class="qicon">' + ico(icon) + '</span><span>' + label + '</span></a>'; }
-  h += '<div class="band"></div><div class="sec-title">' + ico("bolt", "ic sm") + 'Quick links</div><div class="quick">' +
-    (leader() ? q("#/new", "plus", "New<br>event") + q("#/newsong", "doc", "New<br>song") + q("#/songs", "music", "All<br>songs") + q("#/manage", "tools", "Leader<br>tools")
-              : q("#/songs", "music", "All<br>songs") + q("#/events", "cal", "All<br>events") + q("#/songs?saved", "heart", "Saved<br>songs") + q("#/help", "help", "How to<br>use")) + '</div><div class="band"></div>';
   var days = [], byDay = {};
   live.forEach(function(e){ (byDay[e.date] = byDay[e.date] || []).push(e); });
   for(var i=0;i<14;i++){ var d = new Date(); d.setDate(d.getDate() + i); days.push(d); }
-  h += '<div class="sec-title">' + ico("cal", "ic sm") + 'Next two weeks</div><div class="week"><div class="week-row">' + days.map(function(d, i){
-    var k = ymd(d), evs = byDay[k] || [], href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : (leader() ? "#/new/" + k : "");
-    return '<' + (href ? 'a href="' + href + '"' : 'span') + ' class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></' + (href ? 'a' : 'span') + '>';
-  }).join("") + '</div></div><div class="band"></div>';
-  h += '<div class="sec-title">' + ico("pulse", "ic sm") + 'Coming up</div>' + (function(){ var rest = sp.up.filter(function(e){ return e !== next; }).slice(0, 5); return rest.length ? '<div class="songs">' + rest.map(evRow).join("") + '</div>' : '<div class="card empty">' + (next ? 'Nothing else planned after that.' : 'Nothing planned yet.') + '</div>'; })();
-  h += '<div class="foot">' + (leader() ? '<a href="#/manage">Leader tools</a> · <a href="javascript:void 0" id="soBtn">Leader sign out</a>' : '<a href="#/manage">Leader sign-in</a>') + ' · <a href="#/help">Help</a></div>';
+  var now = new Date();
+  h += '<div class="dash2">' +
+    '<a class="card teamcard" href="#/settings"><span class="pilltag">Current Team</span><div class="team-n">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + '</div>' +
+      '<div class="team-foot"><div class="team-s">' + db.songs.length + (db.songs.length === 1 ? ' song' : ' songs') + '</div>' + (mem.length ? avatars(mem, 4) : '') + '</div></a>' +
+    '<div class="dash-side">' +
+      '<div class="card datecard"><div class="dc-h">' + now.toLocaleDateString("en-US", { weekday:"short" }) + ' <b>' + now.getDate() + '</b></div><div class="week-row">' + days.map(function(d, i){
+        var k = ymd(d), evs = byDay[k] || [], href = evs.length ? "#/e/" + encodeURIComponent(evs[0].id) : (leader() ? "#/new/" + k : "");
+        return '<' + (href ? 'a href="' + href + '"' : 'span') + ' class="day' + (i === 0 ? ' today' : '') + (evs.length ? ' has' : '') + '"><span>' + d.toLocaleDateString("en-US", { weekday:"short" }) + '</span><b>' + d.getDate() + '</b><i></i></' + (href ? 'a' : 'span') + '>';
+      }).join("") + '</div></div>' +
+      '<a class="card savedcard" href="#/songs?saved"><div class="sc-h">' + ico("heart", "ic heart-ic") + 'Saved Songs</div><div class="sc-row"><span class="sc-v">' + savedN + '</span><span class="sc-go">' + ico("right", "ic sm") + '</span></div></a>' +
+    '</div></div>';
+  h += '<div class="sec-h2">Upcoming</div>';
+  if(next){
+    h += nextCard(next);
+    var rest = sp.up.filter(function(e){ return e !== next; }).slice(0, 5);
+    if(rest.length) h += '<div class="songs" style="margin-top:10px">' + rest.map(evRow).join("") + '</div>';
+  } else {
+    h += '<div class="nothing">' + ico("cal", "ic big") + '<b>Nothing planned yet</b><span>No events planned at the moment.</span>' + (leader() ? '<a class="btn primary" href="#/new" style="margin-top:14px">' + ico("add", "ic sm") + 'Create event</a>' : '') + '</div>';
+  }
   $("app").innerHTML = h;
+  $("homeRefresh").onclick = function(){ load(true); };
   if($("instBtn")) $("instBtn").onclick = function(){ showGuide(0); };
   if($("instHide")) $("instHide").onclick = function(){ ls("installHidden", true); renderHome(banner); };
   if($("remBtn")) $("remBtn").onclick = function(){ shareEvent(next); };
   if($("heroStart")) $("heroStart").onclick = function(){ startStage(next); };
   if(next) startCountdown(next);
-  if($("soBtn")) $("soBtn").onclick = signOut;
 }
 
 /* ---------- countdown to the next event ---------- */
@@ -1384,29 +1549,42 @@ function evFiltered(f){
 }
 function evSheetCount(f){ return f.types.length + (f.when !== "any" ? 1 : 0) + (f.sort ? 1 : 0) + (f.hideCanceled ? 1 : 0); }
 function renderEvents(banner){
-  var f = state.ef, list = evFiltered(f), n = evSheetCount(f);
-  var views = [["upcoming","Upcoming"],["past","Past"],["all","All"]];
+  var f = state.ef, n = evSheetCount(f), flat = !!(n || state.evQ), list = evFiltered(f);
   var chips = [];
   f.types.forEach(function(t){ chips.push('<button class="fchip" data-rm-type="' + esc(t) + '">' + esc(t) + ' <b>×</b></button>'); });
   if(f.when !== "any") chips.push('<button class="fchip" data-rm-when="1">' + WHENS[f.when] + ' <b>×</b></button>');
   if(f.sort) chips.push('<button class="fchip" data-rm-esort="1">' + ESORTS[f.sort] + ' <b>×</b></button>');
   if(f.hideCanceled) chips.push('<button class="fchip" data-rm-canc="1">Hiding canceled <b>×</b></button>');
   if(chips.length > 1) chips.push('<button class="fchip clear" id="efClearAll">Clear all</button>');
-  var h = banner + '<div class="pagehead"><h2><span class="muted">' + list.length + '</span> Events</h2></div>' +
+  var h = banner + '<div class="pagehead"><h2>Events</h2>' + (leader() ? '<a class="rbtn" href="#/new" aria-label="New event" title="New event">' + ico("add") + '</a>' : '') + '</div>' +
     '<div class="search has-filter' + (state.evQ ? ' has' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-    '<input id="eq" type="search" placeholder="Search events or songs" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button>' +
+    '<input id="eq" type="search" placeholder="Search events" autocomplete="off" value="' + esc(state.evQ || "") + '"><button class="x" id="eqx" aria-label="Clear">×</button>' +
     '<button class="fbtn' + (n ? ' on' : '') + '" id="efOpen" aria-label="Filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>' + (n ? '<i>' + n + '</i>' : '') + '</button></div>' +
-    '<div class="seg">' + views.map(function(v){ return '<button class="' + (f.view === v[0] ? 'on' : '') + '" data-ev="' + v[0] + '">' + v[1] + '</button>'; }).join("") + '</div>' +
     (chips.length ? '<div class="fchips">' + chips.join("") + '</div>' : '');
-  if(!list.length) h += '<div class="card empty">' + (n || state.evQ ? 'No events match.' : f.view === "upcoming" ? 'Nothing planned yet.' + (leader() ? ' Tap + to add an event.' : '') : f.view === "past" ? 'No past events yet.' : 'No events yet.') + '</div>';
-  else h += '<div class="songs">' + list.map(evRow).join("") + '</div>';
+  var next = null;
+  if(flat){
+    h += '<div class="count">' + list.length + (list.length === 1 ? ' event' : ' events') + '</div>';
+    h += list.length ? '<div class="songs">' + list.map(evRow).join("") + '</div>' : '<div class="card empty">No events match.</div>';
+  } else {
+    var sp = splitEvents(), live = sp.up.filter(function(e){ return !isCanceled(e); });
+    next = live[0];
+    h += nextCard(next, "You don't have any events planned.");
+    var rest = sp.up.filter(function(e){ return e !== next; });
+    if(rest.length) h += '<div class="sec-h2">Upcoming</div><div class="songs">' + rest.map(evRow).join("") + '</div>';
+    if(sp.past.length){
+      var showN = state.pastAll ? sp.past.length : 10;
+      h += '<div class="sec-h2">Past Events</div><div class="songs">' + sp.past.slice(0, showN).map(evRow).join("") + '</div>' +
+        (sp.past.length > showN ? '<button class="btn" id="pastMore" style="width:100%;margin-top:10px">Show all ' + sp.past.length + ' past events</button>' : '');
+    }
+  }
   $("app").innerHTML = h;
+  if(next){ startCountdown(next); if($("heroStart")) $("heroStart").onclick = function(){ startStage(next); }; }
+  if($("pastMore")) $("pastMore").onclick = function(){ state.pastAll = true; renderEvents(banner); };
   var eq = $("eq");
   eq.oninput = function(){ state.evQ = eq.value; var pos = eq.selectionStart; renderEvents(banner); var e2 = $("eq"); e2.focus(); try{ e2.setSelectionRange(pos,pos); }catch(e){} };
   $("eqx").onclick = function(){ state.evQ = ""; renderEvents(banner); };
   $("efOpen").onclick = function(){ openEventFilters(banner); };
   function save(){ ls("ef", state.ef); renderEvents(banner); }
-  document.querySelectorAll("[data-ev]").forEach(function(b){ b.onclick = function(){ f.view = b.getAttribute("data-ev"); save(); }; });
   document.querySelectorAll("[data-rm-type]").forEach(function(b){ b.onclick = function(){ f.types = f.types.filter(function(x){ return x !== b.getAttribute("data-rm-type"); }); save(); }; });
   document.querySelectorAll("[data-rm-when]").forEach(function(b){ b.onclick = function(){ f.when = "any"; save(); }; });
   document.querySelectorAll("[data-rm-esort]").forEach(function(b){ b.onclick = function(){ f.sort = ""; save(); }; });
@@ -1423,7 +1601,7 @@ function openEventFilters(banner){
       '<div class="sheet-h">Type</div><div class="gchips">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.types.indexOf(t) >= 0 ? ' on' : '') + '" data-ty="' + t + '">' + t + ' <span class="muted" style="font-size:12px">' + cnt(t) + '</span></button>'; }).join("") + '</div>' +
       '<div class="sheet-h">When</div><div class="seg">' + Object.keys(WHENS).map(function(k){ return '<button class="' + (d.when === k ? 'on' : '') + '" data-wh="' + k + '">' + WHENS[k] + '</button>'; }).join("") + '</div>' +
       '<div class="sheet-h">Sort by date</div><div class="seg"><button class="' + (!d.sort ? 'on' : '') + '" data-es="">Automatic</button>' + Object.keys(ESORTS).map(function(k){ return '<button class="' + (d.sort === k ? 'on' : '') + '" data-es="' + k + '">' + ESORTS[k] + '</button>'; }).join("") + '</div>' +
-      '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: upcoming events soonest first, past events most recent first.</div>' +
+      '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: newest date first when you search or filter.</div>' +
       '<label class="switch-row"><span>Hide canceled events</span><input type="checkbox" id="efHide"' + (d.hideCanceled ? ' checked' : '') + '><i></i></label>' +
       '</div><div class="sheet-foot"><button class="btn" id="efClear">Clear all</button><button class="btn primary" id="efGo">Show ' + evFiltered(d).length + ' events</button></div></div>';
     ov.querySelectorAll("[data-ty]").forEach(function(b){ b.onclick = function(){ var t = b.getAttribute("data-ty"), i = d.types.indexOf(t); if(i >= 0) d.types.splice(i, 1); else d.types.push(t); draw(); }; });
@@ -1680,7 +1858,7 @@ function renderManage(banner){
       items.map(function(it){ var name = it.name || it; return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(name) + '</b>' + (it.year ? ' <span class="muted">' + esc(it.year) + '</span>' : '') + ' <span class="muted" style="font-size:12px">· ' + count(field, name) + ' songs</span></div>' +
         '<button class="btn small" data-ren="' + kind + '" data-name="' + esc(name) + '">Rename</button><button class="btn small danger" data-del="' + kind + '" data-name="' + esc(name) + '">Delete</button></div>'; }).join("") + '</div>';
   }
-  var h = banner + '<div class="pagehead"><h2>Leader tools</h2><button class="ibtn" id="mSignOut">Sign out</button></div><div id="mMsg"></div>' +
+  var h = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Leader tools</h2><button class="ibtn" id="mSignOut">Sign out</button></div><div id="mMsg"></div>' +
     '<div class="card block"><h2>Band members <span class="muted" style="font-size:14px">(' + (db.members || []).length + ')</span></h2>' +
     '<div class="addrow"><input id="addMembers" placeholder="Name"><input id="addInst" placeholder="Plays (e.g. guitar, vocals)"><button class="btn small primary" data-addk="Members">+ Add</button></div>' +
     (db.members || []).map(function(m){ return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(m.name) + '</b> <span class="muted">' + esc(m.instruments || "") + '</span></div>' +
@@ -1730,6 +1908,67 @@ function renderManage(banner){
     var m = db.members.filter(function(x){ return x.id === b.getAttribute("data-mdel"); })[0];
     if(m && confirm("Remove " + m.name + " from the band list?")) op({ kind: "Members", op: "delete", id: m.id }, "Removed " + m.name + ".");
   }; });
+}
+
+/* ---------- settings ---------- */
+function appLink(){ return location.href.split("#")[0]; }
+function inviteBand(){
+  var text = "Rey de Reyes Songbook: songs, set lists and rehearsal mode for the band.\n" + appLink();
+  if(navigator.share){ navigator.share({ text: text }).catch(function(){}); return; }
+  window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+}
+function renderSettings(banner){
+  var db = state.db, mem = db.members || [], dark = document.documentElement.classList.contains("dark");
+  function row(o){
+    var inner = '<span class="gi">' + ico(o.icon) + '</span><span class="gl">' + o.label + '</span>' + (o.right != null ? '<span class="gr"' + (o.rightId ? ' id="' + o.rightId + '"' : '') + '>' + o.right + '</span>' : '') +
+      (o.toggle != null ? '<span class="tog' + (o.toggle ? ' on' : '') + '"><i></i></span>' : o.stepper ? '' : '<span class="gchev">' + ico("right", "ic sm") + '</span>');
+    if(o.href) return '<a class="grow" href="' + o.href + '">' + inner + '</a>';
+    if(o.stepper) return '<div class="grow">' + inner + o.stepper + '</div>';
+    return '<button class="grow' + (o.cls ? ' ' + o.cls : '') + '" id="' + o.id + '"' + (o.toggle != null ? ' role="switch" aria-checked="' + !!o.toggle + '"' : '') + '>' + inner + '</button>';
+  }
+  var h = banner + '<div class="pagehead"><h2>Settings</h2></div>';
+  h += '<div class="sec-row"><span class="sec-h2" style="margin:0">Team</span>' + (mem.length ? '<button class="linkbtn" id="stTeam">' + (state.showTeam ? 'Hide' : 'Members') + ico(state.showTeam ? "down" : "right", "ic xs") + '</button>' : '') + '</div>' +
+    '<div class="card teamrow"><div style="flex:1;min-width:0"><div class="team-n" style="margin:0">RDR Band</div><div class="team-s">' + mem.length + (mem.length === 1 ? ' Member' : ' Members') + ' · ' + db.songs.length + ' songs</div></div>' + (mem.length ? avatars(mem, 3) : '') + '</div>';
+  if(state.showTeam && mem.length) h += '<div class="glist" style="margin-top:10px">' + mem.map(function(m){ return '<div class="grow"><span class="av">' + esc(initials(m.name)) + '</span><span class="gl">' + esc(m.name) + '</span><span class="gr">' + esc(m.instruments || "") + '</span></div>'; }).join("") + '</div>';
+  h += '<div class="glist" style="margin-top:14px">' +
+    row({ href: "#/manage", icon: "crown", label: leader() ? "Leader tools" : "Leader sign-in", right: leader() ? "LEADER" : "MEMBER" }) +
+    row({ id: "stInvite", icon: "gift", label: "Invite the band" }) + '</div>';
+  h += '<div class="sec-h2">Personal</div><div class="glist">' +
+    row({ id: "stDark", icon: "moon", label: "Dark Mode", toggle: dark }) +
+    row({ id: "stChords", icon: "chords", label: "Show chords", toggle: state.chords }) +
+    row({ icon: "text", label: "Lyrics text size", stepper: '<span class="step"><button id="stSm" aria-label="Smaller">A−</button><b>' + state.size + '</b><button id="stBg" aria-label="Bigger">A+</button></span>' }) +
+    row({ id: "stLang", icon: "globe", label: "Guide language", right: state.lang === "es" ? "Español" : "English" }) + '</div>';
+  h += '<div class="sec-h2">General</div><div class="glist">' +
+    row({ id: "stSync", icon: "refresh", label: "Refresh songs", right: esc(statusText()), rightId: "syncVal", cls: "js-refresh" + (state.loading ? " spin" : "") }) +
+    (isInstalled() ? '' : row({ id: "stInstall", icon: "phone", label: "Add to Home screen" })) +
+    row({ id: "stGuide", icon: "book", label: "Quick guide" }) +
+    row({ href: "#/help", icon: "help", label: "Help Center" }) +
+    row({ id: "stAbout", icon: "info", label: "About" }) + '</div>';
+  if(leader()) h += '<div class="glist" style="margin-top:22px"><button class="grow danger" id="stOut"><span class="gi">' + ico("out") + '</span><span class="gl">Leader sign out</span></button></div>';
+  h += '<div class="foot">Rey de Reyes Songbook</div>';
+  $("app").innerHTML = h;
+  function again(){ renderSettings(banner); }
+  if($("stTeam")) $("stTeam").onclick = function(){ state.showTeam = !state.showTeam; again(); };
+  $("stInvite").onclick = inviteBand;
+  $("stDark").onclick = function(){ setTheme(dark ? "light" : "dark"); again(); };
+  $("stChords").onclick = function(){ state.chords = !state.chords; ls("chords", state.chords); again(); };
+  $("stSm").onclick = function(){ setSize(state.size - 2); again(); };
+  $("stBg").onclick = function(){ setSize(state.size + 2); again(); };
+  $("stLang").onclick = function(){ state.lang = state.lang === "es" ? "en" : "es"; ls("lang", state.lang); again(); };
+  $("stSync").onclick = function(){ load(true); };
+  if($("stInstall")) $("stInstall").onclick = function(){ showGuide(0); };
+  $("stGuide").onclick = function(){ showGuide(0); };
+  $("stAbout").onclick = function(){
+    var ev = (state.events || []).length;
+    openMenu("About", [
+      { id: "a1", label: "Rey de Reyes Songbook", right: "" },
+      { id: "a2", label: "Songs", right: db.songs.length },
+      { id: "a3", label: "Events", right: ev },
+      { id: "a4", label: "Data", right: state.source === "live" ? "Band database" : state.source === "cache" ? "Copy on this phone" : "Test copy" },
+      { id: "a5", label: "Last update", right: statusText() }
+    ], function(){});
+  };
+  if($("stOut")) $("stOut").onclick = function(){ if(confirm("Sign out as leader on this phone?")) signOut(); };
 }
 
 /* ---------- help ---------- */
