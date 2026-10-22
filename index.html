@@ -604,6 +604,59 @@ html:not(.dark) .tog.on i{background:#fff}
 .step b{min-width:24px;text-align:center;font-weight:600}
 .glist + .sec-h2,.teamrow + .glist{margin-top:26px}
 .sheet .glist{background:var(--card)}
+
+/* event page, event form, set list page */
+.subhead{display:flex;align-items:center;gap:14px;margin:2px 0 20px;min-height:56px}
+.subhead h2{flex:1;margin:0;font-size:21px;font-weight:600}
+.sbback{width:44px;height:44px;margin-left:-8px;display:flex;align-items:center;justify-content:center;color:var(--ink);border-radius:50%}
+.sbback .ic{width:28px;height:28px;stroke-width:2.2}
+.hpill{display:flex;gap:4px;background:var(--card);border-radius:20px;padding:6px}
+.hpill button{width:46px;height:46px;border:0;background:none;color:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.hpill .ic{width:24px;height:24px}
+.savebtn{width:56px;height:56px;border:0;border-radius:16px;background:var(--card);color:var(--muted);display:flex;align-items:center;justify-content:center}
+.savebtn.on{background:var(--accent);color:#fff}
+.savebtn .ic{width:26px;height:26px}
+.savebtn.spin .ic{animation:spin 1s linear infinite}
+.evhero{min-height:250px;padding:20px 22px 22px;justify-content:space-between}
+.evh-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.whenpill{background:rgba(0,0,0,.45);color:#fff;border-radius:999px;padding:9px 18px;font-size:16px;font-weight:500}
+.typepill{background:rgba(255,255,255,.16);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.evh-bottom{margin-top:auto;padding-top:40px}
+.evh-loc{display:inline-flex;align-items:center;gap:6px;color:#fff;opacity:.8;font-size:16px;margin-top:8px;text-decoration:none}
+.evhero.canc{background:var(--soft);color:var(--ink)}
+.evhero.canc .evh-loc,.evhero.canc .bc-t{color:var(--ink)}
+.cancpill{display:inline-block;background:var(--bad);color:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;margin-bottom:8px}
+.evbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.evbtn{display:flex;align-items:center;justify-content:center;gap:10px;height:62px;border-radius:18px;border:0;background:var(--card);color:var(--accent);font-size:17px;font-weight:500;text-decoration:none}
+.evbtn .ic{width:26px;height:26px}
+.evbtn.primary{background:var(--accent);color:#fff}
+.evbtn.off{opacity:.4}
+.evbtn .cnt{background:var(--t-blue);border-radius:999px;padding:1px 9px;font-size:14px;font-weight:600}
+.addrow2{display:flex;align-items:center;gap:14px;width:100%;border:0;padding:20px 22px;margin-top:14px;color:var(--accent);font-size:17px;font-weight:500;text-decoration:none;text-align:left}
+.addrow2 .ic{width:26px;height:26px;stroke-width:2.2}
+.notescard{padding:16px 20px;font-size:16px;line-height:1.5}
+.form .fl{display:block;font-size:16px;font-weight:500;color:var(--ink);margin:20px 2px 10px}
+.form label.fl{margin-bottom:0}
+.form .fl i{color:var(--bad);font-style:normal;margin-left:6px}
+.form input,.form textarea{display:block;width:100%;margin-top:10px;height:58px;border:0;border-radius:18px;background:var(--card);padding:0 20px;font-size:17px;color:var(--ink)}
+.form textarea{height:110px;padding:16px 20px;resize:vertical;font-family:inherit}
+.form input::placeholder,.form textarea::placeholder{color:var(--muted)}
+.form .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form .gchips .chip{height:40px;padding:0 16px;font-size:15px;background:var(--card)}
+.form .gchips .chip.on{background:var(--accent);color:#fff}
+html.dark .form input[type=date],html.dark .form input[type=time]{color-scheme:dark}
+.savebar{position:sticky;bottom:12px;margin-top:24px;z-index:5}
+@media (max-width:640px){ .savebar{bottom:calc(var(--navh, 72px) + 12px)} }
+.savebar .btn{width:100%;height:60px;border-radius:18px;font-size:18px;font-weight:500}
+input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.sl-ev{color:var(--muted);font-size:15px;margin:-8px 2px 12px}
+.picker{padding:14px;margin-top:4px}
+.picker .search input{background:var(--bg)}
+.sel-row{padding:14px 14px 14px 16px}
+.sel-row .t{font-size:17px;font-weight:500}
+.set-row{padding:16px 18px}
+.set-row .chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.set-row .sub{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1010,19 +1063,21 @@ function route(){
   else if(h === "events") view = "events";
   else if((m = h.match(/^e\/([^\/]+)\/s\/(\d+)$/))){ view = "evsong"; arg = decodeURIComponent(m[1]); arg2 = +m[2]; }
   else if((m = h.match(/^e\/([^\/]+)\/edit$/))){ view = "edit"; arg = decodeURIComponent(m[1]); }
+  else if((m = h.match(/^e\/([^\/]+)\/setlist$/))){ view = "setlist"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^e\/([^\/]+)$/))){ view = "event"; arg = decodeURIComponent(m[1]); }
   else if((m = h.match(/^new(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "edit"; arg = ""; arg2 = m[1] || ""; }
   else if(h === "manage") view = "manage";
   else if(h === "settings") view = "settings";
   else if((m = h.match(/^schedule(?:\/(\d{4}-\d{2}-\d{2}))?$/))){ view = "schedule"; arg = m[1] || ""; }
   else if(/^help/.test(h)) view = "help";
-  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
+  var tab = { song:"songs", songs:"songs", songedit:"songs", events:"events", event:"events", setlist:"events", evsong:"events", edit:"events", home:"home", schedule:"home", settings:"settings", help:"settings", manage:"settings" }[view] || "";
   document.querySelectorAll("[data-v]").forEach(function(a){ a.classList.toggle("on", a.getAttribute("data-v") === tab); });
   if(view !== "song" && view !== "evsong"){ metro.stop(); $("app").removeAttribute("data-song"); }
   if(view !== "evsong" && state.stage) endStage(true);
   document.body.classList.toggle("stage", view === "evsong" && state.stage);
   if(view !== "edit"){ state.draft = null; state.draftKey = ""; }
   if(view !== "songedit") state.sdraft = null;
+  if(view !== "setlist"){ state.sl = null; state.slAdd = false; }
   var app = $("app");
   if(!state.db){
     if(state.error === "setup") app.innerHTML = '<div class="card empty">The app is not connected to the band database yet.</div>';
@@ -1040,6 +1095,7 @@ function route(){
   else if(view === "songedit") renderSongEditor(arg, banner);
   else if(view === "events") renderEvents(banner);
   else if(view === "event") renderEvent(arg, banner);
+  else if(view === "setlist") renderSetlist(arg, banner);
   else if(view === "evsong"){
     var ev = findEvent(arg);
     if(!ev) renderEvent(arg, banner);
@@ -1302,7 +1358,7 @@ function renderSong(id, banner, ctx){
   var struct = s.sections.filter(function(x){ return x.label; }).map(function(x, k){
     return '<a href="javascript:void 0" data-sec="' + s.sections.indexOf(x) + '" class="k-' + x.kind + '"><i>' + (k+1) + '</i>' + esc(x.label) + (x.reps ? ' ×' + x.reps : '') + '</a>';
   });
-  var back = ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) : '#/songs';
+  var back = ctx ? '#/e/' + encodeURIComponent(ctx.ev.id) + '/setlist' : '#/songs';
   var head = (ctx ? evBarHtml(ctx) : '') + '<div class="card"><div class="song-head">' +
     (state.stage ? '' : '<div class="backrow"><a class="ibtn" href="' + back + '" style="text-decoration:none">' + (ctx ? '‹ Set list' : '‹ Songs') + '</a><div style="display:flex;gap:6px;align-items:center">' +
       (leader() ? '<a class="ibtn" href="#/c/' + encodeURIComponent(s.id) + '/edit" style="text-decoration:none">Edit</a>' : '') +
@@ -1487,7 +1543,11 @@ function shareEvent(e){
 }
 function isInstalled(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
 
-var ICON = {"add": "<path d=\"M12 5v14M5 12h14\"/>", "down": "<path d=\"m6 9 6 6 6-6\"/>", "right": "<path d=\"m9 6 6 6-6 6\"/>", "back": "<path d=\"m15 6-6 6 6 6\"/>",
+var ICON = {"share": "<circle cx=\"18\" cy=\"5\" r=\"2.5\"/><circle cx=\"6\" cy=\"12\" r=\"2.5\"/><circle cx=\"18\" cy=\"19\" r=\"2.5\"/><path d=\"m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4\"/>",
+  "list": "<path d=\"M4 6h11M4 11h11M4 16h7\"/><path d=\"M19 4v11\"/><circle cx=\"16.5\" cy=\"16.5\" r=\"2.5\"/>", "play": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m10 8.5 5 3.5-5 3.5z\"/>",
+  "save": "<path d=\"M5 3h11l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z\"/><path d=\"M8 3v5h7V3M8 21v-7h8v7\"/>", "edit": "<path d=\"M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z\"/><path d=\"m13.5 6.5 4 4\"/>",
+  "copy": "<rect x=\"8\" y=\"8\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2\"/>", "x": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m9 9 6 6M15 9l-6 6\"/>",
+  "add": "<path d=\"M12 5v14M5 12h14\"/>", "down": "<path d=\"m6 9 6 6 6-6\"/>", "right": "<path d=\"m9 6 6 6-6 6\"/>", "back": "<path d=\"m15 6-6 6 6 6\"/>",
   "refresh": "<path d=\"M21 12a9 9 0 1 1-2.64-6.36\"/><path d=\"M21 3v6h-6\"/>", "crown": "<path d=\"m3 7 4.5 4L12 5l4.5 6L21 7l-1.5 11h-15z\"/><path d=\"M5 21h14\"/>",
   "gift": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\"/><path d=\"M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\"/><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5\"/>",
   "moon": "<path d=\"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z\"/>", "info": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 11v6M12 7.5h.01\"/>",
@@ -1688,37 +1748,46 @@ function openEventFilters(banner){
 }
 
 /* ---------- one event ---------- */
+function eventPayload(e, songs){
+  return { id: e.id, title: String(e.title || "").trim(), type: e.type, date: e.date, time: e.time, location: String(e.location || "").trim(), notes: e.notes || "", players: [], status: e.status || "", statusNote: e.statusNote || "",
+    songs: (songs || e.songs || []).map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
+}
+function subHead(back, title, right){
+  return '<div class="subhead"><a class="sbback" href="' + back + '" aria-label="Back">' + ico("back") + '</a><h2>' + esc(title) + '</h2>' + (right || '') + '</div>';
+}
 function renderEvent(id, banner){
   var e = findEvent(id);
-  if(!e){ $("app").innerHTML = banner + '<div class="card empty">This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a></div>'; return; }
-  var items = e.songs || [];
+  if(!e){ $("app").innerHTML = banner + subHead("#/events", "Event") + '<div class="card empty">This event was not found. It may have been deleted.<br><br><a href="#/events">See all events</a></div>'; return; }
+  var items = e.songs || [], d = evDate(e);
   var MAP = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(e.location || "");
-  var h = banner + '<div class="card song-head">' +
-    '<div class="backrow"><a class="ibtn" href="#/events" style="text-decoration:none">‹ Events</a><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' +
-      '<button class="ibtn" id="evShare">Share</button>' +
-      (leader() ? '<button class="ibtn" id="evDup">Copy</button><a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '/edit" style="text-decoration:none">Edit</a>' : '') + '</div></div>' +
-    (isCanceled(e) ? '<div class="cancel-box"><b>This event was canceled.</b>' + (e.statusNote ? '<div>' + esc(e.statusNote) + '</div>' : '') + '</div>' : '') +
-    (e.type ? '<span class="' + evTypeClass(e.type) + '">' + esc(e.type) + '</span>' : '') +
-    '<h1 style="margin-top:8px"' + (isCanceled(e) ? ' class="struck"' : '') + '>' + esc(e.title) + '</h1><div class="meta"><span>' + esc(fmtDate(e, true)) + '</span>' +
-    (e.location ? '<a class="loc" href="' + esc(MAP) + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>' + esc(e.location) + '</a>' : '') + '<span><b>' + items.length + '</b> ' + (items.length === 1 ? 'song' : 'songs') + '</span></div>' +
-    (e.notes ? '<div class="ev-notes">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>' : '') +
-    (items.length && !isCanceled(e) ? '<button class="btn primary big" style="margin-top:14px" id="evStart">▶ Start rehearsal</button>' : '') +
-    (leader() ? '<div class="ev-admin">' + (isCanceled(e) ? '<button class="btn" id="evUncancel">Undo cancel</button><button class="btn primary" id="evTell">Tell the band</button>' : '<button class="btn danger" id="evCancel">Cancel event</button>') + '</div>' : '') + '</div>';
-  h += '<div class="sec-title">Set list</div>';
-  if(!items.length) h += '<div class="card empty">No songs yet.' + (leader() ? ' Tap Edit to add the set list.' : '') + '</div>';
-  else h += '<div class="songs">' + items.map(function(it, i){
-    var s = songFor(it), bits = [], k = s && s.key ? keyName(s.key, 0) : "";
-    if(k) bits.push('<span class="pill">' + esc(k) + '</span>');
-    if(s && s.bpm) bits.push('<span class="pill">' + s.bpm + ' bpm</span>');
-    return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
-      (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : (s.artist && s.type === "Cover" ? '<div class="s">' + esc(s.artist) + '</div>' : '')) +
-      '</div><div class="pills">' + bits.join("") + '</div></a>';
-  }).join("") + '</div>';
+  var when = (e.time ? fmtTime(e.time) + " • " : "") + (d ? d.toLocaleDateString("en-US", { weekday:"short", day:"numeric", month:"long" }) : e.date);
+  var acts = '<div class="hpill"><button id="evShare" aria-label="Share" title="Share">' + ico("share") + '</button>' + (leader() ? '<button id="evMore" aria-label="More" title="More">' + ico("tools") + '</button>' : '') + '</div>';
+  var h = banner + subHead("#/events", "Event", acts) +
+    '<div class="bluecard evhero' + (isCanceled(e) ? ' canc' : '') + '"><div class="evh-top"><span class="whenpill">' + esc(when) + '</span>' + (e.type ? '<span class="typepill">' + esc(e.type) + '</span>' : '') + '</div>' +
+      '<div class="evh-bottom">' + (isCanceled(e) ? '<span class="cancpill">Canceled</span>' : '') + '<div class="bc-t' + (isCanceled(e) ? ' struck' : '') + '">' + esc(e.title) + '</div>' +
+      (e.location ? '<a class="evh-loc" href="' + esc(MAP) + '" target="_blank" rel="noopener">' + ico("pin", "ic xs") + esc(e.location) + '</a>' : '') + '</div></div>' +
+    '<div class="evbtns"><a class="evbtn" href="#/e/' + encodeURIComponent(e.id) + '/setlist">' + ico("list") + 'See Setlist' + (items.length ? ' <span class="cnt">' + items.length + '</span>' : '') + '</a>' +
+      (items.length && !isCanceled(e) ? '<button class="evbtn primary" id="evStart">' + ico("play") + 'Start Event</button>' : '<span class="evbtn primary off">' + ico("play") + 'Start Event</span>') + '</div>';
+  if(isCanceled(e)) h += '<div class="cancel-box" style="margin-top:14px"><b>This event was canceled.</b>' + (e.statusNote ? '<div>' + esc(e.statusNote) + '</div>' : '') + '</div>';
+  if(!items.length && leader() && !isCanceled(e)) h += '<a class="card addrow2" href="#/e/' + encodeURIComponent(e.id) + '/setlist">' + ico("add") + 'Add the set list</a>';
+  if(e.notes) h += '<div class="sec-h2">Notes</div><div class="card notescard">' + esc(e.notes).replace(/\n/g, "<br>") + '</div>';
+  if(leader()) h += '<div class="sec-h2">Leader</div><div class="glist">' +
+    '<a class="grow" href="#/e/' + encodeURIComponent(e.id) + '/edit"><span class="gi">' + ico("edit") + '</span><span class="gl">Edit details</span><span class="gchev">' + ico("right", "ic sm") + '</span></a>' +
+    '<button class="grow" id="evDup"><span class="gi">' + ico("copy") + '</span><span class="gl">Copy to next week</span><span class="gchev">' + ico("right", "ic sm") + '</span></button>' +
+    (isCanceled(e) ? '<button class="grow" id="evTell"><span class="gi">' + ico("share") + '</span><span class="gl">Tell the band it\'s canceled</span></button><button class="grow" id="evUncancel"><span class="gi">' + ico("refresh") + '</span><span class="gl">Undo cancel</span></button>'
+                   : '<button class="grow danger" id="evCancel"><span class="gi">' + ico("x") + '</span><span class="gl">Cancel event</span></button>') + '</div>';
   $("app").innerHTML = h; scrollTop();
   $("evShare").onclick = function(){ shareEvent(e); };
+  if($("evMore")) $("evMore").onclick = function(){
+    openMenu("Event", [{ id: "edit", label: "Edit details" }, { id: "setlist", label: "Edit set list" }, { id: "copy", label: "Copy to next week" }], function(k){
+      if(k === "edit") location.hash = "#/e/" + encodeURIComponent(e.id) + "/edit";
+      else if(k === "setlist") location.hash = "#/e/" + encodeURIComponent(e.id) + "/setlist";
+      else $("evDup").click();
+    });
+  };
   function setStatus(status, note, btn){
-    btn.disabled = true; btn.textContent = "Saving...";
-    var payload = JSON.parse(JSON.stringify(e)); payload.status = status; payload.statusNote = note || "";
+    btn.disabled = true; btn.querySelector(".gl").textContent = "Saving...";
+    var payload = eventPayload(e); payload.status = status; payload.statusNote = note || "";
     send("save", state.pin, payload).then(function(r){
       if(r && r.ok) return load(true).then(function(){ if(status === "canceled" && confirm("Event canceled. Send the band a message about it now?")) shareEvent(findEvent(e.id) || payload); });
       if(r && r.error === "wrong_pin") return wrongPin();
@@ -1741,6 +1810,79 @@ function renderEvent(id, banner){
   };
 }
 
+/* ---------- set list of an event (its own page; leaders edit it here) ---------- */
+function renderSetlist(id, banner){
+  var e = findEvent(id), back = "#/e/" + encodeURIComponent(id);
+  if(!e){ $("app").innerHTML = banner + subHead("#/events", "Setlist") + '<div class="card empty">This event was not found.</div>'; return; }
+  var lead = leader();
+  if(lead && (!state.sl || state.sl.id !== id)){ state.sl = { id: id, songs: JSON.parse(JSON.stringify(e.songs || [])), dirty: false }; state.pick = ""; state.slAdd = false; }
+  var sl = state.sl, items = lead ? sl.songs : (e.songs || []);
+  var h = banner + subHead(back, "Setlist", lead ? '<button class="savebtn' + (sl.dirty ? ' on' : '') + '" id="slSave" aria-label="Save set list" title="Save set list">' + ico("save") + '</button>' : (items.length && !isCanceled(e) ? '<button class="savebtn on" id="slStart" aria-label="Start">' + ico("play") + '</button>' : ''));
+  h += '<div class="sl-ev">' + esc(e.title) + ' · ' + esc(shortWhen(e)) + '</div><div id="slMsg"></div>';
+  if(lead){
+    h += state.slAdd ? '<div class="card picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+        '<input id="pickQ" type="search" placeholder="Type a song title or lyrics" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div>' +
+        '<button class="linkbtn" id="slDone" style="margin:10px auto 0;display:flex">Done adding</button></div>'
+      : '<button class="card addrow2" id="slAdd">' + ico("add") + 'Add Songs</button>';
+  }
+  h += '<div id="selList" style="margin-top:12px"></div>';
+  $("app").innerHTML = h;
+  function mark(){ sl.dirty = true; var b = $("slSave"); if(b) b.classList.add("on"); }
+  function drawSel(){
+    if(!items.length){ $("selList").innerHTML = '<div class="card empty" style="padding:20px">' + (lead ? 'No songs yet. Tap Add Songs to build the set list.' : 'No songs in this set list yet.') + '</div>'; return; }
+    $("selList").innerHTML = '<div class="songs">' + items.map(function(it, i){
+      var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : "";
+      var chips = (k ? '<span class="kchip">' + esc(k) + '</span>' : '') + (s && s.bpm ? '<span class="kchip">' + s.bpm + ' bpm</span>' : '');
+      if(!lead) return '<a class="card set-row" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '"><div class="num">' + (i+1) + '</div><div style="min-width:0;flex:1"><div class="t">' + esc(s ? s.title : it.title) + '</div>' +
+        (it.note ? '<div class="note-line">' + esc(it.note) + '</div>' : '') + (!s ? '<div class="s" style="color:var(--warn)">Not in the songbook</div>' : '<div class="s chips">' + (s.artist ? '<span class="sub">' + esc(s.artist) + '</span>' : '') + chips + '</div>') + '</div></a>';
+      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><a class="t" href="#/e/' + encodeURIComponent(e.id) + '/s/' + i + '" style="color:inherit;text-decoration:none">' + esc(s ? s.title : it.title) + '</a> ' + chips +
+        '<div class="sel-in"><input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
+        '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === items.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
+    }).join("") + '</div>';
+    document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ items[+x.getAttribute("data-note")].note = x.value; mark(); }; });
+    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = items[i-1]; items[i-1] = items[i]; items[i] = t; mark(); drawSel(); }; });
+    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = items[i+1]; items[i+1] = items[i]; items[i] = t; mark(); drawSel(); }; });
+    document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ items.splice(+x.getAttribute("data-rm"), 1); mark(); drawSel(); drawPick(); }; });
+  }
+  function drawPick(){
+    if(!$("pickRes")) return;
+    var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
+    if(!q){ $("pickRes").innerHTML = '<div class="muted" style="padding:10px 2px 0;font-size:14px">Start typing to find a song.</div>'; return; }
+    items.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
+    var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
+      .sort(function(a,b){ var at = a.titleN.indexOf(q) === 0 ? 0 : 1, bt = b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, 12);
+    $("pickRes").innerHTML = res.map(function(s){
+      var lp = lastPlayed(s.id);
+      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
+        (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
+    }).join("") + (!res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
+    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); items.push({ id: s.id, title: s.title, note: "", key: "" }); mark(); clearPick(); drawSel(); drawPick(); }; });
+    if($("addFree")) $("addFree").onclick = function(){ items.push({ id:"", title: state.pick.trim(), note:"", key:"" }); mark(); clearPick(); drawSel(); drawPick(); };
+  }
+  function clearPick(){ state.pick = ""; var q = $("pickQ"); q.value = ""; q.parentNode.classList.remove("has"); q.focus(); }
+  drawSel();
+  if($("slStart")) $("slStart").onclick = function(){ startStage(e); };
+  if(!lead) return;
+  if($("slAdd")) $("slAdd").onclick = function(){ state.slAdd = true; renderSetlist(id, banner); $("pickQ").focus(); };
+  if($("slDone")) $("slDone").onclick = function(){ state.slAdd = false; state.pick = ""; renderSetlist(id, banner); };
+  if($("pickQ")){
+    $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
+    $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
+    drawPick();
+  }
+  document.querySelector(".sbback").onclick = function(ev){ if(sl.dirty && !confirm("Leave without saving the set list?")) ev.preventDefault(); };
+  $("slSave").onclick = function(){
+    var b = this;
+    b.disabled = true; b.classList.add("spin");
+    send("save", state.pin, eventPayload(e, items)).then(function(r){
+      if(r && r.ok){ state.sl = null; return load(true).then(function(){ if(location.hash === "#/e/" + encodeURIComponent(id) + "/setlist"){ renderSetlist(id, banner); $("slMsg").innerHTML = '<div class="banner ok">Set list saved.</div>'; } }); }
+      b.disabled = false; b.classList.remove("spin");
+      if(r && r.error === "wrong_pin") return wrongPin();
+      $("slMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
+    }).catch(function(x){ b.disabled = false; b.classList.remove("spin"); $("slMsg").innerHTML = '<div class="banner bad">Could not reach the server (' + esc(x.message) + '). Try again.</div>'; });
+  };
+}
+
 /* ---------- add / edit an event ---------- */
 function keySelect(cls, val, data){
   var o = '<option value="">Song key</option>';
@@ -1750,74 +1892,40 @@ function keySelect(cls, val, data){
 }
 function renderEditor(id, newDate, banner){
   var e = id ? findEvent(id) : null;
-  if(id && !e){ $("app").innerHTML = banner + '<div class="card empty">This event was not found.</div>'; return; }
+  if(id && !e){ $("app").innerHTML = banner + subHead("#/events", "Edit Event") + '<div class="card empty">This event was not found.</div>'; return; }
   var key = id || "new" + (newDate || "");
   if(!state.draft || (state.draftKey !== key && !(state.draftKey === "new" && !id))){
     state.draftKey = key;
     state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type:"Service", date: newDate || ymd(new Date()), time:"19:00", location:"", notes:"", songs:[], players:[] };
-    state.pick = "";
   }
-  var d = state.draft; d.players = d.players || [];
-  var h = banner + '<div class="card song-head editor">' +
-    '<div class="backrow"><a class="ibtn" href="' + (id ? '#/e/' + encodeURIComponent(id) : '#/events') + '" style="text-decoration:none">‹ Cancel</a><span class="muted" style="font-size:13px">' + (id ? 'Edit event' : 'New event') + '</span></div>' +
-    '<label>Event name<input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="e.g. Sunday service, Boda | Rene Mena"></label>' +
-    '<div class="row2"><label>Type<select id="fType">' + EV_TYPES.map(function(t){ return '<option' + (d.type === t ? ' selected' : '') + '>' + t + '</option>'; }).join("") + '</select></label>' +
-    '<label>Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label>Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
-    '<label>Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="e.g. Rey de Reyes church, San Antonio"></label>' +
-    '<label>Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label></div>';
-  h += '<div class="sec-title">Set list <span class="muted" id="selCount"></span></div>';
-  h += '<div class="card song-head picker"><div class="search' + (state.pick ? ' has' : '') + '" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-    '<input id="pickQ" type="search" placeholder="Add a song: type a title" autocomplete="off" value="' + esc(state.pick) + '"><button class="x" id="pickX" aria-label="Clear">×</button></div><div id="pickRes"></div></div>';
-  h += '<div id="selList" style="margin-top:10px"></div>';
-  h += '<div class="card song-head" style="margin-top:10px"><div id="edMsg"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="edSave">Save event</button>' + (id ? '<button class="btn danger" id="edDel">Delete event</button>' : '') + '</div></div>';
+  var d = state.draft, copying = !id && (d.songs || []).length;
+  var h = banner + subHead(id ? '#/e/' + encodeURIComponent(id) : '#/events', id ? "Edit Event" : "Create Event") +
+    '<div class="form">' +
+    '<label class="fl">Name <i>*</i><input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="Sunday Service"></label>' +
+    '<div class="fl">Type</div><div class="gchips" id="fTypes">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.type === t ? ' on' : '') + '" data-type="' + t + '">' + t + '</button>'; }).join("") + '</div>' +
+    '<label class="fl">Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="Rey de Reyes church, San Antonio"></label>' +
+    '<div class="frow"><label class="fl">Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label class="fl">Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
+    '<label class="fl">Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label>' +
+    (copying ? '<div class="muted" style="font-size:14px;margin-top:14px">The set list (' + d.songs.length + ' songs) is copied too. You can change it after saving.</div>' : !id ? '<div class="muted" style="font-size:14px;margin-top:14px">You add the set list after the event is created.</div>' : '') +
+    '<div id="edMsg" style="margin-top:14px"></div>' +
+    (id ? '<div class="glist" style="margin-top:18px"><button class="grow danger" id="edDel"><span class="gi">' + ico("x") + '</span><span class="gl">Delete event</span></button></div>' : '') +
+    '</div><div class="savebar"><button class="btn primary big" id="edSave">Save Event</button></div>';
   $("app").innerHTML = h;
   function bind(idn, k){ $(idn).oninput = $(idn).onchange = function(){ d[k] = this.value; }; }
-  bind("fTitle", "title"); bind("fType", "type"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes"); bind("fLoc", "location");
-  function drawSel(){
-    $("selCount").textContent = d.songs.length ? "(" + d.songs.length + ")" : "";
-    $("selList").innerHTML = d.songs.length ? '<div class="muted" style="font-size:12px;margin:0 2px 6px">In this set (' + d.songs.length + ')</div><div class="songs">' + d.songs.map(function(it, i){
-      var s = songFor(it);
-      return '<div class="card sel-row"><div class="num">' + (i+1) + '</div><div style="flex:1;min-width:0"><div class="t">' + esc(s ? s.title : it.title) + (s && s.key ? ' <span class="pill">' + esc(keyName(s.key,0)) + '</span>' : '') + '</div>' +
-        '<div class="sel-in"><input class="note-in" data-note="' + i + '" maxlength="200" placeholder="Note, e.g. skip Verso II" value="' + esc(it.note || "") + '"></div></div>' +
-        '<div class="sel-btns"><button data-up="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button><button data-down="' + i + '"' + (i === d.songs.length-1 ? ' disabled' : '') + ' aria-label="Move down">↓</button><button data-rm="' + i + '" class="rm" aria-label="Remove">✕</button></div></div>';
-    }).join("") + '</div>' : '<div class="card empty" style="padding:16px">No songs yet. Search above to add them in order.</div>';
-    document.querySelectorAll("[data-note]").forEach(function(x){ x.oninput = function(){ d.songs[+x.getAttribute("data-note")].note = x.value; }; });
-    document.querySelectorAll("[data-up]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-up"), t = d.songs[i-1]; d.songs[i-1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
-    document.querySelectorAll("[data-down]").forEach(function(x){ x.onclick = function(){ var i = +x.getAttribute("data-down"), t = d.songs[i+1]; d.songs[i+1] = d.songs[i]; d.songs[i] = t; drawSel(); }; });
-    document.querySelectorAll("[data-rm]").forEach(function(x){ x.onclick = function(){ d.songs.splice(+x.getAttribute("data-rm"), 1); drawSel(); drawPick(); }; });
-  }
-  function drawPick(){
-    var q = norm(state.pick), words = q ? q.split(" ") : [], inList = {};
-    if(!q){ $("pickRes").innerHTML = ""; return; }   // no suggestions until something is typed
-    d.songs.forEach(function(it){ var s = songFor(it); if(s) inList[s.id] = 1; });
-    var res = state.db.songs.filter(function(s){ for(var i=0;i<words.length;i++) if(s.search.indexOf(words[i]) < 0) return false; return true; })
-      .sort(function(a,b){ var at = words.length && a.titleN.indexOf(q) === 0 ? 0 : 1, bt = words.length && b.titleN.indexOf(q) === 0 ? 0 : 1; return at - bt || byTitle(a,b); }).slice(0, q ? 12 : 6);
-    $("pickRes").innerHTML = res.map(function(s){
-      var lp = lastPlayed(s.id);
-      return '<div class="pick-row"><div style="flex:1;min-width:0"><b>' + esc(s.title) + '</b><div class="s">' + [s.key ? keyName(s.key,0) : "", s.bpm ? s.bpm + " bpm" : "", lp ? "played " + ago(lp.date) : "not played yet"].filter(Boolean).map(esc).join(" · ") + '</div></div>' +
-        (inList[s.id] ? '<span class="muted" style="font-size:12px">Added</span>' : '<button class="btn small" data-add="' + esc(s.id) + '">+ Add</button>') + '</div>';
-    }).join("") + (q && !res.length ? '<div class="muted" style="padding:10px 2px">No song with that name. <button class="btn small" id="addFree">Add "' + esc(state.pick) + '" anyway</button></div>' : '');
-    document.querySelectorAll("[data-add]").forEach(function(x){ x.onclick = function(){ var s = find(x.getAttribute("data-add")); d.songs.push({ id: s.id, title: s.title, note: "", key: "" }); clearPick(); drawSel(); drawPick(); }; });
-    if($("addFree")) $("addFree").onclick = function(){ d.songs.push({ id:"", title: state.pick.trim(), note:"", key:"" }); clearPick(); drawSel(); drawPick(); };
-  }
-  function clearPick(){ state.pick = ""; var q = $("pickQ"); q.value = ""; q.parentNode.classList.remove("has"); q.focus(); }
-  $("pickQ").oninput = function(){ state.pick = this.value; this.parentNode.classList.toggle("has", !!this.value); drawPick(); };
-  $("pickX").onclick = function(){ state.pick = ""; $("pickQ").value = ""; $("pickQ").parentNode.classList.remove("has"); drawPick(); };
-  drawSel(); drawPick();
-  function msg(t){ $("edMsg").innerHTML = t ? '<div class="banner bad" style="margin:0 0 10px">' + t + '</div>' : ''; }
+  bind("fTitle", "title"); bind("fDate", "date"); bind("fTime", "time"); bind("fNotes", "notes"); bind("fLoc", "location");
+  document.querySelectorAll("[data-type]").forEach(function(b){ b.onclick = function(){ d.type = b.getAttribute("data-type"); document.querySelectorAll("[data-type]").forEach(function(x){ x.classList.toggle("on", x === b); }); }; });
+  function msg(t){ $("edMsg").innerHTML = t ? '<div class="banner bad" style="margin:0">' + t + '</div>' : ''; }
   $("edSave").onclick = function(){
     var b = this;
     if(!d.title.trim()) return msg("Give the event a name.");
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.");
     b.disabled = true; b.textContent = "Saving...";
-    var payload = { id: d.id, title: d.title.trim(), type: d.type, date: d.date, time: d.time, location: (d.location || "").trim(), notes: d.notes, players: [], status: d.status || "", statusNote: d.statusNote || "",
-      songs: d.songs.map(function(it){ var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
-    send("save", state.pin, payload).then(function(r){
+    send("save", state.pin, eventPayload(d)).then(function(r){
       if(r && r.ok){ state.draft = null; state.draftKey = ""; return load(true).then(function(){ location.hash = "#/e/" + encodeURIComponent(r.id); }); }
-      b.disabled = false; b.textContent = "Save event";
+      b.disabled = false; b.textContent = "Save Event";
       if(r && r.error === "wrong_pin") return wrongPin();
       msg("Could not save (" + esc((r && r.error) || "unknown") + ").");
-    }).catch(function(x){ b.disabled = false; b.textContent = "Save event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again."); });
+    }).catch(function(x){ b.disabled = false; b.textContent = "Save Event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again."); });
   };
   if($("edDel")) $("edDel").onclick = function(){
     if(!confirm('Delete "' + d.title + '"? This removes it for everyone.')) return;
