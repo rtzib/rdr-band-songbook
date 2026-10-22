@@ -567,6 +567,13 @@ html,body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,
 .cday.canc i{background:var(--bad)}
 .cday.today b{border-color:var(--muted)}
 .cday.sel b{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cal{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.cal-today{min-width:32px;height:32px;padding:0 6px;border-radius:9px;border:1.5px solid var(--muted);background:none;color:var(--ink);font-size:14px;font-weight:600;margin-left:4px}
+.cal-today.on{border-color:var(--accent);background:var(--accent);color:#fff}
+.sfab{position:fixed;right:18px;bottom:22px;z-index:35;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.3);text-decoration:none}
+.sfab .ic{width:26px;height:26px;stroke-width:2.4}
+.sfab:active{transform:scale(.95)}
+@media (max-width:640px){ .sfab{bottom:calc(var(--navh, 64px) + 16px)} }
 .savedcard{display:flex;flex-direction:column;padding:18px 18px 16px;text-decoration:none;color:var(--ink)}
 .sc-h{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:500}
 .sc-h .ic{width:26px;height:26px;color:#f0566a}
@@ -1741,32 +1748,34 @@ function renderSchedule(banner){
   }
   var dayEvs = (byDay[sel] || []).slice().sort(function(a,b){ return evKey(a) < evKey(b) ? -1 : 1; });
   var h = banner + '<div class="pagehead" style="justify-content:flex-start;gap:14px"><a class="rbtn" href="#/" aria-label="Back to Home">' + ico("back") + '</a><h2 style="font-size:22px">Band Schedule</h2></div>' +
-    '<div class="card cal"><div class="cal-h"><b>' + first.toLocaleDateString("en-US", { month:"long", year:"numeric" }) + '</b><span><button class="cal-nav" id="calPrev" aria-label="Previous month">' + ico("back", "ic sm") + '</button><button class="cal-nav" id="calNext" aria-label="Next month">' + ico("right", "ic sm") + '</button></span></div>' +
+    '<div class="card cal"><div class="cal-h"><b>' + first.toLocaleDateString("en-US", { month:"long", year:"numeric" }) + '</b><span><button class="cal-nav" id="calPrev" aria-label="Previous month">' + ico("back", "ic sm") + '</button><button class="cal-nav" id="calNext" aria-label="Next month">' + ico("right", "ic sm") + '</button><button class="cal-today' + (sel === today ? ' on' : '') + '" id="calToday" aria-label="Go to today" title="Today, ' + esc(new Date().toLocaleDateString("en-US", { month:"long", day:"numeric" })) + '">' + new Date().getDate() + '</button></span></div>' +
     '<div class="cal-grid cal-wd">' + ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(function(w){ return '<span>' + w + '</span>'; }).join("") + '</div>' +
     '<div class="cal-grid">' + cells + '</div>' +
-    (mo.slice(0, 7) !== today.slice(0, 7) || sel !== today ? '<button class="linkbtn" id="calToday" style="margin:6px auto 0;display:flex">Today</button>' : '') + '</div>';
+    '</div>';
   h += '<div class="sec-h2" style="font-size:20px">' + selD.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" }) + '</div>';
   if(dayEvs.length) h += '<div class="songs">' + dayEvs.map(homeEvRow).join("") + '</div>';
   else h += '<div class="card empty" style="padding:20px">Nothing planned for the band this day.</div>';
-  if(leader()){
-    var tpl = '<div class="sec-h2" style="font-size:15px;color:var(--muted);margin-top:22px">Quick event on this date</div><div class="glist">';
-    [["Service","19:00"],["Rehearsal","19:00"],["Wedding","15:00"],["Other",""]].forEach(function(t){
-      tpl += '<button class="grow qev" data-qt="' + t[0] + '" data-qtime="' + t[1] + '"><span class="gl">New ' + (t[0] === "Other" ? 'event' : t[0].toLowerCase()) + '</span>' + (t[1] ? '<span class="gr">' + fmtTime(t[1]) + '</span>' : '') + '<span class="gchev">' + ico("right", "ic sm") + '</span></button>';
-    });
-    h += tpl + '</div>';
-  }
+  // floating + (leaders): new event on the picked date
+  if(leader()) h += '<a class="sfab" href="#/new/' + sel + '" aria-label="New event on this date" title="New event on ' + esc(selD.toLocaleDateString("en-US", { month:"short", day:"numeric" })) + '">' + ico("add") + '</a><div style="height:72px"></div>';
   $("app").innerHTML = h;
   document.querySelectorAll("[data-day]").forEach(function(b){ b.onclick = function(){ state.schedSel = b.getAttribute("data-day"); history.replaceState(null, "", "#/schedule/" + state.schedSel); renderSchedule(banner); }; });
   function shift(n){ var x = new Date(first.getFullYear(), first.getMonth() + n, 1); state.schedMonth = ymd(x); state.schedMonthFree = true; renderSchedule(banner); }
   $("calPrev").onclick = function(){ shift(-1); };
   $("calNext").onclick = function(){ shift(1); };
-  if($("calToday")) $("calToday").onclick = function(){ state.schedSel = today; state.schedMonth = ""; history.replaceState(null, "", "#/schedule"); renderSchedule(banner); };
-  document.querySelectorAll("[data-qt]").forEach(function(b){ b.onclick = function(){
-    var type = b.getAttribute("data-qt");
-    state.draft = { id:"", title: type === "Other" ? "" : type, type: type, date: sel, time: b.getAttribute("data-qtime"), location:"", notes:"", songs:[], players:[] };
-    state.draftKey = "new" + sel; state.pick = "";
-    location.hash = "#/new/" + sel;
-  }; });
+  $("calToday").onclick = function(){ state.schedSel = ymd(new Date()); state.schedMonth = ""; state.schedMonthFree = false; history.replaceState(null, "", "#/schedule"); renderSchedule(banner); };
+  // swipe the calendar left/right to change month
+  var cal = document.querySelector(".cal"), sx = 0, sy = 0, st = 0;
+  cal.addEventListener("touchstart", function(ev){ var t = ev.touches[0]; sx = t.clientX; sy = t.clientY; st = Date.now(); }, { passive: true });
+  cal.addEventListener("touchend", function(ev){
+    var t = ev.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5 && Date.now() - st < 800){ ev.preventDefault(); shift(dx < 0 ? 1 : -1); }
+  });
+  // the today box follows the clock (e.g. past midnight)
+  if(state.schedTimer) clearInterval(state.schedTimer);
+  state.schedTimer = setInterval(function(){
+    var b = $("calToday"); if(!b){ clearInterval(state.schedTimer); state.schedTimer = null; return; }
+    if(ymd(new Date()) !== today) renderSchedule(banner);
+  }, 60000);
 }
 
 /* ---------- countdown to the next event ---------- */
