@@ -42,11 +42,13 @@ function doGet(e) {
   var body;
   try {
     var a = p.action || "";
-    var needPin = { save: 1, "delete": 1, part: 1, savesong: 1, deletesong: 1, listop: 1 };
+    var needPin = { save: 1, "delete": 1, part: 1, savesong: 1, deletesong: 1, listop: 1, golive: 1 };
     if (needPin[a] && !checkPin_(p.pin)) body = JSON.stringify({ ok: false, error: "wrong_pin" });
     else if (a === "data") body = dataJson_(p.fresh);
     else if (a === "events") body = JSON.stringify({ ok: true, events: listEvents_() });
     else if (a === "ping") body = JSON.stringify({ ok: true, pinOk: checkPin_(p.pin) });
+    else if (a === "live") body = JSON.stringify(liveGet_(String(p.ev || "")));
+    else if (a === "golive") body = JSON.stringify(goLive_(payload_(p)));
     else if (a === "part") body = JSON.stringify(savePart_(p));
     else if (a === "save") body = JSON.stringify(write_(function () { return saveEvent_(payload_(p)); }));
     else if (a === "delete") body = JSON.stringify(write_(function () { return deleteEvent_(String(p.id || "")); }));
@@ -62,6 +64,27 @@ function doGet(e) {
     return ContentService.createTextOutput(cb + "(" + body + ");").setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
   return ContentService.createTextOutput(body).setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ================= live session =================
+ * A leader's phone sends where it is (set list item + song part); the band's phones ask every few seconds.
+ * Kept only in the script cache (6 hours), never written to the sheet. Dropped if the leader goes quiet for 10 minutes.
+ */
+function goLive_(d) {
+  var ev = clean_(d.ev, 20);
+  if (!ev) return { ok: false, error: "no_event" };
+  var c = CacheService.getScriptCache(), k = "live_" + ev;
+  if (!d.on) { c.remove(k); return { ok: true, on: false }; }
+  var sec = parseInt(d.sec, 10);
+  var v = { on: true, idx: Math.max(0, parseInt(d.idx, 10) || 0), sec: isNaN(sec) ? -1 : sec, sid: clean_(d.sid, 20), t: Date.now() };
+  c.put(k, JSON.stringify(v), 21600);
+  return { ok: true, on: true };
+}
+function liveGet_(ev) {
+  if (!ev) return { ok: false, error: "no_event" };
+  var raw = CacheService.getScriptCache().get("live_" + clean_(ev, 20)), v = raw ? JSON.parse(raw) : null;
+  if (v && Date.now() - v.t > 10 * 60 * 1000) v = null;
+  return { ok: true, live: v ? { on: true, idx: v.idx, sec: v.sec, sid: v.sid } : { on: false } };
 }
 
 function payload_(p) { return JSON.parse(p.data || joinParts_(p.key) || "{}"); }
