@@ -975,6 +975,16 @@ body.rsview main{padding-bottom:110px}
 .prevhead .s{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:13.5px}
 .prevhead .sub{color:var(--muted)}
 [data-panel="preview"] .sections{margin-top:10px}
+
+/* background save status pill */
+.sync{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 10px);z-index:120;transform:translate(-50%,-30px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:10px;width:max-content;max-width:calc(100% - 24px);background:var(--ink);color:var(--bg);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.3);transition:transform .2s,opacity .2s}
+.sync.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.sync.ok{background:#16a34a;color:#fff}
+.sync.warn{background:#b45309;color:#fff;border-radius:16px}
+.sync.bad{background:#b91c1c;color:#fff;border-radius:16px}
+.sync-spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite;flex:0 0 auto}
+.sync-b{border:0;background:rgba(255,255,255,.22);color:#fff;border-radius:999px;padding:5px 12px;font-weight:600;font-size:13px;text-decoration:none;flex:0 0 auto}
+.sync-x{border:0;background:none;color:#fff;font-size:20px;line-height:1;padding:0 2px;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -1321,8 +1331,161 @@ function send(action, pin, obj){
   return next();
 }
 function useData(raw, source, when){
-  state.db = parseDb(raw); state.events = raw.events || []; state.source = source; state.loadedAt = when || Date.now();
+  var first = !state.db;
+  state.base = raw; rebuild(); state.source = source; state.loadedAt = when || Date.now();
+  // a refresh in the background must not throw away what someone is typing
+  if(!first && typingInApp()){ status(); return; }
   route();
+}
+function typingInApp(){ var a = document.activeElement; return !!(a && $("app").contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)); }
+
+/* ---------- background saves ----------
+ * A save changes the app's own copy right away (so the screen moves on at once),
+ * then goes into a small outbox kept on the phone and is sent to the sheet in the background, one at a time.
+ * If there is no internet it waits and tries again; if the sheet says no, the change is undone and the leader is told.
+ */
+var outbox = ls("outbox") || [], obBusy = false, obTimer = null, obSeq = outbox.reduce(function(m, j){ return Math.max(m, j.n || 0); }, 0);
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
+function newEventId(){ return (Date.now().toString(16) + Math.random().toString(16).slice(2, 10)).slice(-10); }
+function sameName(a, b){ return norm(a) === norm(b); }
+function addName(list, v){ if(v && !list.some(function(x){ return sameName(x.name || x, v); })) list.push(v); }
+// apply one waiting save to a copy of the data (same rules as the sheet script)
+function applyJob(raw, job){
+  var d = job.data, at = job.at;
+  raw.events = raw.events || []; raw.songs = raw.songs || [];
+  function upsert(list, obj){ for(var i=0;i<list.length;i++) if(list[i].id === obj.id){ list[i] = obj; return; } list.push(obj); }
+  if(job.action === "save"){
+    var ev = clone(d); ev.updated = at; ev.players = ev.players || [];
+    upsert(raw.events, ev);
+    if(d.type){ raw.eventTypes = raw.eventTypes && raw.eventTypes.length ? raw.eventTypes : EV_TYPES.slice(); addName(raw.eventTypes, d.type); }
+  } else if(job.action === "delete"){
+    raw.events = raw.events.filter(function(e){ return e.id !== d.id; });
+  } else if(job.action === "savesong"){
+    var sg = clone(d); sg.updated = at;
+    upsert(raw.songs, sg);
+    raw.artists = raw.artists || []; raw.genres = raw.genres || []; raw.themes = raw.themes || []; raw.albums = raw.albums || [];
+    addName(raw.artists, d.artist); addName(raw.genres, d.genre); (d.themes || []).forEach(function(t){ addName(raw.themes, t); });
+    if(d.album && !raw.albums.some(function(a){ return sameName(a.name, d.album); })) raw.albums.push({ name: d.album, year: "" });
+  } else if(job.action === "deletesong"){
+    raw.songs = raw.songs.filter(function(x){ return x.id !== d.id; });
+  } else if(job.action === "listop") applyListOp(raw, d, job);
+}
+function applyListOp(raw, d, job){
+  if(d.kind === "Members"){
+    raw.members = raw.members || [];
+    if(d.op === "add") raw.members.push({ id: "tmp" + job.n, name: d.name, instruments: d.instruments || "", active: true });
+    else if(d.op === "update") raw.members.forEach(function(m){ if(m.id === d.id){ m.name = d.name || m.name; m.instruments = d.instruments || ""; } });
+    else if(d.op === "delete") raw.members = raw.members.filter(function(m){ return m.id !== d.id; });
+    return;
+  }
+  if(d.kind === "EventTypes"){
+    var types = raw.eventTypes = raw.eventTypes && raw.eventTypes.length ? raw.eventTypes : EV_TYPES.slice();
+    if(d.op === "add") addName(types, d.name);
+    else if(d.op === "rename"){ raw.eventTypes = types.map(function(t){ return sameName(t, d.old) ? d.name : t; }); raw.events.forEach(function(e){ if(sameName(e.type, d.old)) e.type = d.name; }); }
+    else if(d.op === "delete"){ raw.eventTypes = types.filter(function(t){ return !sameName(t, d.old); }); raw.events.forEach(function(e){ if(sameName(e.type, d.old)) e.type = ""; }); }
+    return;
+  }
+  var key = { Albums: "albums", Artists: "artists", Genres: "genres", Themes: "themes" }[d.kind], field = { Albums: "album", Artists: "artist", Genres: "genre", Themes: "themes" }[d.kind];
+  if(!key) return;
+  var list = raw[key] = raw[key] || [];
+  function nm(x){ return x && x.name != null ? x.name : x; }
+  function swap(to){
+    raw.songs.forEach(function(sg){
+      if(field === "themes"){ var th = Array.isArray(sg.themes) ? sg.themes : String(sg.themes || "").split(","); sg.themes = th.map(function(t){ return String(t).trim(); }).map(function(t){ return sameName(t, d.old) ? to : t; }).filter(Boolean); }
+      else if(sameName(sg[field], d.old)) sg[field] = to;
+    });
+  }
+  if(d.op === "add"){ if(!list.some(function(x){ return sameName(nm(x), d.name); })) list.push(d.kind === "Albums" ? { name: d.name, year: d.year || "" } : d.name); }
+  else if(d.op === "rename"){ raw[key] = list.map(function(x){ return sameName(nm(x), d.old) ? (d.kind === "Albums" ? { name: d.name, year: x.year || "" } : d.name) : x; }); swap(d.name); }
+  else if(d.op === "delete"){ raw[key] = list.filter(function(x){ return !sameName(nm(x), d.old); }); swap(""); }
+}
+// the data the app shows = what the sheet last sent + the saves still waiting
+function rebuild(){
+  if(!state.base) return;
+  var raw = clone(state.base);
+  outbox.forEach(function(j){ try{ applyJob(raw, j); }catch(e){} });
+  state.db = parseDb(raw); state.events = raw.events || [];
+}
+function saveOutbox(){ ls("outbox", outbox); }
+// queue a save; the caller then moves on / redraws straight away
+function queueSave(action, data, label){
+  var job = { n: ++obSeq, action: action, data: data, label: label || "", at: new Date().toISOString(), tries: 0 };
+  outbox.push(job); saveOutbox(); rebuild();
+  syncPill(); flush();
+  return job;
+}
+// a new song gets its real ID from the sheet; if it differs from our guess, follow it everywhere
+function remapSong(oldId, newId){
+  if(!oldId || !newId || oldId === newId) return;
+  outbox.forEach(function(j){
+    if((j.action === "savesong" || j.action === "deletesong") && j.data.id === oldId) j.data.id = newId;
+    if(j.action === "save") (j.data.songs || []).forEach(function(it){ if(it.id === oldId) it.id = newId; });
+  });
+  if(state.base){ (state.base.songs || []).forEach(function(x){ if(x.id === oldId) x.id = newId; }); (state.base.events || []).forEach(function(e){ (e.songs || []).forEach(function(it){ if(it.id === oldId) it.id = newId; }); }); }
+  if(state.saved[oldId]){ delete state.saved[oldId]; state.saved[newId] = 1; ls("saved", state.saved); }
+  if(state.sdraft && state.sdraft.id === oldId){ state.sdraft.id = newId; state.sdraft._for = newId; }
+  var o = encodeURIComponent(oldId), h = location.hash;
+  if(h.indexOf("#/c/" + o) === 0) history.replaceState(null, "", "#/c/" + encodeURIComponent(newId) + h.slice(("#/c/" + o).length));
+  if(state.returnTo && state.returnTo.indexOf("#/c/" + o) === 0) state.returnTo = "#/c/" + encodeURIComponent(newId) + state.returnTo.slice(("#/c/" + o).length);
+  saveOutbox();
+}
+function sendJob(job){
+  var pin = encodeURIComponent(state.pin);
+  if(job.action === "delete") return jsonp(SCRIPT_URL + "?action=delete&pin=" + pin + "&id=" + encodeURIComponent(job.data.id), 30000);
+  if(job.action === "deletesong") return jsonp(SCRIPT_URL + "?action=deletesong&pin=" + pin + "&id=" + encodeURIComponent(job.data.id), 30000);
+  return send(job.action, state.pin, job.data);
+}
+var ERRS = { exists: "that name is already used", no_title: "it has no name", bad_date: "the date is not valid", bad_time: "the time is not valid", not_found: "it was already removed", in_use: "it is still in use", no_name: "it has no name" };
+function flush(){
+  if(obBusy || !outbox.length || !SCRIPT_URL || !state.pin){ syncPill(); return; }
+  clearTimeout(obTimer); obBusy = true; syncPill();
+  var job = outbox[0];
+  sendJob(job).then(function(r){
+    obBusy = false;
+    if(r && r.error === "wrong_pin"){ syncPill(); wrongPin(); return; }
+    // a retry after a timeout can find the first try already went through
+    var already = job.tries > 0 && r && (r.error === "exists" || r.error === "not_found");
+    if(r && (r.ok || already)){
+      outbox.shift();
+      if(state.base) applyJob(state.base, job);
+      if(job.action === "savesong" && r.id) remapSong(job.data.id, r.id);
+      saveOutbox(); if(state.base) ls("cache2", { at: state.loadedAt, data: state.base });
+      if(outbox.length) return flush();
+      syncPill("saved");
+      return load(true);
+    }
+    outbox.shift(); saveOutbox(); rebuild();
+    syncPill("error", 'Could not save' + (job.label ? ' "' + job.label + '"' : '') + ': ' + (ERRS[r && r.error] || (r && r.error) || "unknown error") + '. That change was undone.');
+    if(!typingInApp()) route();
+    if(outbox.length) flush(); else load(true);
+  }).catch(function(){
+    obBusy = false; job.tries++; saveOutbox();
+    syncPill("offline");
+    obTimer = setTimeout(flush, Math.min(60000, 3000 * Math.pow(2, Math.min(job.tries, 5))));
+  });
+}
+window.addEventListener("online", function(){ flush(); });
+// the little status pill at the bottom of the screen
+function syncPill(kind, text){
+  var el = $("sync");
+  if(!el){ el = document.createElement("div"); el.id = "sync"; el.className = "sync"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite"); document.body.appendChild(el); }
+  clearTimeout(state.pillTimer);
+  var n = outbox.length;
+  if(kind === "error"){
+    el.className = "sync bad show"; el.innerHTML = '<span>' + esc(text) + '</span><button class="sync-x" aria-label="Close">×</button>';
+    el.querySelector(".sync-x").onclick = function(){ el.className = "sync"; syncPill(); };
+    state.pillTimer = setTimeout(function(){ el.className = "sync"; syncPill(); }, 9000);
+    return;
+  }
+  if(n && !state.pin){ el.className = "sync warn show"; el.innerHTML = '<span>' + n + (n === 1 ? ' change' : ' changes') + ' waiting. Sign in as leader to save.</span><a class="sync-b" href="#/manage">Sign in</a>'; return; }
+  if(n && (kind === "offline" || (!obBusy && outbox[0].tries > 0))){
+    el.className = "sync warn show"; el.innerHTML = '<span>No internet. ' + n + (n === 1 ? ' change' : ' changes') + ' waiting to save.</span><button class="sync-b" id="syncRetry">Retry</button>';
+    $("syncRetry").onclick = function(){ clearTimeout(obTimer); flush(); };
+    return;
+  }
+  if(n){ el.className = "sync show"; el.innerHTML = '<i class="sync-spin"></i><span>Saving' + (n > 1 ? ' ' + n + ' changes' : '') + '...</span>'; return; }
+  if(kind === "saved"){ el.className = "sync ok show"; el.innerHTML = '<span>✓ Saved</span>'; state.pillTimer = setTimeout(function(){ el.className = "sync"; }, 2200); return; }
+  el.className = "sync";
 }
 function load(force){
   if(state.loading) return Promise.resolve();
@@ -1364,6 +1527,7 @@ function status(){
 document.addEventListener("visibilitychange", function(){
   if(document.visibilityState === "visible"){
     if(SCRIPT_URL && Date.now() - state.loadedAt > REFRESH_MINUTES*60000) load(false);
+    flush();
     if(wake.want) wake.on();
   }
 });
@@ -1456,13 +1620,16 @@ function bindLeaderGate(after){
     if(!pin) return;
     b.disabled = true; b.textContent = "Checking...";
     jsonp(SCRIPT_URL + "?action=ping&pin=" + encodeURIComponent(pin)).then(function(r){
-      if(r && r.pinOk){ state.pin = pin; ls("pin", pin); if(after) after(); else route(); }
+      if(r && r.pinOk){ state.pin = pin; ls("pin", pin); if(after) after(); else route(); flush(); }
       else { b.disabled = false; b.textContent = "Sign in"; $("lgMsg").innerHTML = '<div class="banner bad" style="margin:10px 0 0">That PIN didn\'t work.</div>'; }
     }).catch(function(){ b.disabled = false; b.textContent = "Sign in"; $("lgMsg").innerHTML = '<div class="banner bad" style="margin:10px 0 0">No internet. Try again.</div>'; });
   };
   $("lgPin").onkeydown = function(e){ if(e.key === "Enter") $("lgGo").click(); };
 }
-function signOut(){ state.pin = ""; ls("pin", ""); route(); }
+function signOut(){
+  if(outbox.length && !confirm(outbox.length + (outbox.length === 1 ? " change is" : " changes are") + " still waiting to save. Sign out anyway? They will be saved after you sign in again.")) return;
+  state.pin = ""; ls("pin", ""); route(); syncPill();
+}
 function wrongPin(){ state.pin = ""; ls("pin", ""); alert("The band PIN changed or is wrong. Please sign in again."); route(); }
 
 /* ---------- songs list ---------- */
@@ -2396,14 +2563,11 @@ function renderEvent(id, banner){
       else $("evDup").click();
     });
   };
-  function setStatus(status, note, btn){
-    btn.disabled = true; btn.querySelector(".gl").textContent = "Saving...";
+  function setStatus(status, note){
     var payload = eventPayload(e); payload.status = status; payload.statusNote = note || "";
-    send("save", state.pin, payload).then(function(r){
-      if(r && r.ok) return load(true).then(function(){ if(status === "canceled" && confirm("Event canceled. Send the band a message about it now?")) shareEvent(findEvent(e.id) || payload); });
-      if(r && r.error === "wrong_pin") return wrongPin();
-      alert("Could not save (" + ((r && r.error) || "unknown") + ")."); renderEvent(id, banner);
-    }).catch(function(){ alert("No internet. Try again."); renderEvent(id, banner); });
+    queueSave("save", payload, (status ? "Cancel " : "Undo cancel ") + e.title);
+    route();
+    if(status === "canceled" && confirm("Event canceled. Send the band a message about it now?")) shareEvent(findEvent(e.id) || payload);
   }
   if($("evCancel")) $("evCancel").onclick = function(){
     var why = prompt('Cancel "' + e.title + '"? You can type a reason for the band (optional):', "");
@@ -2508,14 +2672,9 @@ function renderSetlist(id, banner, editing){
   };
   document.querySelector(".sbback").onclick = function(ev){ if(!sl.dirty) return; if(!confirm("Leave without saving the set list?")) ev.preventDefault(); else state.sl = null; };
   $("slSave").onclick = function(){
-    var b = this;
-    b.disabled = true; b.classList.add("spin");
-    send("save", state.pin, eventPayload(e, items)).then(function(r){
-      if(r && r.ok){ state.sl = null; return load(true).then(function(){ state.slMsg = "Set list saved."; if(location.hash === slUrl(id, true)) location.hash = slUrl(id); }); }
-      b.disabled = false; b.classList.remove("spin");
-      if(r && r.error === "wrong_pin") return wrongPin();
-      $("slMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
-    }).catch(function(x){ b.disabled = false; b.classList.remove("spin"); $("slMsg").innerHTML = '<div class="banner bad">Could not reach the server (' + esc(x.message) + '). Try again.</div>'; });
+    queueSave("save", eventPayload(e, items), "Set list of " + e.title);
+    state.sl = null;
+    location.hash = slUrl(id);
   };
 }
 /* sheets used by the set list editor and rehearsal screen */
@@ -2615,21 +2774,17 @@ function renderEditor(id, newDate, banner){
     var b = this;
     if(!d.title.trim()) return msg("Give the event a name.");
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) return msg("Pick a date.");
-    b.disabled = true; b.textContent = "Saving...";
-    send("save", state.pin, eventPayload(d)).then(function(r){
-      if(r && r.ok){ state.draft = null; state.draftKey = ""; return load(true).then(function(){ location.hash = "#/e/" + encodeURIComponent(r.id); }); }
-      b.disabled = false; b.textContent = "Save Event";
-      if(r && r.error === "wrong_pin") return wrongPin();
-      msg("Could not save (" + esc((r && r.error) || "unknown") + ").");
-    }).catch(function(x){ b.disabled = false; b.textContent = "Save Event"; msg("Could not reach the server (" + esc(x.message) + "). Check the internet and try again."); });
+    var payload = eventPayload(d);
+    if(!payload.id) payload.id = newEventId();   // the sheet keeps the ID we give it, so the new event can open right away
+    queueSave("save", payload, payload.title);
+    state.draft = null; state.draftKey = "";
+    location.hash = "#/e/" + encodeURIComponent(payload.id);
   };
   if($("edDel")) $("edDel").onclick = function(){
     if(!confirm('Delete "' + d.title + '"? This removes it for everyone.')) return;
-    jsonp(SCRIPT_URL + "?action=delete&pin=" + encodeURIComponent(state.pin) + "&id=" + encodeURIComponent(id), 30000).then(function(r){
-      if(r && r.ok){ state.draft = null; return load(true).then(function(){ location.hash = "#/events"; }); }
-      if(r && r.error === "wrong_pin") return wrongPin();
-      msg("Could not delete (" + esc((r && r.error) || "unknown") + ").");
-    }).catch(function(x){ msg("Could not reach the server (" + esc(x.message) + ")."); });
+    queueSave("delete", { id: id }, "Delete " + d.title);
+    state.draft = null; state.draftKey = "";
+    location.hash = "#/events";
   };
 }
 
@@ -2726,22 +2881,23 @@ function renderSongEditor(id, banner){
     var b = this;
     if(!d.title.trim()){ showTab("details"); $("sTitle").focus(); return msg("Give the song a title."); }
     if(db.songs.some(function(x){ return x.id !== d.id && x.titleN === norm(d.title); })){ showTab("details"); return msg("Another song already has that title."); }
-    b.disabled = true; b.textContent = "Saving...";
     var payload = { id: d.id, title: d.title.trim(), album: d.album, type: d.type, artist: d.artist, key: d.key, bpm: d.bpm, time: d.time, genre: d.genre, themes: d.themes, link: (d.link || "").trim(), lyrics: d.lyrics };
-    send("savesong", state.pin, payload).then(function(r){
-      if(r && r.ok){ state.sdraft = null; state.sTab = ""; return load(true).then(function(){ location.hash = state.returnTo || ("#/c/" + encodeURIComponent(r.id)); }); }
-      b.disabled = false; b.textContent = id ? "Save changes" : "Add song";
-      if(r && r.error === "wrong_pin") return wrongPin();
-      msg(r && r.error === "exists" ? "Another song already has that title." : "Could not save (" + esc((r && r.error) || "unknown") + ").");
-    }).catch(function(x){ b.disabled = false; b.textContent = id ? "Save changes" : "Add song"; msg("Could not reach the server (" + esc(x.message) + "). Your changes are still here; try again."); });
+    if(!payload.id){
+      // the sheet names new songs after their title (same rule as the script); the real ID is followed if it differs
+      var base = slug(payload.title), sid = base, k = 2, ids = {};
+      db.songs.forEach(function(x){ ids[x.id] = 1; });
+      while(ids[sid]) sid = base + "-" + (k++);
+      payload.id = sid;
+    }
+    queueSave("savesong", payload, payload.title);
+    state.sdraft = null; state.sTab = "";
+    location.hash = state.returnTo || ("#/c/" + encodeURIComponent(payload.id));
   };
   if($("sDel")) $("sDel").onclick = function(){
     if(!confirm('Delete "' + d.title + '" from the songbook? This removes it for everyone.')) return;
-    jsonp(SCRIPT_URL + "?action=deletesong&pin=" + encodeURIComponent(state.pin) + "&id=" + encodeURIComponent(id)).then(function(r){
-      if(r && r.ok){ state.sdraft = null; state.returnTo = ""; if(state.stage) endStage(true); return load(true).then(function(){ location.hash = "#/songs"; }); }
-      if(r && r.error === "wrong_pin") return wrongPin();
-      msg("Could not delete (" + esc((r && r.error) || "unknown") + ").");
-    });
+    queueSave("deletesong", { id: id }, "Delete " + d.title);
+    state.sdraft = null; state.returnTo = ""; if(state.stage) endStage(true);
+    location.hash = "#/songs";
   };
 }
 
@@ -2768,18 +2924,21 @@ function renderManage(banner){
     block("Themes", "Themes", db.themes, "themes") +
     block("EventTypes", "Event types", evTypes(), "events");
   $("app").innerHTML = h; scrollTop();
+  var FIELD = { Albums: "album", Artists: "artist", Genres: "genre", Themes: "themes", EventTypes: "events" };
+  function names(kind){ return kind === "Albums" ? db.albums.map(function(a){ return a.name; }) : kind === "EventTypes" ? evTypes() : (db[kind.toLowerCase()] || []); }
   function op(data, okMsg){
-    $("mMsg").innerHTML = '<div class="banner warn">Saving...</div>';
-    send("listop", state.pin, data).then(function(r){
-      if(r && r.ok) return load(true).then(function(){ renderManage(banner); $("mMsg").innerHTML = '<div class="banner ok">' + okMsg + '</div>'; });
-      if(r && r.error === "wrong_pin") return wrongPin();
-      if(r && r.error === "in_use"){
-        var what = data.kind === "EventTypes" ? "events" : "songs";
-        if(confirm(r.count + " " + what + " use this. Delete it anyway? Those " + what + " will have it left blank.")) return op(Object.assign({}, data, { force: true }), okMsg);
-        $("mMsg").innerHTML = ""; return;
+    // check here what the sheet would refuse, so the change can show at once
+    if(data.kind !== "Members"){
+      var list = names(data.kind);
+      if((data.op === "add" || (data.op === "rename" && !sameName(data.name, data.old))) && list.some(function(x){ return sameName(x, data.name); })){ $("mMsg").innerHTML = '<div class="banner bad">' + esc(data.name) + ' is already in the list.</div>'; return; }
+      if(data.op === "delete"){
+        var used = count(FIELD[data.kind], data.old), what = data.kind === "EventTypes" ? "events" : "songs";
+        if(used){ if(!confirm(used + " " + what + " use this. Delete it anyway? Those " + what + " will have it left blank.")) return; data.force = true; }
       }
-      $("mMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
-    }).catch(function(x){ $("mMsg").innerHTML = '<div class="banner bad">No internet (' + esc(x.message) + ').</div>'; });
+    } else if(/^tmp/.test(data.id || "")){ $("mMsg").innerHTML = '<div class="banner warn">Still saving this member. Try again in a moment.</div>'; return; }
+    queueSave("listop", data, data.name || data.old || "");
+    renderManage(banner);
+    $("mMsg").innerHTML = '<div class="banner ok">' + esc(okMsg) + '</div>';
   }
   $("mSignOut").onclick = signOut;
   document.querySelectorAll("[data-addk]").forEach(function(b){ b.onclick = function(){
@@ -2965,6 +3124,7 @@ var c = ls("cache2");
 if(SCRIPT_URL && c && c.data){ try{ useData(c.data, "cache", c.at); }catch(e){} }
 load(false);
 if(!state.db) route();
+if(outbox.length){ syncPill(); setTimeout(flush, 1500); }
 if("serviceWorker" in navigator && location.protocol === "https:"){ navigator.serviceWorker.register("sw.js").catch(function(){}); }
 })();
 
