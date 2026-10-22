@@ -3,7 +3,7 @@
 Phone app for the Rey de Reyes band: songs with lyrics and chords, events with set lists, rehearsal mode.
 
 - **Live page:** https://rtzib.github.io/rdr-band-songbook/
-- **Data:** one Google Sheet in the church Drive, "RDRB - Tracker | Band Database" (tabs Songs, Albums, Artists, Genres, Themes, Members, Events, SetList). No lyrics are stored in this repo.
+- **Data:** one Google Sheet in the church Drive, "RDRB - Tracker | Band Database" (tabs Songs, Albums, Artists, Genres, Themes, EventTypes, Members, Events, SetList). No lyrics are stored in this repo.
 - **Old song Google Doc:** no longer used by the app. Keep it as a backup.
 - `noindex` tag is set so Google doesn't list it. Anyone with the link can still open it.
 
@@ -20,7 +20,7 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 ## Who can do what
 
 - **Everyone:** read songs, open events, rehearsal mode, change key/text size on their own phone, save songs (heart), share an event.
-- **Leaders** (anyone with the band PIN, signed in once on their phone via Settings > Leader sign-in): add/edit/delete songs and events, copy events, manage albums, artists, genres, themes and band members (Leader tools).
+- **Leaders** (anyone with the band PIN, signed in once on their phone via Settings > Leader sign-in): add/edit/delete songs and events, copy events, manage albums, artists, genres, themes, event types and band members (Leader tools).
 - The PIN is stored in the script's settings, not here. To see it, run `setupBand` in the script. To change it: put it in `NEW_PIN`, run `changePin`, set `NEW_PIN` back to "". 20 wrong tries locks saving for an hour.
 
 ## Features
@@ -35,7 +35,8 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 - **Setlist page** (See Setlist): everyone sees the songs in order with key and bpm and can open each one. Leaders tap **Add Songs** to search and add, move songs up/down, add a note per song, remove, then tap the blue save button.
 - **Band Schedule** (tap the date card on Home): month calendar (Mon–Sun, dots on days with events, red dot if canceled). Swipe left/right on the calendar or use the arrows to change month; the box with today's date jumps back to today. Tap a day to see its events. Leaders get a floating **+** button (bottom right) that opens Create Event on the picked date.
 - **Settings:** team members, Leader sign-in / Leader tools, invite the band (shares the app link), dark mode, chords on/off, lyrics text size, guide language, refresh songs, add to Home screen, quick guide, Help Center, About, leader sign out.
-- **Rehearsal mode** (Start): full screen, screen stays on, swipe left/right or the big buttons to move between songs, plays each song in the key set for the event.
+- **Event types:** leaders add, rename and delete them in Leader tools. Renaming updates every event using it; deleting one that events use asks first and leaves those events with no type.
+- **Rehearsal / event mode** (Start Event): full screen, screen stays on, swipe left/right or the big buttons to move between songs, plays each song in the key set for the event. The top bar says Rehearsal for Rehearsal-type events and Live for everything else.
 - **First-run guide** (English / Spanish): install the app, open the next event, swipe song by song. Help has it again.
 - **Song editor:** title, album, type, artist, key, BPM, time, genre, themes, practice link, lyrics with part buttons and a live preview. "+ Add new..." in the album/artist/genre lists adds a new one.
 

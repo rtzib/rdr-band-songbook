@@ -211,6 +211,8 @@ html.dark .et{filter:brightness(.85) saturate(1.2)}
 .note-line{font-size:13px;color:var(--chord);margin-top:3px;font-weight:600}
 .pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .pill{display:inline-block;font-size:12px;font-weight:700;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.stmode{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:999px;background:var(--line);color:inherit;margin-right:2px}
+.stmode.live{background:#dc2626;color:#fff}
 .evbar{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:10px;text-decoration:none;color:inherit;border-color:var(--accent)}
 .ev-note{padding:10px 14px;margin-bottom:10px;background:var(--warn-bg);color:var(--warn);border-color:transparent;font-size:15px}
 .song-row{padding:0;gap:0}
@@ -1100,7 +1102,7 @@ function parseDb(raw){
   songs.forEach(function(s){ if(s.album) add(s.album); });
   add("Covers"); add("No album");
   function abc(a, b){ return norm(a) < norm(b) ? -1 : 1; }
-  return { songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), themes: (raw.themes || []).slice().sort(abc), members: raw.members || [] };
+  return { songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), themes: (raw.themes || []).slice().sort(abc), eventTypes: (raw.eventTypes || []).slice(), members: raw.members || [] };
 }
 /* CORE-END */
 </script>
@@ -1557,7 +1559,7 @@ function setSize(v){ state.size = Math.max(14, Math.min(40, v)); ls("size", stat
 /* ---------- set list mode + rehearsal (stage) mode ---------- */
 function evBarHtml(ctx){
   var e = ctx.ev, n = (e.songs || []).length;
-  return '<div class="card evbar"><div style="min-width:0;flex:1"><div class="muted" style="font-size:12px">' + esc(e.title) + '</div><b>Song ' + (ctx.idx + 1) + ' of ' + n + '</b></div>' +
+  return '<div class="card evbar"><div style="min-width:0;flex:1"><div class="muted" style="font-size:12px">' + (state.stage ? '<span class="stmode' + (state.stageMode === "event" ? ' live' : '') + '">' + (state.stageMode === "event" ? 'Live' : 'Rehearsal') + '</span> ' : '') + esc(e.title) + '</div><b>Song ' + (ctx.idx + 1) + ' of ' + n + '</b></div>' +
     (state.stage ? '<button class="ibtn" id="stEnd">✕ End</button>' : '<a class="ibtn" href="#/e/' + encodeURIComponent(e.id) + '" style="text-decoration:none">☰ List</a>') + '</div>' +
     (ctx.item && ctx.item.note ? '<div class="card ev-note"><b>Note:</b> ' + esc(ctx.item.note) + '</div>' : '');
 }
@@ -1581,8 +1583,9 @@ document.addEventListener("touchend", function(e){
   var c = swipe.ctx, to = c.idx + (dx < 0 ? 1 : -1);
   if(to >= 0 && to < c.ev.songs.length) location.hash = "#/e/" + encodeURIComponent(c.ev.id) + "/s/" + to;
 }, { passive: true });
+// a Rehearsal-type event runs as a rehearsal, anything else as a live event (shown in the top bar)
 function startStage(ev){
-  state.stage = true; wake.on();
+  state.stage = true; state.stageMode = norm(ev.type) === "rehearsal" ? "rehearsal" : "event"; wake.on();
   try{ var el = document.documentElement; (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el); }catch(e){}
   location.hash = "#/e/" + encodeURIComponent(ev.id) + "/s/0";
 }
@@ -1617,7 +1620,13 @@ var wake = { want:false, lock:null,
 
 /* ---------- events helpers ---------- */
 var EV_TYPES = ["Service", "Rehearsal", "Wedding", "Campaign", "Youth", "Funeral", "Birthday", "Other"];
-function evTypeClass(t){ var i = EV_TYPES.indexOf(t); return "et et" + (i < 0 ? 7 : i); }
+// the band's own list (Leader tools > Event types); the built-in list until the sheet has one
+function evTypes(){ var l = state.db && state.db.eventTypes; return l && l.length ? l : EV_TYPES; }
+function evTypeClass(t){
+  var i = EV_TYPES.indexOf(t);
+  if(i < 0){ i = 0; String(t || "").split("").forEach(function(c){ i = (i * 31 + c.charCodeAt(0)) % 997; }); i = t ? i % 7 : 7; }
+  return "et et" + i;
+}
 function ymd(d){ return d.getFullYear() + "-" + ("0" + (d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
 function evDate(e){ var p = String(e.date||"").split("-"); return p.length === 3 ? new Date(+p[0], +p[1]-1, +p[2]) : null; }
 function fmtTime(t){ if(!t) return ""; var p = t.split(":"), h = +p[0]; return (h % 12 || 12) + ":" + p[1] + (h < 12 ? " AM" : " PM"); }
@@ -1885,7 +1894,7 @@ function openEventFilters(banner){
   function cnt(t){ return (state.events || []).filter(function(e){ return (e.type || "Other") === t; }).length; }
   function draw(){
     ov.innerHTML = '<div class="sheet"><div class="sheet-grab"></div><div class="sheet-head"><b>Filters</b><button class="xclose" id="efX" aria-label="Close">×</button></div><div class="sheet-body">' +
-      '<div class="sheet-h">Type</div><div class="gchips">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.types.indexOf(t) >= 0 ? ' on' : '') + '" data-ty="' + t + '">' + t + ' <span class="muted" style="font-size:12px">' + cnt(t) + '</span></button>'; }).join("") + '</div>' +
+      '<div class="sheet-h">Type</div><div class="gchips">' + evTypes().map(function(t){ return '<button class="chip' + (d.types.indexOf(t) >= 0 ? ' on' : '') + '" data-ty="' + esc(t) + '">' + esc(t) + ' <span class="muted" style="font-size:12px">' + cnt(t) + '</span></button>'; }).join("") + '</div>' +
       '<div class="sheet-h">When</div><div class="seg">' + Object.keys(WHENS).map(function(k){ return '<button class="' + (d.when === k ? 'on' : '') + '" data-wh="' + k + '">' + WHENS[k] + '</button>'; }).join("") + '</div>' +
       '<div class="sheet-h">Sort by date</div><div class="seg"><button class="' + (!d.sort ? 'on' : '') + '" data-es="">Automatic</button>' + Object.keys(ESORTS).map(function(k){ return '<button class="' + (d.sort === k ? 'on' : '') + '" data-es="' + k + '">' + ESORTS[k] + '</button>'; }).join("") + '</div>' +
       '<div class="muted" style="font-size:12px;margin-top:6px">Automatic: newest date first when you search or filter.</div>' +
@@ -2053,13 +2062,13 @@ function renderEditor(id, newDate, banner){
   var key = id || "new" + (newDate || "");
   if(!state.draft || (state.draftKey !== key && !(state.draftKey === "new" && !id))){
     state.draftKey = key;
-    state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type:"Service", date: newDate || ymd(new Date()), time:"19:00", location:"", notes:"", songs:[], players:[] };
+    state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type: evTypes().indexOf("Service") >= 0 ? "Service" : (evTypes()[0] || ""), date: newDate || ymd(new Date()), time:"19:00", location:"", notes:"", songs:[], players:[] };
   }
   var d = state.draft, copying = !id && (d.songs || []).length;
   var h = banner + subHead(id ? '#/e/' + encodeURIComponent(id) : '#/events', id ? "Edit Event" : "Create Event") +
     '<div class="form">' +
     '<label class="fl">Name <i>*</i><input id="fTitle" maxlength="100" value="' + esc(d.title) + '" placeholder="Sunday Service"></label>' +
-    '<div class="fl">Type</div><div class="gchips" id="fTypes">' + EV_TYPES.map(function(t){ return '<button class="chip' + (d.type === t ? ' on' : '') + '" data-type="' + t + '">' + t + '</button>'; }).join("") + '</div>' +
+    '<div class="fl">Type</div><div class="gchips" id="fTypes">' + (function(){ var l = evTypes().slice(); if(d.type && l.indexOf(d.type) < 0) l.push(d.type); return l; })().map(function(t){ return '<button class="chip' + (d.type === t ? ' on' : '') + '" data-type="' + esc(t) + '">' + esc(t) + '</button>'; }).join("") + '</div>' +
     '<label class="fl">Location<input id="fLoc" maxlength="150" value="' + esc(d.location || "") + '" placeholder="Rey de Reyes church, San Antonio"></label>' +
     '<div class="frow"><label class="fl">Date<input id="fDate" type="date" value="' + esc(d.date) + '"></label><label class="fl">Time<input id="fTime" type="time" value="' + esc(d.time) + '"></label></div>' +
     '<label class="fl">Notes<textarea id="fNotes" maxlength="1000" placeholder="Sound check time, dress code...">' + esc(d.notes) + '</textarea></label>' +
@@ -2183,14 +2192,16 @@ function renderSongEditor(id, banner){
   };
 }
 
-/* ---------- leader tools: albums, artists, genres, themes, members ---------- */
+/* ---------- leader tools: albums, artists, genres, themes, event types, members ---------- */
 function renderManage(banner){
   var db = state.db;
-  function count(field, name){ return db.songs.filter(function(s){ return field === "themes" ? s.themes.some(function(t){ return norm(t) === norm(name); }) : norm(s[field]) === norm(name); }).length; }
+  function count(field, name){
+    if(field === "events") return (state.events || []).filter(function(e){ return norm(e.type) === norm(name); }).length;
+    return db.songs.filter(function(s){ return field === "themes" ? s.themes.some(function(t){ return norm(t) === norm(name); }) : norm(s[field]) === norm(name); }).length; }
   function block(kind, title, items, field, extra){
     return '<div class="card block"><h2>' + title + ' <span class="muted" style="font-size:14px">(' + items.length + ')</span></h2>' +
       '<div class="addrow"><input id="add' + kind + '" placeholder="New ' + title.toLowerCase().replace(/s$/, "") + ' name">' + (extra || '') + '<button class="btn small primary" data-addk="' + kind + '">+ Add</button></div>' +
-      items.map(function(it){ var name = it.name || it; return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(name) + '</b>' + (it.year ? ' <span class="muted">' + esc(it.year) + '</span>' : '') + ' <span class="muted" style="font-size:12px">· ' + count(field, name) + ' songs</span></div>' +
+      items.map(function(it){ var name = it.name || it; return '<div class="mrow"><div style="flex:1;min-width:0"><b>' + esc(name) + '</b>' + (it.year ? ' <span class="muted">' + esc(it.year) + '</span>' : '') + ' <span class="muted" style="font-size:12px">· ' + (function(n){ return n + ' ' + (field === "events" ? 'event' : 'song') + (n === 1 ? '' : 's'); })(count(field, name)) + '</span></div>' +
         '<button class="btn small" data-ren="' + kind + '" data-name="' + esc(name) + '">Rename</button><button class="btn small danger" data-del="' + kind + '" data-name="' + esc(name) + '">Delete</button></div>'; }).join("") + '</div>';
   }
   var h = banner + '<div class="pagehead"><a class="rbtn" href="#/settings" aria-label="Back to settings">' + ico("back") + '</a><h2 style="flex:1;margin-left:10px">Leader tools</h2><button class="ibtn" id="mSignOut">Sign out</button></div><div id="mMsg"></div>' +
@@ -2201,7 +2212,8 @@ function renderManage(banner){
     block("Albums", "Albums", db.albums, "album", '<input id="addYear" placeholder="Year" style="max-width:90px" inputmode="numeric">') +
     block("Artists", "Artists", db.artists, "artist") +
     block("Genres", "Genres", db.genres, "genre") +
-    block("Themes", "Themes", db.themes, "themes");
+    block("Themes", "Themes", db.themes, "themes") +
+    block("EventTypes", "Event types", evTypes(), "events");
   $("app").innerHTML = h; scrollTop();
   function op(data, okMsg){
     $("mMsg").innerHTML = '<div class="banner warn">Saving...</div>';
@@ -2209,7 +2221,8 @@ function renderManage(banner){
       if(r && r.ok) return load(true).then(function(){ renderManage(banner); $("mMsg").innerHTML = '<div class="banner ok">' + okMsg + '</div>'; });
       if(r && r.error === "wrong_pin") return wrongPin();
       if(r && r.error === "in_use"){
-        if(confirm(r.count + " songs use this. Delete it anyway? Those songs will have it left blank.")) return op(Object.assign({}, data, { force: true }), okMsg);
+        var what = data.kind === "EventTypes" ? "events" : "songs";
+        if(confirm(r.count + " " + what + " use this. Delete it anyway? Those " + what + " will have it left blank.")) return op(Object.assign({}, data, { force: true }), okMsg);
         $("mMsg").innerHTML = ""; return;
       }
       $("mMsg").innerHTML = '<div class="banner bad">Could not save (' + esc((r && r.error) || "unknown") + ').</div>';
@@ -2226,7 +2239,7 @@ function renderManage(banner){
   document.querySelectorAll("[data-ren]").forEach(function(b){ b.onclick = function(){
     var k = b.getAttribute("data-ren"), old = b.getAttribute("data-name"), name = (prompt("New name for " + old + ":", old) || "").trim();
     if(!name || name === old) return;
-    op({ kind: k, op: "rename", old: old, name: name }, "Renamed. Songs using it were updated too.");
+    op({ kind: k, op: "rename", old: old, name: name }, "Renamed. " + (k === "EventTypes" ? "Events" : "Songs") + " using it were updated too.");
   }; });
   document.querySelectorAll("[data-del]").forEach(function(b){ b.onclick = function(){
     var k = b.getAttribute("data-del"), old = b.getAttribute("data-name");
