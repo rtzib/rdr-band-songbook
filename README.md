@@ -40,6 +40,14 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 - **First-run guide** (English / Spanish): install the app, open the next event, swipe song by song. Help has it again.
 - **Song editor** (new or edit song), in three tabs: **Details** (title, type, artist, album, genre, key, BPM, time, themes, practice link, delete), **Content** (lyrics with part buttons), **Preview** (how the band will see it). **Save** is at the bottom of every tab. "+ Add new..." in the album/artist/genre lists adds a new one.
 
+## Saving
+
+Saves don't make you wait. When a leader saves a song, event, set list, cancel, or a Leader tools change, the app shows it right away and sends it to the sheet in the background. A small message at the top says **Saving...**, then **✓ Saved**.
+
+- **No internet:** the change stays on the phone (even if the app is closed) and is sent when the internet is back. The message says how many changes are waiting and has a **Retry** button.
+- **The sheet refuses a change** (for example a bad time): the change is undone on screen and the message says why.
+- **Signing out** with changes still waiting asks first; they are sent after signing in again.
+
 ## Genre vs theme
 
 - **Genre** is the rhythm, one per song: Soca, Cumbia, Balada...
