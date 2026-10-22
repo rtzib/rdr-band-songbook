@@ -1,5 +1,5 @@
 // Keeps the app working when the church internet drops. Always tries the internet first.
-var CACHE = "cancionero-v1";
+var CACHE = "cancionero-v2";
 self.addEventListener("install", function (e) { self.skipWaiting(); });
 self.addEventListener("activate", function (e) { e.waitUntil(self.clients.claim()); });
 self.addEventListener("fetch", function (e) {
