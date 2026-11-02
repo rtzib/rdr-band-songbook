@@ -1889,7 +1889,7 @@ function renderSong(id, banner, ctx){
   meta.push('<span>' + (s.type === 'Cover' && s.artist ? 'Cover of <b>' + esc(s.artist) + '</b>' : esc(s.artist || s.type)) + '</span>');
   var lp = lastPlayed(s.id);
   var tools = "";
-  if(s.key || s.hasChords) tools += '<div class="tool"><span class="lbl">Key</span><button id="tDown" aria-label="Down a half step">−</button><span class="val">' + (n > 0 ? "+" + n : n) + '</span><button id="tUp" aria-label="Up a half step">+</button>' + (state.trans[tk] != null ? '<button id="tReset">Reset</button>' : '') + '</div>';
+  if(s.key || s.hasChords) tools += '<div class="tool"><span class="lbl">Key</span><button id="tDown" aria-label="Down a half step">−</button><span class="val">' + (n > 0 ? "+" + n : n) + '</span><button id="tUp" aria-label="Up a half step">+</button>' + (state.trans[tk] != null ? '<button id="tReset">Reset</button>' + (leader() && s.key && n ? '<button id="tKeep">Save for good</button>' : '') : '') + '</div>';
   if(s.hasChords) tools += '<div class="tool"><span class="lbl">Chords</span><button id="cOn" class="' + (state.chords ? 'on' : '') + '">On</button><button id="cOff" class="' + (state.chords ? '' : 'on') + '">Off</button></div>';
   tools += '<div class="tool"><span class="lbl">Text</span><button id="zDown" aria-label="Smaller text">A−</button><button id="zUp" aria-label="Bigger text">A+</button></div>';
   if(s.bpm) tools += '<div class="tool"><span class="lbl">Metronome</span><span class="beat" id="beat"></span><button id="mGo" class="' + (metro.on ? 'on' : '') + '">' + (metro.on ? 'Stop' : 'Play') + '</button></div>';
@@ -1925,6 +1925,7 @@ function renderSong(id, banner, ctx){
   if($("tUp")) $("tUp").onclick = function(){ setT(n + 1); };
   if($("tDown")) $("tDown").onclick = function(){ setT(n - 1); };
   if($("tReset")) $("tReset").onclick = function(){ delete state.trans[tk]; ls("trans", state.trans); again(); };
+  if($("tKeep")) $("tKeep").onclick = function(){ saveSongKey(s, n, flats, tk); };
   if($("cOn")) $("cOn").onclick = function(){ state.chords = true; ls("chords", true); again(); };
   if($("cOff")) $("cOff").onclick = function(){ state.chords = false; ls("chords", false); again(); };
   if($("zUp")) $("zUp").onclick = function(){ setSize(state.size + 2); };
@@ -2066,7 +2067,6 @@ window.addEventListener("scroll", function(){
 }, { passive: true });
 
 /* key picker: letters, then flat / sharp */
-var BAND_ROOTS = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
 var LETTERS = ["C", "D", "E", "F", "G", "A", "B"], NO_SHARP = { E: 1, B: 1 }, NO_FLAT = { C: 1, F: 1 };
 // the key a leader set for the whole band on one set list item ("F", "Bb"...) -> half steps from the written key
 function bandKey(s, it){
@@ -2091,22 +2091,29 @@ function itemKeyName(s, it){
   var b = bandKey(s, it);
   return b ? chordName(transposeChord(s.key.root, b.n, b.flats != null ? b.flats : useFlats(s.key, b.n)) + (s.key.minor ? "m" : "")) : keyName(s.key, 0);
 }
-// leader: save one item's key for everyone on this set list ("" = back to the written key)
-function saveBandKey(ctx, root){
-  var songs = JSON.parse(JSON.stringify(ctx.ev.songs || []));
-  songs[ctx.idx].key = root;
-  var old = itemTk(ctx.ev, ctx.idx, ctx.item); delete state.trans[old]; delete state.transF[old]; ls("trans", state.trans); ls("transF", state.transF);
-  queueSave("save", eventPayload(ctx.ev, songs), "Key for " + (ctx.item.title || "song"));
+// move every chord in the lyrics by n half steps, written the way songs are typed (English names)
+function moveLyrics(lyrics, n, flats){
+  var was = CHORD_LANG; CHORD_LANG = "en";
+  try { return String(lyrics || "").split("\n").map(function(l){ return isChordLine(l) ? transposeLine(l, n, flats) : l; }).join("\n"); }
+  finally { CHORD_LANG = was; }
+}
+// leader: change a song's written key for good - its key and all its chords, for everyone, in every set list
+function saveSongKey(s, n, flats, tk){
+  var key = transposeChord(s.key.root, n, flats) + (s.key.minor ? "m" : "");
+  if(!confirm('Change "' + s.title + '" to ' + chordName(key) + ' for good?\n\nEvery chord in the song moves with it, for everyone, in every set list.')) return false;
+  if(tk){ delete state.trans[tk]; delete state.transF[tk]; ls("trans", state.trans); ls("transF", state.transF); }
+  queueSave("savesong", { id: s.id, title: s.title, album: s.album, type: s.type, artist: s.artist, key: key, bpm: s.bpm ? String(s.bpm) : "", time: s.time || "", genre: s.genre, themes: s.themes.slice(), link: s.link || "", lyrics: moveLyrics(s.lyrics, n, flats) }, s.title);
   route();
+  return true;
 }
 function keySheet(s, tk, again, ctx){
-  var bk = tkBand(s, tk), base = bk ? bk.n : 0, forBand = !!ctx && leader();
+  var bk = tkBand(s, tk), base = bk ? bk.n : 0, forBand = leader();
   formSheet("Key", '<div class="kp-now"><b id="kNow"></b><small id="kWas"></small></div>' +
     '<div class="kp-row">' + LETTERS.map(function(l){ return '<button data-l="' + l + '">' + esc(noteName(l)) + '</button>'; }).join("") + '</div>' +
     '<div class="kp-row acc"><button data-a="b" aria-label="Flat">♭</button><button data-a="#" aria-label="Sharp">♯</button></div>' +
     '<button class="btn" id="kReset" style="width:100%;margin-top:14px">' + (bk ? 'Back to the band key' : 'Back to the written key') + '</button>' +
-    (forBand ? '<button class="bigbtn" id="kBand" style="width:100%;margin-top:10px">Set for the whole band</button>' : '') +
-    '<p class="muted" style="font-size:13.5px;margin:12px 2px 4px">' + (forBand ? 'Picking a key changes it on this phone only. Tap <b>Set for the whole band</b> to save it on this set list for everyone.' : bk ? 'A leader set this key for the band. Changing it here only changes this phone.' : 'Only changes the key on this phone.') + '</p>', "", function(box, close){
+    (forBand ? '<button class="bigbtn" id="kBand" style="width:100%;margin-top:10px">Save as the song&#39;s key</button>' : '') +
+    '<p class="muted" style="font-size:13.5px;margin:12px 2px 4px">' + (forBand ? 'Picking a key changes it on this phone only. Tap <b>Save as the song&#39;s key</b> to change the song and all its chords for everyone, from now on.' : 'Only changes the key on this phone.') + '</p>', "", function(box, close){
     function cur(){ var n = state.trans[tk] != null ? state.trans[tk] : base, r = transposeChord(s.key.root, n, flatsFor(s, tk, n)); return { n: n, r: r, L: r.charAt(0), A: r.slice(1) }; }
     function show(){
       var c = cur(), was = [];
@@ -2117,7 +2124,7 @@ function keySheet(s, tk, again, ctx){
       box.querySelectorAll("[data-l]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-l") === c.L); });
       box.querySelectorAll("[data-a]").forEach(function(b){ var a = b.getAttribute("data-a"); b.classList.toggle("on", a === c.A); b.disabled = a === "#" ? !!NO_SHARP[c.L] : !!NO_FLAT[c.L]; });
       box.querySelector("#kReset").disabled = state.trans[tk] == null && state.transF[tk] == null;
-      var kb = box.querySelector("#kBand"); if(kb) kb.disabled = (c.n ? c.r : "") === ((ctx && ctx.item.key) || "");
+      var kb = box.querySelector("#kBand"); if(kb) kb.disabled = !c.n;
     }
     function pick(L, A){
       if((A === "#" && NO_SHARP[L]) || (A === "b" && NO_FLAT[L])) A = "";
@@ -2131,7 +2138,7 @@ function keySheet(s, tk, again, ctx){
     box.querySelector("#kReset").onclick = function(){ delete state.trans[tk]; delete state.transF[tk]; ls("trans", state.trans); ls("transF", state.transF); again(); show(); };
     var kb = box.querySelector("#kBand");
     if(kb) kb.onclick = function(){
-      var c = cur(); close(); saveBandKey(ctx, c.n ? c.r : "");
+      var c = cur(); if(saveSongKey(s, c.n, flatsFor(s, tk, c.n), tk)) close();
     };
     show();
   });
@@ -2744,16 +2751,11 @@ function renderSetlist(id, banner, editing){
   function editItem(i){
     var it = items[i];
     if(isMoment(it)) return momentSheet(it, function(m){ if(m === null) items.splice(i, 1); else { it.title = m.title; it.note = m.note; } mark(); drawSel(); });
-    var s = songFor(it), keyBox = "";
-    if(s && s.key){
-      var minor = s.key.minor ? "m" : "", here = NOTE_IDX[s.key.root];
-      keyBox = '<label class="fl">Key for the band</label><select id="fsKey" class="fin"><option value="">Written key (' + esc(keyName(s.key, 0)) + ')</option>' +
-        BAND_ROOTS.filter(function(r){ return NOTE_IDX[r] !== here; }).map(function(r){ return '<option value="' + r + '"' + (bandKey(s, it) && NOTE_IDX[it.key] === NOTE_IDX[r] ? ' selected' : '') + '>' + esc(chordName(r + minor)) + '</option>'; }).join("") + '</select>';
-    }
-    formSheet(s ? s.title : it.title, keyBox + '<label class="fl">Note for the band</label><textarea id="fsNote" class="fin" maxlength="200" rows="3" placeholder="e.g. skip Verso II, end after the chorus">' + esc(it.note || "") + '</textarea>' +
+    var s = songFor(it);
+    formSheet(s ? s.title : it.title, '<label class="fl">Note for the band</label><textarea id="fsNote" class="fin" maxlength="200" rows="3" placeholder="e.g. skip Verso II, end after the chorus">' + esc(it.note || "") + '</textarea>' +
       '<button class="grow danger rmrow" id="fsRm"><span class="gi">' + ico("x") + '</span><span class="gl">Remove from set list</span></button>', "Save", function(box, close){
       box.querySelector("#fsRm").onclick = function(){ items.splice(i, 1); mark(); drawSel(); close(); };
-      return function(){ it.note = box.querySelector("#fsNote").value.trim(); var k = box.querySelector("#fsKey"); if(k) it.key = k.value; mark(); drawSel(); return true; };
+      return function(){ it.note = box.querySelector("#fsNote").value.trim(); mark(); drawSel(); return true; };
     });
   }
   drawSel();
@@ -2936,7 +2938,18 @@ function renderSongEditor(id, banner){
     '</div><div class="savebar"><button class="btn primary big" id="sSave">' + (id ? 'Save changes' : 'Add song') + '</button></div>';
   $("app").innerHTML = h;
   function bind(i, k){ $(i).oninput = $(i).onchange = function(){ d[k] = this.value; if(k === "lyrics" || k === "key") drawPrev(); }; }
-  bind("sTitle","title"); bind("sKey","key"); bind("sBpm","bpm"); bind("sTime","time"); bind("sLink","link"); bind("sLyrics","lyrics");
+  bind("sTitle","title");
+  $("sKey").onchange = function(){
+    var from = parseKey(d.key), to = parseKey(this.value);
+    if(from && to && from.minor === to.minor && d.lyrics && splitLines(d.lyrics).some(isChordLine)){
+      var n = ((NOTE_IDX[to.root] - NOTE_IDX[from.root]) % 12 + 12) % 12; if(n > 6) n -= 12;
+      if(n && confirm("Move all the chords to " + chordName(this.value) + " too?\n\nOK = the chords move with the key. Cancel = only the key label changes.")){
+        d.lyrics = moveLyrics(d.lyrics, n, /b/.test(to.root) ? true : /#/.test(to.root) ? false : useFlats(to, 0));
+        if($("sLyrics")) $("sLyrics").value = d.lyrics;
+      }
+    }
+    d.key = this.value; drawPrev();
+  }; bind("sBpm","bpm"); bind("sTime","time"); bind("sLink","link"); bind("sLyrics","lyrics");
   function pickNew(sel, k, what){
     $(sel).onchange = function(){
       if(this.value === "__new"){
@@ -3175,7 +3188,7 @@ function helpHtml(){
     '<ul><li><b>Home</b> shows the next event. Tap <b>▶ Start</b> to go through the set list song by song. Swipe left or right to change songs.</li>' +
     '<li><b>Songs</b>: search by title or by any line of the lyrics. Tap ♡ to save a song to your own list.</li>' +
     '<li>In a song, <b>Options</b> lets you change the key, hide chords, make the text bigger, use the metronome and keep the screen on. Changes stay on your phone only.</li>' +
-    '<li>In an event set list, a leader can set a song&#39;s key for the whole band (tap the key button, then <b>Set for the whole band</b>). Everyone&#39;s phone switches to it.</li>' +
+    '<li>A leader can change a song&#39;s key for good: tap the key button in rehearsal, pick the key, then <b>Save as the song&#39;s key</b> (or <b>Save for good</b> in the song&#39;s Options, or change the key in the song editor). Every chord moves with it, for everyone.</li>' +
     '<li>Chords show as C D E or Do Re Mi for everyone. A leader picks this in <b>Settings &gt; Band &gt; Chord names</b>.</li>' +
     '<li><b>▶ Listen</b> opens the practice recording when the song has one.</li>' +
     '<li><b>//</b> means sing those lines twice, <b>///</b> three times.</li>' +
