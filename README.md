@@ -40,8 +40,16 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 - **Event types:** leaders add, rename and delete them in Leader tools. Renaming updates every event using it; deleting one that events use asks first and leaves those events with no type.
 - **Rehearsal / event mode** (Start Event): full screen, screen stays on, swipe left/right or the big buttons to move between songs, plays each song in the key set for the event. The top bar says Rehearsal for Rehearsal-type events and Live for everything else.
 - **First-run guide** (English / Spanish): install the app, open the next event, swipe song by song. Help has it again.
-- **Song editor:** title, album, type, artist, key, BPM, time, genre, themes, practice link, lyrics with part buttons and a live preview. "+ Add new..." in the album/artist/genre lists adds a new one.
+- **Song editor** (new or edit song), in three tabs: **Details** (title, type, artist, album, genre, key, BPM, time, themes, practice link, delete), **Content** (lyrics with part buttons), **Preview** (how the band will see it). **Save** is at the bottom of every tab. "+ Add new..." in the album/artist/genre lists adds a new one.
 - **Unsaved changes:** leaving the song editor, event editor or set list editor with changes you have not saved (another tab, Back, Cancel) asks first: **Keep editing** or **Leave**.
+
+## Saving
+
+Saves don't make you wait. When a leader saves a song, event, set list, cancel, or a Leader tools change, the app shows it right away and sends it to the sheet in the background. A small message at the top says **Saving...**, then **✓ Saved**.
+
+- **No internet:** the change stays on the phone (even if the app is closed) and is sent when the internet is back. The message says how many changes are waiting and has a **Retry** button.
+- **The sheet refuses a change** (for example a bad time): the change is undone on screen and the message says why.
+- **Signing out** with changes still waiting asks first; they are sent after signing in again.
 
 ## Genre vs theme
 
