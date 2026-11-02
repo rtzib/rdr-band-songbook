@@ -84,7 +84,7 @@ function liveGet_(ev) {
   if (!ev) return { ok: false, error: "no_event" };
   var raw = CacheService.getScriptCache().get("live_" + clean_(ev, 20)), v = raw ? JSON.parse(raw) : null;
   if (v && Date.now() - v.t > 10 * 60 * 1000) v = null;
-  return { ok: true, live: v ? { on: true, idx: v.idx, sec: v.sec, sid: v.sid } : { on: false } };
+  return { ok: true, live: v ? { on: true, idx: v.idx, sec: v.sec, sid: v.sid } : { on: false }, stamp: changeStamp_() };
 }
 
 function payload_(p) { return JSON.parse(p.data || joinParts_(p.key) || "{}"); }
@@ -219,7 +219,7 @@ function dataJson_(fresh) {
   var members = rows_(ss, "Members").filter(function (r) { return r.ID && r.Name; }).map(function (r) {
     return { id: r.ID, name: r.Name, instruments: r.Instruments, active: r.Active !== "no" };
   });
-  body = JSON.stringify({ ok: true, version: 2, read: new Date().toISOString(), songs: songs, albums: albums, artists: artists, genres: genres, themes: themes, eventTypes: eventTypes, members: members, events: listEvents_(ss) });
+  body = JSON.stringify({ ok: true, version: 2, read: new Date().toISOString(), settings: settings_(), songs: songs, albums: albums, artists: artists, genres: genres, themes: themes, eventTypes: eventTypes, members: members, events: listEvents_(ss) });
   cachePut_(body);
   return body;
 }
@@ -318,8 +318,26 @@ function eventTypeOp_(ss, d) {
 }
 
 /* ================= albums / artists / genres / members ================= */
+/* ================= band settings =================
+ * Band-wide switches a leader sets in the app (Settings > Band). Kept in the script's settings, not the sheet.
+ * chordLang: "en" shows chords as C D E, "es" as Do Re Mi. Songs are still written in English.
+ */
+var SETTINGS = { chordLang: ["en", "es"] };
+function settings_() {
+  var p = PropertiesService.getScriptProperties(), o = {};
+  Object.keys(SETTINGS).forEach(function (k) { o[k] = p.getProperty("SET_" + k) || SETTINGS[k][0]; });
+  return o;
+}
+function settingOp_(d) {
+  var name = String(d.name || ""), value = String(d.value || "");
+  if (!SETTINGS[name] || SETTINGS[name].indexOf(value) < 0) return { ok: false, error: "bad_setting" };
+  PropertiesService.getScriptProperties().setProperty("SET_" + name, value);
+  return { ok: true };
+}
+
 function listOp_(d) {
   var ss = sheet_(), kind = String(d.kind || ""), op = String(d.op || "");
+  if (kind === "Settings") return settingOp_(d);
   if (kind === "EventTypes") return eventTypeOp_(ss, d);
   var name = clean_(d.name, 100), old = clean_(d.old, 100);
   var songCol = { Albums: "Album", Artists: "Artist", Genres: "Genre", Themes: "Themes" }[kind];
@@ -466,7 +484,9 @@ function cacheGet_() {
     return out;
   } catch (e) { return null; }
 }
-function cacheClear_() { try { CacheService.getScriptCache().remove("db_n"); } catch (e) {} }
+function cacheClear_() { try { var c = CacheService.getScriptCache(); c.remove("db_n"); c.put("changed", String(Date.now()), 21600); } catch (e) {} }
+// changes every time anything is saved; phones on an event see it in their live check and reload the songs
+function changeStamp_() { try { return CacheService.getScriptCache().get("changed") || ""; } catch (e) { return ""; } }
 
 /* ================= one-time: occasions out of Genres and into Themes (2026-10-16) ================= */
 // Boda (now Wedding) and Birthday become themes, Independence Day becomes "September Celebration". Safe to run again.

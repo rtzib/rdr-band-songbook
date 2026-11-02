@@ -19,7 +19,7 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 
 ## Who can do what
 
-- **Everyone:** read songs, open events, rehearsal mode, change key/text size on their own phone, save songs (heart), share an event.
+- **Everyone:** read songs, open events, rehearsal mode, change key/text size on their own phone (on top of the band key a leader set), save songs (heart), share an event.
 - **Leaders** (anyone with the band PIN, signed in once on their phone via Settings > Leader sign-in): add/edit/delete songs and events, copy events, manage albums, artists, genres, themes, event types and band members (Leader tools).
 - The PIN is stored in the script's settings, not here. To see it, run `setupBand` in the script. To change it: put it in `NEW_PIN`, run `changePin`, set `NEW_PIN` back to "". 20 wrong tries locks saving for an hour.
 
@@ -33,12 +33,15 @@ Phone app for the Rey de Reyes band: songs with lyrics and chords, events with s
 - **Event page:** blue card with time and date, name, location (opens Google Maps), **See Setlist** and **Start Event**, notes. Share at the top. Leaders: Edit details, Copy to next week, Cancel event (with a reason; **Undo cancel**, **Tell the band**).
 - **Create / Edit Event:** name, type, location, date, time, notes, and a big **Save Event** button. No set list here: save the event first, then add songs on its Setlist page.
 - **Setlist page** (See Setlist): everyone sees the songs in order with key and bpm and can open each one. Leaders tap **Add Songs** to search and add, move songs up/down, add a note per song, remove, then tap the blue save button.
+- **Band key per song:** in a set list, leaders set a song's key for everyone: tap the song in Edit setlist and pick **Key for the band**, or in rehearsal tap the key button, pick a key and tap **Set for the whole band**. The chords move with it. Each phone can still pick its own key on top. Saved in the SetList sheet's Key column. Other phones on that event switch within about 12 seconds.
 - **Band Schedule** (tap the date card on Home): month calendar (Mon–Sun, dots on days with events, red dot if canceled). Swipe left/right on the calendar or use the arrows to change month; the box with today's date jumps back to today. Tap a day to see its events. Leaders get a floating **+** button (bottom right) that opens Create Event on the picked date.
 - **Settings:** team members, Leader sign-in / Leader tools, invite the band (shares the app link), dark mode, chords on/off, lyrics text size, guide language, refresh songs, add to Home screen, quick guide, Help Center, About, leader sign out.
+- **Chord names (Settings > Band):** a leader switches the whole band between English (C D E) and Spanish (Do Re Mi). Only changes how chords and keys are shown; songs are still typed in English. Kept in the script's settings (`SET_chordLang`).
 - **Event types:** leaders add, rename and delete them in Leader tools. Renaming updates every event using it; deleting one that events use asks first and leaves those events with no type.
 - **Rehearsal / event mode** (Start Event): full screen, screen stays on, swipe left/right or the big buttons to move between songs, plays each song in the key set for the event. The top bar says Rehearsal for Rehearsal-type events and Live for everything else.
 - **First-run guide** (English / Spanish): install the app, open the next event, swipe song by song. Help has it again.
 - **Song editor** (new or edit song), in three tabs: **Details** (title, type, artist, album, genre, key, BPM, time, themes, practice link, delete), **Content** (lyrics with part buttons), **Preview** (how the band will see it). **Save** is at the bottom of every tab. "+ Add new..." in the album/artist/genre lists adds a new one.
+- **Unsaved changes:** leaving the song editor, event editor or set list editor with changes you have not saved (another tab, Back, Cancel) asks first: **Keep editing** or **Leave**.
 
 ## Saving
 

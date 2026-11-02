@@ -1028,6 +1028,25 @@ var NOTE_IDX = {"C":0,"C#":1,"Db":1,"D":2,"D#":3,"Eb":3,"E":4,"Fb":4,"E#":5,"F":
 var CHORD_BODY = "[A-G](?:#|b)?(?:maj|min|m|M|dim|aug|sus|add|º|°)?\\d*(?:(?:sus|add|maj|b|#)\\d+)*(?:\\/[A-G](?:#|b)?)?";
 var CHORD_RE = new RegExp("^" + CHORD_BODY + "$");
 var CHORD_G = new RegExp("(^|[^A-Za-z#])(" + CHORD_BODY + ")(?![A-Za-z#])", "g");
+// band-wide switch (set by a leader in Settings): show chords as Do Re Mi instead of C D E
+var CHORD_LANG = "en";
+var ES_NOTES = { C: "Do", D: "Re", E: "Mi", F: "Fa", G: "Sol", A: "La", B: "Si" };
+// finds chords already turned into Spanish names, so they still get chord styling
+var CHORD_ES_G = new RegExp("(^|[^A-Za-z#])(" + CHORD_BODY.replace(/\[A-G\]/g, "(?:Do|Re|Mi|Fa|Sol|La|Si)") + ")(?![A-Za-z#])", "g");
+function noteName(l){ return CHORD_LANG === "es" ? (ES_NOTES[l] || l) : l; }
+// an English chord ("Am7", "G/B") as the band reads it
+function chordName(ch){
+  if(CHORD_LANG !== "es") return ch;
+  var m = String(ch).match(/^([A-G])([#b]?)(.*?)(?:\/([A-G])([#b]?))?$/);
+  if(!m) return ch;
+  return ES_NOTES[m[1]] + m[2] + esSuffix(m[3]) + (m[4] ? "/" + ES_NOTES[m[4]] + m[5] : "");
+}
+// the rest of the chord after the note: "m", "7", "maj7", "sus4"...
+function esSuffix(rest){
+  // TODO(human): decide how the band reads minors and other chord types in Spanish.
+  // Right now the ending stays as written: Am -> Lam, Bm7 -> Sim7, Gmaj7 -> Solmaj7.
+  return rest;
+}
 
 function norm(s){ return String(s||"").replace(/&/g," y ").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[’'`´]/g,"").replace(/[^a-z0-9#]+/g," ").trim(); }
 function slug(s){ return norm(s).replace(/#/g,"").replace(/\s+/g,"-") || "cancion"; }
@@ -1065,7 +1084,7 @@ function parseKey(k){
 function keyName(k, n){
   if(!k) return "";
   var flats = useFlats(k, n);
-  return transposeChord(k.root, n, flats) + (k.minor ? "m" : "");
+  return chordName(transposeChord(k.root, n, flats) + (k.minor ? "m" : ""));
 }
 function useFlats(k, n){
   if(!k) return false;
@@ -1078,7 +1097,7 @@ function useFlats(k, n){
 // transpose every chord in a chord line, keeping chords lined up over the words when possible
 function transposeLine(line, n, flats){
   line = expandTabs(line);
-  if(!n) return line;
+  if(!n && CHORD_LANG !== "es") return line;
   var out = "", carry = 0, last = 0, m;
   CHORD_G.lastIndex = 0;
   while((m = CHORD_G.exec(line))){
@@ -1086,7 +1105,7 @@ function transposeLine(line, n, flats){
     var gap = line.slice(last, start);
     if(carry > 0 && /^ +$/.test(gap) && gap.length > 1){ var cut = Math.min(carry, gap.length-1); gap = gap.slice(cut); carry -= cut; }
     else if(carry < 0 && /^ +$/.test(gap)){ gap += new Array(-carry+1).join(" "); carry = 0; }
-    var t = transposeChord(m[2], n, flats);
+    var t = chordName(n ? transposeChord(m[2], n, flats) : m[2]);
     carry += t.length - m[2].length;
     out += gap + t;
     last = start + m[2].length;
@@ -1276,7 +1295,9 @@ function parseDb(raw){
   songs.forEach(function(s){ if(s.album) add(s.album); });
   add("Covers"); add("No album");
   function abc(a, b){ return norm(a) < norm(b) ? -1 : 1; }
-  return { songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), themes: (raw.themes || []).slice().sort(abc), eventTypes: (raw.eventTypes || []).slice(), members: raw.members || [] };
+  var settings = raw.settings || {};
+  CHORD_LANG = settings.chordLang === "es" ? "es" : "en";
+  return { settings: settings, songs: songs, groups: groups, albums: albums, artists: (raw.artists || []).slice().sort(abc), genres: (raw.genres || []).slice().sort(abc), themes: (raw.themes || []).slice().sort(abc), eventTypes: (raw.eventTypes || []).slice(), members: raw.members || [] };
 }
 /* CORE-END */
 </script>
@@ -1423,7 +1444,7 @@ function remapSong(oldId, newId){
   });
   if(state.base){ (state.base.songs || []).forEach(function(x){ if(x.id === oldId) x.id = newId; }); (state.base.events || []).forEach(function(e){ (e.songs || []).forEach(function(it){ if(it.id === oldId) it.id = newId; }); }); }
   if(state.saved[oldId]){ delete state.saved[oldId]; state.saved[newId] = 1; ls("saved", state.saved); }
-  if(state.sdraft && state.sdraft.id === oldId){ state.sdraft.id = newId; state.sdraft._for = newId; }
+  if(state.sdraft && state.sdraft.id === oldId){ var clean = snap(state.sdraft) === state.sdraft._orig; state.sdraft.id = newId; state.sdraft._for = newId; if(clean) state.sdraft._orig = snap(state.sdraft); }
   var o = encodeURIComponent(oldId), h = location.hash;
   if(h.indexOf("#/c/" + o) === 0) history.replaceState(null, "", "#/c/" + encodeURIComponent(newId) + h.slice(("#/c/" + o).length));
   if(state.returnTo && state.returnTo.indexOf("#/c/" + o) === 0) state.returnTo = "#/c/" + encodeURIComponent(newId) + state.returnTo.slice(("#/c/" + o).length);
@@ -1533,8 +1554,32 @@ document.addEventListener("visibilitychange", function(){
 });
 window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); state.installEvt = e; });
 
+/* ---------- unsaved changes: ask before leaving an editor ---------- */
+// a draft's starting copy, so we can tell later if anything changed
+function snap(d){ return JSON.stringify(d, function(k, v){ return k.charAt(0) === "_" ? undefined : v; }); }
+// what has unsaved changes right now ("" = nothing)
+function unsavedWhat(){
+  if(state.sl && state.sl.dirty) return "set list";
+  if(state.sdraft && snap(state.sdraft) !== state.sdraft._orig) return "song";
+  if(state.draft && snap(state.draft) !== state.draft._orig) return "event";
+  return "";
+}
+function leaveSheet(what, to){
+  var sh = sheetOpen("confirm", '<div class="cf"><h3>You have unsaved changes</h3><p>If you leave now, the changes to this ' + esc(what) + ' are lost.</p>' +
+    '<div class="cf-btns"><button class="btn big" id="cfLeave">Leave</button><button class="bigbtn" id="cfStay">Keep editing</button></div></div>');
+  sh.el.querySelector("#cfStay").onclick = sh.close;
+  sh.el.querySelector("#cfLeave").onclick = function(){ sh.close(); state.leaveOk = true; location.hash = to; };
+}
+window.addEventListener("beforeunload", function(e){ if(unsavedWhat()){ e.preventDefault(); e.returnValue = ""; } });
+
 /* ---------- routing ---------- */
 function route(){
+  // leaving an editor with unsaved changes: stay put and ask first
+  if(state.curHash != null && location.hash !== state.curHash && !state.leaveOk){
+    var what = unsavedWhat();
+    if(what){ var to = location.hash; history.replaceState(null, "", state.curHash); leaveSheet(what, to); return; }
+  }
+  state.leaveOk = false; state.curHash = location.hash;
   status();
   var h = location.hash.replace(/^#\/?/,""), m;
   var view = "home", arg = "", arg2 = "";
@@ -1754,7 +1799,7 @@ function openFilters(banner){
 function toggleSaved(id){ if(state.saved[id]) delete state.saved[id]; else state.saved[id] = 1; ls("saved", state.saved); }
 
 /* ---------- one song ---------- */
-function chordHtml(line){ return esc(line).replace(CHORD_G, function(all, pre, ch){ return pre + '<span class="ch">' + ch + '</span>'; }); }
+function chordHtml(line){ return esc(line).replace(CHORD_LANG === "es" ? CHORD_ES_G : CHORD_G, function(all, pre, ch){ return pre + '<span class="ch">' + ch + '</span>'; }); }
 function lyricHtml(text){
   var h = esc(text);
   h = h.replace(/(\/{2,4})([^\/]+?)\1/g, function(all, sl, inner){ return '<span class="rp">' + inner + '<sup>×' + sl.length + '</sup></span>'; });
@@ -1907,8 +1952,14 @@ function liveTick(){
   clearTimeout(live.poll); live.poll = 0;
   var ev = live.ev; if(!ev || !SCRIPT_URL) return;
   live.poll = -1;
-  jsonp(SCRIPT_URL + "?action=live&ev=" + encodeURIComponent(ev), 15000).then(function(r){ if(live.ev === ev && r && r.ok) liveApply(r.live); }).catch(function(){})
+  jsonp(SCRIPT_URL + "?action=live&ev=" + encodeURIComponent(ev), 15000).then(function(r){ if(live.ev === ev && r && r.ok){ liveApply(r.live); liveStamp(r.stamp); } }).catch(function(){})
     .then(function(){ if(live.ev === ev && live.poll === -1) live.poll = setTimeout(liveTick, live.on && !live.mine ? 2500 : 12000); });
+}
+// a leader saved something (a key, the set list, chord names): reload so this phone shows it
+function liveStamp(t){
+  if(!t) return;
+  if(live.stamp && t !== live.stamp && !state.loading && !unsavedWhat()) load(true);
+  live.stamp = t;
 }
 function liveApply(v){
   var was = live.on + "|" + live.mine;
@@ -2015,37 +2066,76 @@ window.addEventListener("scroll", function(){
 }, { passive: true });
 
 /* key picker: letters, then flat / sharp */
+var BAND_ROOTS = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
 var LETTERS = ["C", "D", "E", "F", "G", "A", "B"], NO_SHARP = { E: 1, B: 1 }, NO_FLAT = { C: 1, F: 1 };
-function flatsFor(s, tk, n){ return state.transF[tk] != null ? state.transF[tk] : useFlats(s.key, n); }
-function stageKeyName(s, tk, n){ return transposeChord(s.key.root, n, flatsFor(s, tk, n)) + (s.key.minor ? "m" : ""); }
-function keySheet(s, tk, again){
+// the key a leader set for the whole band on one set list item ("F", "Bb"...) -> half steps from the written key
+function bandKey(s, it){
+  var m = s && s.key && it ? String(it.key || "").match(/^([A-G])([#b]?)$/) : null;
+  if(!m) return null;
+  var n = ((NOTE_IDX[m[1] + m[2]] - NOTE_IDX[s.key.root]) % 12 + 12) % 12; if(n > 6) n -= 12;
+  return { n: n, flats: m[2] === "b" ? true : m[2] === "#" ? false : null };
+}
+// per-phone key choices on a set list item are saved under "@event:item=bandkey",
+// so when a leader changes the band key, old personal choices stop applying
+function itemTk(ev, idx, it){ return "@" + ev.id + ":" + idx + (it && it.key ? "=" + it.key : ""); }
+function tkBand(s, tk){ var m = String(tk).match(/=([A-G][#b]?)$/); return m ? bandKey(s, { key: m[1] }) : null; }
+function flatsFor(s, tk, n){
+  if(state.transF[tk] != null) return state.transF[tk];
+  var b = tkBand(s, tk);
+  return b && b.n === n && b.flats != null ? b.flats : useFlats(s.key, n);
+}
+function stageKeyName(s, tk, n){ return chordName(transposeChord(s.key.root, n, flatsFor(s, tk, n)) + (s.key.minor ? "m" : "")); }
+// key shown for a set list item (band key if a leader set one)
+function itemKeyName(s, it){
+  if(!s || !s.key) return "";
+  var b = bandKey(s, it);
+  return b ? chordName(transposeChord(s.key.root, b.n, b.flats != null ? b.flats : useFlats(s.key, b.n)) + (s.key.minor ? "m" : "")) : keyName(s.key, 0);
+}
+// leader: save one item's key for everyone on this set list ("" = back to the written key)
+function saveBandKey(ctx, root){
+  var songs = JSON.parse(JSON.stringify(ctx.ev.songs || []));
+  songs[ctx.idx].key = root;
+  var old = itemTk(ctx.ev, ctx.idx, ctx.item); delete state.trans[old]; delete state.transF[old]; ls("trans", state.trans); ls("transF", state.transF);
+  queueSave("save", eventPayload(ctx.ev, songs), "Key for " + (ctx.item.title || "song"));
+  route();
+}
+function keySheet(s, tk, again, ctx){
+  var bk = tkBand(s, tk), base = bk ? bk.n : 0, forBand = !!ctx && leader();
   formSheet("Key", '<div class="kp-now"><b id="kNow"></b><small id="kWas"></small></div>' +
-    '<div class="kp-row">' + LETTERS.map(function(l){ return '<button data-l="' + l + '">' + l + '</button>'; }).join("") + '</div>' +
+    '<div class="kp-row">' + LETTERS.map(function(l){ return '<button data-l="' + l + '">' + esc(noteName(l)) + '</button>'; }).join("") + '</div>' +
     '<div class="kp-row acc"><button data-a="b" aria-label="Flat">♭</button><button data-a="#" aria-label="Sharp">♯</button></div>' +
-    '<button class="btn" id="kReset" style="width:100%;margin-top:14px">Back to the written key</button><p class="muted" style="font-size:13.5px;margin:12px 2px 4px">Only changes the key on this phone.</p>', "", function(box){
+    '<button class="btn" id="kReset" style="width:100%;margin-top:14px">' + (bk ? 'Back to the band key' : 'Back to the written key') + '</button>' +
+    (forBand ? '<button class="bigbtn" id="kBand" style="width:100%;margin-top:10px">Set for the whole band</button>' : '') +
+    '<p class="muted" style="font-size:13.5px;margin:12px 2px 4px">' + (forBand ? 'Picking a key changes it on this phone only. Tap <b>Set for the whole band</b> to save it on this set list for everyone.' : bk ? 'A leader set this key for the band. Changing it here only changes this phone.' : 'Only changes the key on this phone.') + '</p>', "", function(box, close){
+    function cur(){ var n = state.trans[tk] != null ? state.trans[tk] : base, r = transposeChord(s.key.root, n, flatsFor(s, tk, n)); return { n: n, r: r, L: r.charAt(0), A: r.slice(1) }; }
     function show(){
-      var n = state.trans[tk] || 0, r = transposeChord(s.key.root, n, flatsFor(s, tk, n)), L = r.charAt(0), A = r.slice(1);
-      box.querySelector("#kNow").textContent = r + (s.key.minor ? "m" : "");
-      box.querySelector("#kWas").textContent = n ? "Written in " + keyName(s.key, 0) : "Written key";
-      box.querySelectorAll("[data-l]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-l") === L); });
-      box.querySelectorAll("[data-a]").forEach(function(b){ var a = b.getAttribute("data-a"); b.classList.toggle("on", a === A); b.disabled = a === "#" ? !!NO_SHARP[L] : !!NO_FLAT[L]; });
-      box.querySelector("#kReset").disabled = !n && state.transF[tk] == null;
+      var c = cur(), was = [];
+      box.querySelector("#kNow").textContent = chordName(c.r + (s.key.minor ? "m" : ""));
+      if(bk) was.push("Band key " + itemKeyName(s, ctx ? ctx.item : null));
+      was.push(c.n ? "Written in " + keyName(s.key, 0) : "Written key");
+      box.querySelector("#kWas").textContent = was.join(" · ");
+      box.querySelectorAll("[data-l]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-l") === c.L); });
+      box.querySelectorAll("[data-a]").forEach(function(b){ var a = b.getAttribute("data-a"); b.classList.toggle("on", a === c.A); b.disabled = a === "#" ? !!NO_SHARP[c.L] : !!NO_FLAT[c.L]; });
+      box.querySelector("#kReset").disabled = state.trans[tk] == null && state.transF[tk] == null;
+      var kb = box.querySelector("#kBand"); if(kb) kb.disabled = (c.n ? c.r : "") === ((ctx && ctx.item.key) || "");
     }
     function pick(L, A){
       if((A === "#" && NO_SHARP[L]) || (A === "b" && NO_FLAT[L])) A = "";
       var n = ((NOTE_IDX[L + A] - NOTE_IDX[s.key.root]) % 12 + 12) % 12; if(n > 6) n -= 12;
-      if(n) state.trans[tk] = n; else delete state.trans[tk];
+      if(n !== base) state.trans[tk] = n; else delete state.trans[tk];
       if(A === "b") state.transF[tk] = true; else if(A === "#") state.transF[tk] = false; else delete state.transF[tk];
       ls("trans", state.trans); ls("transF", state.transF); again(); show();
     }
-    function curL(){ var n = state.trans[tk] || 0, r = transposeChord(s.key.root, n, flatsFor(s, tk, n)); return { L: r.charAt(0), A: r.slice(1) }; }
     box.querySelectorAll("[data-l]").forEach(function(b){ b.onclick = function(){ pick(b.getAttribute("data-l"), ""); }; });
-    box.querySelectorAll("[data-a]").forEach(function(b){ b.onclick = function(){ var c = curL(), a = b.getAttribute("data-a"); pick(c.L, c.A === a ? "" : a); }; });
+    box.querySelectorAll("[data-a]").forEach(function(b){ b.onclick = function(){ var c = cur(), a = b.getAttribute("data-a"); pick(c.L, c.A === a ? "" : a); }; });
     box.querySelector("#kReset").onclick = function(){ delete state.trans[tk]; delete state.transF[tk]; ls("trans", state.trans); ls("transF", state.transF); again(); show(); };
+    var kb = box.querySelector("#kBand");
+    if(kb) kb.onclick = function(){
+      var c = cur(); close(); saveBandKey(ctx, c.n ? c.r : "");
+    };
     show();
   });
 }
-
 /* ---------- rehearsal screen: one set list item (song or moment) ---------- */
 state.scroll = ls("scroll") || 2;
 var MOMENT_ID = "~moment";
@@ -2084,7 +2174,7 @@ function pagerHtml(ctx){
 }
 function renderStage(s, ctx, banner){
   var it = ctx.item, mom = isMoment(it), eid = ctx.ev.id, N = ctx.ev.songs.length;
-  var tk = "@" + eid + ":" + ctx.idx, n = s && state.trans[tk] != null ? state.trans[tk] : 0;
+  var tk = itemTk(ctx.ev, ctx.idx, it), bk = bandKey(s, it), n = s && state.trans[tk] != null ? state.trans[tk] : (bk ? bk.n : 0);
   var flats = s && s.key ? flatsFor(s, tk, n) : false, showChords = !!(s && state.chords && s.hasChords);
   var left = '<div class="hpill" id="rsLeft">' + (s ? '<button id="rsScroll" class="' + (auto.on ? 'on' : '') + '" aria-label="Auto scroll" title="Auto scroll">' + ico("updown") + '</button>' : '') + liveBtnHtml() + '</div>';
   var right = s ? '<div class="hpill">' + (s.bpm ? '<button id="rsMetro" class="' + (metro.on ? 'on' : '') + '" aria-label="Metronome" title="Metronome">' + ico("pulse") + (metro.on ? '<span class="beat" id="beat"></span>' : '') + '</button>' : '') +
@@ -2135,7 +2225,7 @@ function renderStage(s, ctx, banner){
   if(!s) return;
   $("rsScroll").onclick = function(){ if(auto.on) auto.stop(); else auto.start(); this.classList.toggle("on", auto.on); };
   if($("rsMetro")) $("rsMetro").onclick = function(){ metro.on ? metro.stop() : metro.start(s); again(); };
-  if($("rsKey")) $("rsKey").onclick = function(){ keySheet(s, tk, again); };
+  if($("rsKey")) $("rsKey").onclick = function(){ keySheet(s, tk, again, ctx); };
   if($("rsEdit")) $("rsEdit").onclick = function(){
     openMenu(s.title, [{ id: "edit", label: "Edit song" }], function(){ state.returnTo = location.hash; location.hash = "#/c/" + encodeURIComponent(s.id) + "/edit"; });
   };
@@ -2300,7 +2390,7 @@ function shareText(e){
   if(e.notes) lines.push(e.notes);
   if((e.songs || []).length){
     lines.push("", "Set list:");
-    e.songs.forEach(function(it, i){ var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : ""; lines.push((i+1) + ". " + (isMoment(it) ? "(" : "") + (s ? s.title : it.title) + (isMoment(it) ? ")" : "") + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
+    e.songs.forEach(function(it, i){ var s = songFor(it), k = itemKeyName(s, it); lines.push((i+1) + ". " + (isMoment(it) ? "(" : "") + (s ? s.title : it.title) + (isMoment(it) ? ")" : "") + (k ? " (" + k + ")" : "") + (it.note ? " - " + it.note : "")); });
   }
   lines.push("", "Open it in the app: " + location.href.split("#")[0] + "#/e/" + encodeURIComponent(e.id));
   return lines.join("\n");
@@ -2526,7 +2616,7 @@ function openEventFilters(banner){
 /* ---------- one event ---------- */
 function eventPayload(e, songs){
   return { id: e.id, title: String(e.title || "").trim(), type: e.type, date: e.date, time: e.time, location: String(e.location || "").trim(), notes: e.notes || "", players: [], status: e.status || "", statusNote: e.statusNote || "",
-    songs: (songs || e.songs || []).map(function(it){ if(isMoment(it)) return { id: MOMENT_ID, title: String(it.title || "").trim(), note: it.note || "", key: "" }; var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: "" }; }) };
+    songs: (songs || e.songs || []).map(function(it){ if(isMoment(it)) return { id: MOMENT_ID, title: String(it.title || "").trim(), note: it.note || "", key: "" }; var s = songFor(it); return { id: s ? s.id : "", title: s ? s.title : it.title, note: it.note || "", key: it.key || "" }; }) };
 }
 function subHead(back, title, right, badge){
   return '<div class="subhead"><a class="sbback" href="' + back + '" aria-label="Back">' + ico("back") + '</a><h2>' + esc(title) + (badge || '') + '</h2>' + (right || '') + '</div>';
@@ -2580,7 +2670,8 @@ function renderEvent(id, banner){
   if($("evDup")) $("evDup").onclick = function(){
     var c = JSON.parse(JSON.stringify(e)), d = evDate(e) || new Date();
     d.setDate(d.getDate() + 7); c.id = ""; c.date = ymd(d); c.status = ""; c.statusNote = "";
-    state.draft = c; state.draftKey = "new"; state.pick = "";
+    // a copy counts as unsaved until it is saved; leaveOk lets us open the editor with it
+    c._orig = ""; state.draft = c; state.draftKey = "new"; state.pick = ""; state.leaveOk = true;
     location.hash = "#/new";
   };
 }
@@ -2589,7 +2680,7 @@ function renderEvent(id, banner){
 function slUrl(id, edit){ return "#/e/" + encodeURIComponent(id) + "/setlist" + (edit ? "/edit" : ""); }
 function slRowInner(it){
   if(isMoment(it)) return '<div class="sl-body"><div class="t">' + esc(it.title) + '</div>' + (it.note ? '<div class="sl-desc">' + esc(it.note) + '</div>' : '') + '</div>';
-  var s = songFor(it), k = s && s.key ? keyName(s.key, 0) : "";
+  var s = songFor(it), k = itemKeyName(s, it);
   var chips = (k ? '<span class="kchip">' + esc(k) + '</span>' : '') + (s && s.bpm ? '<span class="kchip">' + s.bpm + ' BPM</span>' : '');
   return '<div class="sl-body">' + (chips ? '<div class="sl-chips">' + chips + '</div>' : '') + '<div class="t">' + esc(s ? s.title : it.title) + '</div>' +
     (!s ? '<div class="sl-desc" style="color:var(--warn)">Not in the songbook</div>' : '') + (it.note ? '<div class="sl-desc">' + esc(it.note) + '</div>' : '') + '</div>';
@@ -2653,11 +2744,16 @@ function renderSetlist(id, banner, editing){
   function editItem(i){
     var it = items[i];
     if(isMoment(it)) return momentSheet(it, function(m){ if(m === null) items.splice(i, 1); else { it.title = m.title; it.note = m.note; } mark(); drawSel(); });
-    var s = songFor(it);
-    formSheet(s ? s.title : it.title, '<label class="fl">Note for the band</label><textarea id="fsNote" class="fin" maxlength="200" rows="3" placeholder="e.g. skip Verso II, end after the chorus">' + esc(it.note || "") + '</textarea>' +
+    var s = songFor(it), keyBox = "";
+    if(s && s.key){
+      var minor = s.key.minor ? "m" : "", here = NOTE_IDX[s.key.root];
+      keyBox = '<label class="fl">Key for the band</label><select id="fsKey" class="fin"><option value="">Written key (' + esc(keyName(s.key, 0)) + ')</option>' +
+        BAND_ROOTS.filter(function(r){ return NOTE_IDX[r] !== here; }).map(function(r){ return '<option value="' + r + '"' + (bandKey(s, it) && NOTE_IDX[it.key] === NOTE_IDX[r] ? ' selected' : '') + '>' + esc(chordName(r + minor)) + '</option>'; }).join("") + '</select>';
+    }
+    formSheet(s ? s.title : it.title, keyBox + '<label class="fl">Note for the band</label><textarea id="fsNote" class="fin" maxlength="200" rows="3" placeholder="e.g. skip Verso II, end after the chorus">' + esc(it.note || "") + '</textarea>' +
       '<button class="grow danger rmrow" id="fsRm"><span class="gi">' + ico("x") + '</span><span class="gl">Remove from set list</span></button>', "Save", function(box, close){
       box.querySelector("#fsRm").onclick = function(){ items.splice(i, 1); mark(); drawSel(); close(); };
-      return function(){ it.note = box.querySelector("#fsNote").value.trim(); mark(); drawSel(); return true; };
+      return function(){ it.note = box.querySelector("#fsNote").value.trim(); var k = box.querySelector("#fsKey"); if(k) it.key = k.value; mark(); drawSel(); return true; };
     });
   }
   drawSel();
@@ -2670,7 +2766,6 @@ function renderSetlist(id, banner, editing){
       else momentSheet(null, function(m){ if(m){ items.push({ id: MOMENT_ID, title: m.title, note: m.note, key: "" }); mark(); drawSel(); } });
     });
   };
-  document.querySelector(".sbback").onclick = function(ev){ if(!sl.dirty) return; if(!confirm("Leave without saving the set list?")) ev.preventDefault(); else state.sl = null; };
   $("slSave").onclick = function(){
     queueSave("save", eventPayload(e, items), "Set list of " + e.title);
     state.sl = null;
@@ -2752,6 +2847,7 @@ function renderEditor(id, newDate, banner){
   if(!state.draft || (state.draftKey !== key && !(state.draftKey === "new" && !id))){
     state.draftKey = key;
     state.draft = e ? JSON.parse(JSON.stringify(e)) : { id:"", title:"", type: evTypes().indexOf("Service") >= 0 ? "Service" : (evTypes()[0] || ""), date: newDate || ymd(new Date()), time:"19:00", location:"", notes:"", songs:[], players:[] };
+    state.draft._orig = snap(state.draft);
   }
   var d = state.draft, copying = !id && (d.songs || []).length;
   var h = banner + subHead(id ? '#/e/' + encodeURIComponent(id) : '#/events', id ? "Edit Event" : "Create Event") +
@@ -2798,6 +2894,7 @@ function renderSongEditor(id, banner){
     state.sTab = "details";
     state.sdraft = s ? { _for: id, id: s.id, title: s.title, album: s.album, type: s.type, artist: s.artist, key: s.keyText, bpm: s.bpm ? String(s.bpm) : "", time: s.time || "4/4", genre: s.genre, themes: s.themes.slice(), link: s.link, lyrics: s.lyrics }
                      : { _for: "new", id: "", title: "", album: "", type: "Original", artist: "Rey de Reyes Band", key: "", bpm: "", time: "4/4", genre: "", themes: [], link: "", lyrics: "" };
+    state.sdraft._orig = snap(state.sdraft);
   }
   var d = state.sdraft;
   function opts(list, val, none){
@@ -2992,6 +3089,9 @@ function renderSettings(banner){
   h += '<div class="glist" style="margin-top:14px">' +
     row({ href: "#/manage", icon: "crown", label: leader() ? "Leader tools" : "Leader sign-in", right: leader() ? "LEADER" : "MEMBER" }) +
     row({ id: "stInvite", icon: "gift", label: "Invite the band" }) + '</div>';
+  h += '<div class="sec-h2">Band</div><div class="glist">' +
+    row({ id: "stNames", icon: "chords", label: "Chord names", right: CHORD_LANG === "es" ? "Spanish (Do Re Mi)" : "English (C D E)", rightId: "namesVal" }) + '</div>' +
+    '<div class="muted" style="font-size:13px;margin:8px 4px 0">' + (leader() ? 'Changes it for everyone in the band. Songs are still written in English.' : 'Set by a band leader for everyone.') + '</div>';
   h += '<div class="sec-h2">Personal</div><div class="glist">' +
     row({ id: "stDark", icon: "moon", label: "Dark Mode", toggle: dark }) +
     row({ id: "stChords", icon: "chords", label: "Show chords", toggle: state.chords }) +
@@ -3014,6 +3114,21 @@ function renderSettings(banner){
   $("stBg").onclick = function(){ setSize(state.size + 2); again(); };
   $("stLang").onclick = function(){ state.lang = state.lang === "es" ? "en" : "es"; ls("lang", state.lang); again(); };
   $("stSync").onclick = function(){ load(true); };
+  $("stNames").onclick = function(){
+    if(!leader()) return openMenu("Chord names", [{ id: "x", label: "A band leader picks this for everyone." }], function(){});
+    openMenu("Chord names for the whole band", [
+      { id: "en", label: "English: C D E F G A B", on: CHORD_LANG !== "es" },
+      { id: "es", label: "Spanish: Do Re Mi Fa Sol La Si", on: CHORD_LANG === "es" }
+    ], function(v){
+      if(v === CHORD_LANG) return;
+      $("namesVal").textContent = "Saving...";
+      send("listop", state.pin, { kind: "Settings", name: "chordLang", value: v }).then(function(r){
+        if(r && r.error === "wrong_pin") return wrongPin();
+        if(!r || !r.ok){ again(); return alert(r && r.error === "bad_kind" ? "The band database needs an update before this works. Paste the new Code.gs and deploy it." : "Could not save (" + ((r && r.error) || "unknown") + ")."); }
+        return load(true);
+      }).catch(function(x){ again(); alert("Could not reach the server (" + x.message + "). Try again."); });
+    });
+  };
   if($("stInstall")) $("stInstall").onclick = function(){ showGuide(0); };
   $("stGuide").onclick = function(){ showGuide(0); };
   $("stAbout").onclick = function(){
@@ -3060,6 +3175,8 @@ function helpHtml(){
     '<ul><li><b>Home</b> shows the next event. Tap <b>▶ Start</b> to go through the set list song by song. Swipe left or right to change songs.</li>' +
     '<li><b>Songs</b>: search by title or by any line of the lyrics. Tap ♡ to save a song to your own list.</li>' +
     '<li>In a song, <b>Options</b> lets you change the key, hide chords, make the text bigger, use the metronome and keep the screen on. Changes stay on your phone only.</li>' +
+    '<li>In an event set list, a leader can set a song&#39;s key for the whole band (tap the key button, then <b>Set for the whole band</b>). Everyone&#39;s phone switches to it.</li>' +
+    '<li>Chords show as C D E or Do Re Mi for everyone. A leader picks this in <b>Settings &gt; Band &gt; Chord names</b>.</li>' +
     '<li><b>▶ Listen</b> opens the practice recording when the song has one.</li>' +
     '<li><b>//</b> means sing those lines twice, <b>///</b> three times.</li>' +
     '<li><b>Events</b>: each one has its set list. Tap <b>Share</b> to send it to the band on WhatsApp.</li></ul></div>';
